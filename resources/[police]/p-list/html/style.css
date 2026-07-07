@@ -1,0 +1,132 @@
+body {
+    background: transparent;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    height: 100vh;
+    padding-right: 50px;
+}
+
+#app {
+    width: 420px;
+    max-height: 80vh;
+    padding: var(--space-xl);
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.header h1 {
+    font-size: var(--font-size-lg);
+    font-weight: 800;
+    color: var(--accent-blue);
+    letter-spacing: 0.12em;
+    text-shadow: 0 0 20px rgba(43, 125, 233, 0.3);
+}
+
+.subheader {
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.35);
+    letter-spacing: 0.08em;
+    margin-top: 2px;
+}
+
+#officer-list {
+    overflow-y: auto;
+    max-height: 55vh;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+}
+
+.officer-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-md) var(--space-lg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all var(--transition-base);
+}
+
+.officer-card:hover {
+    background: rgba(43, 125, 233, 0.05);
+    border-color: rgba(43, 125, 233, 0.2);
+    transform: translateX(4px);
+}
+
+.left {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.name {
+    font-size: var(--font-size-md);
+    font-weight: 600;
+    color: #fff;
+}
+
+.job-row {
+    font-size: var(--font-size-xs);
+    color: rgba(255, 255, 255, 0.35);
+}
+
+.job-badge {
+    display: inline-block;
+    padding: 1px var(--space-sm);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-right: var(--space-xs);
+}
+
+.job-police { background: rgba(43, 125, 233, 0.2); color: var(--accent-blue-light); }
+.job-sheriff { background: rgba(39, 201, 63, 0.2); color: var(--accent-green); }
+.job-cid { background: rgba(139, 92, 246, 0.2); color: var(--accent-purple); }
+.job-statepolice { background: rgba(240, 165, 0, 0.2); color: var(--accent-gold); }
+
+.right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: var(--space-xs);
+}
+
+.radio-freq {
+    font-family: var(--font-mono);
+    font-size: var(--font-size-sm);
+    font-weight: 700;
+    color: var(--accent-green);
+    text-shadow: 0 0 10px rgba(39, 201, 63, 0.25);
+}
+
+.radio-none {
+    font-size: var(--font-size-xs);
+    color: rgba(255, 255, 255, 0.2);
+}
+
+.empty {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.2);
+    padding: 40px 0;
+    font-size: var(--font-size-base);
+}
+
+.close-hint {
+    text-align: center;
+    font-size: var(--font-size-xs);
+    color: rgba(255, 255, 255, 0.12);
+    margin-top: var(--space-md);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--glass-border);
+}

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forensics Terminal</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <div id="app">
+        <div id="overlay"></div>
+        <div id="terminal">
+            <div id="terminal-header">
+                <div id="terminal-title">
+                    <i class="fas fa-microscope"></i>
+                    <span>CID Forensics Analysis Terminal</span>
+                </div>
+                <button id="closeBtn"><i class="fas fa-times"></i></button>
+            </div>
+            <div id="terminal-body">
+                <div id="evidence-list">
+                    <h3><i class="fas fa-box"></i> Collected Evidence</h3>
+                    <div id="evidence-items"></div>
+                </div>
+                <div id="analysis-panel">
+                    <h3><i class="fas fa-flask"></i> Analysis Results</h3>
+                    <div id="analysis-content">
+                        <div class="placeholder">Select an evidence item to analyze</div>
+                    </div>
+                </div>
+            </div>
+            <div id="terminal-footer">
+                <i class="fas fa-shield-halved"></i> CID Headquarters — Secure Terminal v1.0
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

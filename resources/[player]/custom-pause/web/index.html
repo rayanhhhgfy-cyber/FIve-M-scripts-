@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="nui://nui-theme/web/theme.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="pause-bg" id="pauseBg"></div>
+    <div class="pause-overlay" id="pauseOverlay">
+        <div class="pause-panel glass-panel" id="pausePanel">
+            <div class="pause-header">
+                <div class="pause-title">PAUSED</div>
+                <div class="pause-subtitle" id="pauseBranding">Los Santos</div>
+                <div class="pause-divider"></div>
+            </div>
+            <div class="pause-body">
+                <div class="pause-section glass stagger-1 animate-fadeInUp" id="sectionIdentity">
+                    <div class="pause-section-title">IDENTITY</div>
+                    <div class="pause-section-body" id="pauseIdentity"></div>
+                </div>
+                <div class="pause-section glass stagger-2 animate-fadeInUp" id="sectionStats">
+                    <div class="pause-section-title">PLAYER STATS</div>
+                    <div class="pause-section-body" id="pauseStats"></div>
+                </div>
+                <div class="pause-section glass stagger-3 animate-fadeInUp" id="sectionJob">
+                    <div class="pause-section-title">EMPLOYMENT</div>
+                    <div class="pause-section-body" id="pauseJob"></div>
+                </div>
+                <div class="pause-section glass stagger-4 animate-fadeInUp" id="sectionFinances">
+                    <div class="pause-section-title">FINANCES</div>
+                    <div class="pause-section-body" id="pauseFinances"></div>
+                </div>
+                <div class="pause-section glass stagger-5 animate-fadeInUp" id="sectionServerInfo">
+                    <div class="pause-section-title">SERVER</div>
+                    <div class="pause-section-body" id="pauseServer"></div>
+                </div>
+                <div class="pause-section glass stagger-6 animate-fadeInUp" id="sectionActions">
+                    <div class="pause-section-title">ACTIONS</div>
+                    <div class="pause-section-body" id="pauseActions"></div>
+                </div>
+                <div class="pause-section glass stagger-7 animate-fadeInUp" id="sectionEom">
+                    <div class="pause-section-title">EMPLOYEE OF THE MONTH</div>
+                    <div class="pause-section-body" id="pauseEom"></div>
+                </div>
+                <div class="pause-section glass stagger-8 animate-fadeInUp" id="sectionBindings">
+                    <div class="pause-section-title">KEY BINDINGS</div>
+                    <div class="pause-section-body" id="pauseBindings"></div>
+                </div>
+            </div>
+            <div class="pause-footer">ESC to resume</div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

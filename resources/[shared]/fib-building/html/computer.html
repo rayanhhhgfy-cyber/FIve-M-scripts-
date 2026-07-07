@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FIB Terminal</title>
+    <link rel="stylesheet" href="nui://nui-theme/web/theme.css">
+    <link rel="stylesheet" href="computer.css">
+</head>
+<body>
+    <div id="monitor" class="glass animate-scaleIn">
+        <div class="terminal-header">
+            <span class="terminal-dot red"></span>
+            <span class="terminal-dot yellow"></span>
+            <span class="terminal-dot green"></span>
+            <span class="terminal-title mono">FIB TERMINAL v2.0</span>
+        </div>
+        <div class="terminal-body" id="terminalBody">
+            <div class="line accent">=== FIB SECURE TERMINAL ===</div>
+            <div class="line">Type 'help' for available commands.</div>
+            <div class="line">&nbsp;</div>
+        </div>
+        <div class="terminal-input-row">
+            <span class="prompt">&gt;</span>
+            <input type="text" id="cmdInput" class="cmd-input mono" placeholder="type command..." autofocus>
+        </div>
+    </div>
+    <script src="computer.js"></script>
+</body>
+</html>

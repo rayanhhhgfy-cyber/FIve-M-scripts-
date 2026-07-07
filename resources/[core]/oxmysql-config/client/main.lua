@@ -1,0 +1,2 @@
+-- Client stub — all database operations are server-authoritative.
+-- This resource only exposes server-side query methods via exports.

@@ -1,0 +1,164 @@
+body {
+    background: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.terminal {
+    width: 740px;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid rgba(0, 212, 255, 0.15);
+}
+
+.terminal-header {
+    display: flex;
+    align-items: center;
+    padding: var(--space-md) var(--space-lg);
+    gap: var(--space-sm);
+    border-bottom: 1px solid var(--glass-border);
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.header-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: var(--radius-full);
+}
+
+.header-dot.red { background: var(--accent-red); }
+.header-dot.yellow { background: var(--accent-gold); }
+.header-dot.green { background: var(--accent-green); }
+
+.header-title {
+    margin-left: auto;
+    color: rgba(0, 212, 255, 0.6);
+    font-size: var(--font-size-xs);
+    letter-spacing: 0.16em;
+}
+
+.terminal-body {
+    display: flex;
+    height: 420px;
+}
+
+.sidebar {
+    width: 200px;
+    padding: var(--space-lg);
+    border-right: 1px solid var(--glass-border);
+    display: flex;
+    flex-direction: column;
+}
+
+.categories {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+}
+
+.cat-btn {
+    display: block;
+    width: 100%;
+    padding: var(--space-sm) var(--space-md);
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--radius-md);
+    color: rgba(255, 255, 255, 0.5);
+    font-family: var(--font-sans);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    cursor: pointer;
+    text-align: left;
+    transition: all var(--transition-base);
+    letter-spacing: 0.04em;
+}
+
+.cat-btn:hover {
+    background: rgba(0, 212, 255, 0.05);
+    color: rgba(255, 255, 255, 0.8);
+    border-color: rgba(0, 212, 255, 0.15);
+}
+
+.cat-btn.active {
+    color: var(--accent-cyan);
+    border-color: rgba(0, 212, 255, 0.3);
+    background: rgba(0, 212, 255, 0.08);
+}
+
+.vehicle-section {
+    flex: 1;
+    padding: var(--space-lg);
+    display: flex;
+    flex-direction: column;
+}
+
+.vehicle-list {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.vehicle-list .placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: rgba(255, 255, 255, 0.15);
+    font-size: var(--font-size-md);
+    letter-spacing: 0.08em;
+}
+
+.vehicle-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-md) var(--space-lg);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-spring);
+}
+
+.vehicle-item:hover {
+    background: rgba(0, 212, 255, 0.06);
+    border-color: rgba(0, 212, 255, 0.25);
+    transform: translateX(4px) scale(1.01);
+    box-shadow: var(--shadow-glow-blue);
+}
+
+.vehicle-item .name {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: var(--font-size-base);
+    font-weight: 500;
+}
+
+.vehicle-item .stats {
+    color: var(--accent-cyan);
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    opacity: 0.6;
+}
+
+.vehicle-item:hover .stats {
+    opacity: 1;
+}
+
+.vehicle-item .badge {
+    margin-right: var(--space-sm);
+}
+
+.terminal-footer {
+    display: flex;
+    justify-content: flex-end;
+    padding: var(--space-md) var(--space-lg);
+    border-top: 1px solid var(--glass-border);
+    background: rgba(0, 0, 0, 0.2);
+}

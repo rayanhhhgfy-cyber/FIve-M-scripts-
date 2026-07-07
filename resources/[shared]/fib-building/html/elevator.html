@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FIB Elevator</title>
+    <link rel="stylesheet" href="nui://nui-theme/web/theme.css">
+    <link rel="stylesheet" href="elevator.css">
+</head>
+<body>
+    <div id="layout" class="glass-panel animate-fadeIn">
+        <div class="status-section">
+            <div class="floor-display">
+                <span class="floor-number mono" id="floorNumber">B1</span>
+                <span class="floor-label mono" id="floorLabel">SUB-BASEMENT</span>
+            </div>
+            <div class="status-row flex-between">
+                <span class="direction mono" id="directionText">—</span>
+                <span class="door-status mono" id="doorStatus">DOORS: CLOSED</span>
+            </div>
+        </div>
+        <div class="divider"></div>
+        <div class="panel-header">
+            <span class="section-title">SELECT FLOOR</span>
+        </div>
+        <div class="floor-list" id="floorList"></div>
+        <div class="panel-footer">
+            <button class="btn btn-ghost close-btn" onclick="closeElevator()">CLOSE</button>
+        </div>
+    </div>
+    <script src="elevator.js"></script>
+</body>
+</html>

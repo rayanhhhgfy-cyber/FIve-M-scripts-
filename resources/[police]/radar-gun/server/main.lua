@@ -1,0 +1,1 @@
+-- Server-side placeholder for radar-gun if needed later (logging hits)

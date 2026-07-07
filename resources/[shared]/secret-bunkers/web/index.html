@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bunker Terminal</title>
+    <link rel="stylesheet" href="nui://nui-theme/web/theme.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="terminal glass-panel animate-scaleIn" id="terminal">
+        <div class="terminal-header">
+            <div class="header-dot red"></div>
+            <div class="header-dot yellow"></div>
+            <div class="header-dot green"></div>
+            <span class="header-title mono">BUNKER VEHICLE TERMINAL</span>
+        </div>
+        <div class="terminal-body">
+            <div class="sidebar" id="sidebar">
+                <div class="section-title">CATEGORIES</div>
+                <div class="categories" id="categories"></div>
+            </div>
+            <div class="vehicle-section">
+                <div class="section-title">VEHICLES</div>
+                <div class="vehicle-list" id="vehicleList">
+                    <div class="placeholder">Select a category</div>
+                </div>
+            </div>
+        </div>
+        <div class="terminal-footer">
+            <button class="btn btn-ghost close-btn" id="closeBtn">CLOSE</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

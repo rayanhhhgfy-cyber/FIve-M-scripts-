@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>God Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="dashboard">
+        <div class="sidebar">
+            <div class="logo">
+                <i class="fas fa-crown"></i>
+                <span>GOD</span>
+            </div>
+            <nav>
+                <button class="tab-btn active" data-tab="bunkers">
+                    <i class="fas fa-mountain"></i>
+                    <span data-en="Bunkers" data-ar="المخابئ">Bunkers</span>
+                </button>
+                <button class="tab-btn" data-tab="objects">
+                    <i class="fas fa-cube"></i>
+                    <span data-en="Objects" data-ar="الأشياء">Objects</span>
+                </button>
+                <button class="tab-btn" data-tab="doors">
+                    <i class="fas fa-door-closed"></i>
+                    <span data-en="Doors" data-ar="الأبواب">Doors</span>
+                </button>
+                <button class="tab-btn" data-tab="vehicles">
+                    <i class="fas fa-car"></i>
+                    <span data-en="Vehicles" data-ar="المركبات">Vehicles</span>
+                </button>
+                <button class="tab-btn" data-tab="server">
+                    <i class="fas fa-server"></i>
+                    <span data-en="Server" data-ar="الخادم">Server</span>
+                </button>
+                <button class="tab-btn" data-tab="commands">
+                    <i class="fas fa-terminal"></i>
+                    <span data-en="Commands" data-ar="الأوامر">Commands</span>
+                </button>
+            </nav>
+            <div class="sidebar-footer">
+                <button id="langToggle" class="lang-btn">
+                    <i class="fas fa-language"></i>
+                    <span>AR</span>
+                </button>
+                <button id="closeBtn" class="close-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+        <div class="main-content">
+            <div id="tab-bunkers" class="tab-content active">
+                <div class="tab-header">
+                    <h2 data-en="Bunker Management" data-ar="إدارة المخابئ">Bunker Management</h2>
+                    <button class="refresh-btn" onclick="loadBunkers()"><i class="fas fa-sync"></i></button>
+                </div>
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="bunkerSearch" placeholder="Search bunkers..." oninput="filterBunkers()">
+                </div>
+                <div id="bunkerList" class="card-grid"></div>
+            </div>
+
+            <div id="tab-objects" class="tab-content">
+                <div class="tab-header">
+                    <h2 data-en="Object Placement" data-ar="وضع الأشياء">Object Placement</h2>
+                    <button class="refresh-btn" onclick="loadObjects()"><i class="fas fa-sync"></i></button>
+                </div>
+                <div class="control-row">
+                    <div class="search-bar" style="flex:1">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="modelSearch" placeholder="Search model name..." onkeydown="if(event.key==='Enter')placeObject(this.value)">
+                    </div>
+                    <button class="action-btn primary" onclick="placeObject(document.getElementById('modelSearch').value)">
+                        <i class="fas fa-plus"></i> <span data-en="Preview & Place" data-ar="معاينة ووضع">Preview & Place</span>
+                    </button>
+                </div>
+                <div id="objectList" class="card-grid"></div>
+            </div>
+
+            <div id="tab-doors" class="tab-content">
+                <div class="tab-header">
+                    <h2 data-en="Passcode Doors" data-ar="الأبواب المقفلة">Passcode Doors</h2>
+                    <button class="refresh-btn" onclick="loadDoors()"><i class="fas fa-sync"></i></button>
+                </div>
+                <div class="control-row">
+                    <button class="action-btn primary" onclick="createDoor()">
+                        <i class="fas fa-plus"></i> <span data-en="Create Door Here" data-ar="إنشاء باب هنا">Create Door Here</span>
+                    </button>
+                </div>
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="doorSearch" placeholder="Search doors..." oninput="filterDoors()">
+                </div>
+                <div id="doorList" class="card-grid"></div>
+            </div>
+
+            <div id="tab-vehicles" class="tab-content">
+                <div class="tab-header">
+                    <h2 data-en="Vehicle Spawner" data-ar="إستدعاء المركبات">Vehicle Spawner</h2>
+                </div>
+                <div class="control-row">
+                    <div class="search-bar" style="flex:1">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="vehicleSearch" placeholder="Search vehicles..." oninput="filterVehicles()">
+                    </div>
+                </div>
+                <div id="vehicleCategories" class="categories-container"></div>
+            </div>
+
+            <div id="tab-server" class="tab-content">
+                <div class="tab-header">
+                    <h2 data-en="Server Controls" data-ar="تحكم الخادم">Server Controls</h2>
+                </div>
+                <div id="serverContent" class="server-grid">
+                    <div class="server-card">
+                        <i class="fas fa-cloud-sun"></i>
+                        <h3 data-en="Weather" data-ar="الطقس">Weather</h3>
+                        <select id="weatherSelect" onchange="serverAction('weather', this.value)">
+                            <option value="EXTRASUNNY">Extra Sunny</option>
+                            <option value="CLEAR">Clear</option>
+                            <option value="CLOUDS">Clouds</option>
+                            <option value="FOGGY">Foggy</option>
+                            <option value="OVERCAST">Overcast</option>
+                            <option value="RAIN">Rain</option>
+                            <option value="THUNDER">Thunder</option>
+                            <option value="CLEARING">Clearing</option>
+                            <option value="NEUTRAL">Neutral</option>
+                            <option value="SNOW">Snow</option>
+                            <option value="XMAS">Xmas</option>
+                        </select>
+                    </div>
+                    <div class="server-card">
+                        <i class="fas fa-clock"></i>
+                        <h3 data-en="Time" data-ar="الوقت">Time</h3>
+                        <input type="range" id="timeSlider" min="0" max="23" value="12" oninput="document.getElementById('timeValue').textContent=this.value; serverAction('time', parseInt(this.value))">
+                        <span id="timeValue">12:00</span>
+                    </div>
+                    <div class="server-card">
+                        <i class="fas fa-bullhorn"></i>
+                        <h3 data-en="Announcement" data-ar="الإعلان">Announcement</h3>
+                        <input type="text" id="announceInput" placeholder="Enter message...">
+                        <button class="action-btn primary" onclick="serverAction('announce', document.getElementById('announceInput').value)">
+                            <i class="fas fa-paper-plane"></i> <span data-en="Send" data-ar="إرسال">Send</span>
+                        </button>
+                    </div>
+                    <div class="server-card">
+                        <i class="fas fa-heart"></i>
+                        <h3 data-en="Revive" data-ar="إحياء">Revive</h3>
+                        <button class="action-btn primary" onclick="serverAction('revive', null)">
+                            <i class="fas fa-heartbeat"></i> <span data-en="Revive Self" data-ar="إحياء النفس">Revive Self</span>
+                        </button>
+                    </div>
+                    <div class="server-card">
+                        <i class="fas fa-broom"></i>
+                        <h3 data-en="Clear Area" data-ar="تنظيف المنطقة">Clear Area</h3>
+                        <button class="action-btn warning" onclick="serverAction('clearArea', null)">
+                            <i class="fas fa-radiation"></i> <span data-en="Clear 100m" data-ar="تنظيف 100م">Clear 100m</span>
+                        </button>
+                    </div>
+                    <div class="server-card full-width">
+                        <div class="card-header">
+                            <i class="fas fa-users"></i>
+                            <h3 data-en="Online Players" data-ar="اللاعبون المتصلون">Online Players</h3>
+                        </div>
+                        <div class="search-bar">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="playerSearch" placeholder="Search players..." oninput="filterPlayers()">
+                        </div>
+                        <div id="playerList" class="player-grid"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab-commands" class="tab-content">
+                <div class="tab-header">
+                    <h2 data-en="Command Browser" data-ar="متصفح الأوامر">Command Browser</h2>
+                    <button class="refresh-btn" onclick="loadCommands()"><i class="fas fa-sync"></i></button>
+                </div>
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="commandSearch" placeholder="Search commands / ابحث..." oninput="filterCommands()">
+                </div>
+                <div id="commandStats" class="stats-bar"></div>
+                <div id="commandList" class="card-grid"></div>
+            </div>
+        </div>
+    </div>
+    <div id="toast-container"></div>
+    <script src="script.js"></script>
+</body>
+</html>

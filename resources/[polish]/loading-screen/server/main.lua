@@ -1,0 +1,1 @@
+-- Loading screen server stub — no server logic required

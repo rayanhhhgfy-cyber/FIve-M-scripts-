@@ -1,0 +1,2 @@
+--- Police Uniforms - Server
+--- Validates that uniform items exist in ox_inventory

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Info Card</title>
+    <link rel="stylesheet" href="nui://nui-theme/web/theme.css">
+    <style>
+        body {
+            background: transparent;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .info-card {
+            width: 360px;
+            max-height: 500px;
+            overflow-y: auto;
+            color: #fff;
+        }
+        .info-card h2 {
+            font-size: var(--font-size-lg);
+            font-weight: 700;
+            margin-bottom: var(--space-lg);
+            padding-bottom: var(--space-sm);
+            border-bottom: 1px solid var(--glass-border);
+            color: var(--accent-blue);
+        }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: var(--space-xs) 0;
+            font-size: var(--font-size-base);
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+        }
+        .info-label {
+            color: rgba(255,255,255,0.4);
+        }
+        .info-value {
+            color: #fff;
+            font-weight: 500;
+            text-align: right;
+            max-width: 200px;
+        }
+        .info-value.danger { color: var(--accent-red); }
+        .info-value.success { color: var(--accent-green); }
+        .info-section {
+            margin-top: var(--space-md);
+        }
+        .info-section-title {
+            font-size: var(--font-size-xs);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: rgba(255,255,255,0.35);
+            margin-bottom: var(--space-sm);
+        }
+        .info-list-item {
+            font-size: var(--font-size-sm);
+            padding: var(--space-xs) 0;
+            color: rgba(255,255,255,0.55);
+        }
+        .close-hint {
+            text-align: center;
+            font-size: var(--font-size-xs);
+            color: rgba(255,255,255,0.12);
+            margin-top: var(--space-md);
+            padding-top: var(--space-sm);
+            border-top: 1px solid var(--glass-border);
+        }
+    </style>
+</head>
+<body>
+    <div class="info-card glass-panel animate-scaleIn" id="infoCard">
+        <h2 id="cardTitle">Info Card</h2>
+        <div id="cardContent"></div>
+        <div class="close-hint mono">ESC to close</div>
+    </div>
+    <script>
+        window.addEventListener('message', function(event) {
+            const d = event.data;
+            if (d.action === 'showPersonCard') renderPersonCard(d.data);
+            if (d.action === 'showVehicleCard') renderVehicleCard(d.data);
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                fetch('https://person-search/closeInfoCard', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+                document.getElementById('infoCard').style.display = 'none';
+            }
+        });
+
+        function renderPersonCard(data) {
+            if (!data) return;
+            const title = document.getElementById('cardTitle');
+            title.textContent = 'Person Search';
+            const el = document.getElementById('cardContent');
+            let html = '';
+            html += '<div class="info-row"><span class="info-label">Name</span><span class="info-value">' + esc(data.name) + '</span></div>';
+            html += '<div class="info-row"><span class="info-label">Citizen ID</span><span class="info-value">' + esc(data.citizenid) + '</span></div>';
+            html += '<div class="info-row"><span class="info-label">Phone</span><span class="info-value">' + esc(data.phone) + '</span></div>';
+            html += '<div class="info-row"><span class="info-label">DOB</span><span class="info-value">' + esc(data.dob) + '</span></div>';
+            html += '<div class="info-row"><span class="info-label">Criminal Records</span><span class="info-value ' + (data.criminalRecords > 0 ? 'danger' : 'success') + '">' + (data.criminalRecords || 0) + '</span></div>';
+
+            if (data.warrants && data.warrants.length > 0) {
+                html += '<div class="info-section"><div class="info-section-title">Active Warrants (' + data.warrants.length + ')</div>';
+                data.warrants.forEach(function(w) {
+                    html += '<div class="info-list-item">' + esc(w.reason || w.charge || 'Unknown') + '</div>';
+                });
+                html += '</div>';
+            }
+
+            if (data.vehicles && data.vehicles.length > 0) {
+                html += '<div class="info-section"><div class="info-section-title">Registered Vehicles (' + data.vehicles.length + ')</div>';
+                data.vehicles.forEach(function(v) {
+                    html += '<div class="info-list-item">' + esc(v.plate || 'N/A') + ' - ' + esc(v.vehicle || 'Unknown') + '</div>';
+                });
+                html += '</div>';
+            }
+
+            el.innerHTML = html;
+            document.getElementById('infoCard').style.display = 'block';
+        }
+
+        function renderVehicleCard(data) {
+            if (!data) return;
+            const title = document.getElementById('cardTitle');
+            title.textContent = 'Vehicle Search';
+            const el = document.getElementById('cardContent');
+            let html = '';
+            html += '<div class="info-row"><span class="info-label">Plate</span><span class="info-value">' + esc(data.plate) + '</span></div>';
+            html += '<div class="info-row"><span class="info-label">Model</span><span class="info-value">' + esc(data.model) + '</span></div>';
+            html += '<div class="info-row"><span class="info-label">Color</span><span class="info-value">' + esc(data.color) + '</span></div>';
+            html += '<div class="info-row"><span class="info-label">Owner</span><span class="info-value">' + esc(data.ownerName) + '</span></div>';
+            html += '<div class="info-row"><span class="info-label">Owner Phone</span><span class="info-value">' + esc(data.ownerPhone) + '</span></div>';
+            html += '<div class="info-row"><span class="info-label">Stolen</span><span class="info-value ' + (data.stolen ? 'danger' : 'success') + '">' + (data.stolen ? 'YES' : 'NO') + '</span></div>';
+            html += '<div class="info-row"><span class="info-label">BOLO</span><span class="info-value ' + (data.bolo ? 'danger' : 'success') + '">' + (data.bolo ? 'YES' : 'NO') + '</span></div>';
+
+            el.innerHTML = html;
+            document.getElementById('infoCard').style.display = 'block';
+        }
+
+        function esc(str) {
+            if (!str) return '';
+            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+    </script>
+</body>
+</html>

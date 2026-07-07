@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dispatch HUD</title>
+    <link rel="stylesheet" href="nui://nui-theme/web/theme.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="dispatch-hud glass" id="dispatchHud">
+        <div class="hud-header">
+            <div class="hud-header-left">
+                <span class="hud-title">DISPATCH</span>
+                <span class="hud-calls-count" id="callsCount">0</span>
+            </div>
+            <div class="hud-header-right">
+                <button class="minimize-btn" id="minimizeBtn" onclick="toggleMinimize()" title="Minimize">_</button>
+            </div>
+        </div>
+        <div class="hud-calls" id="hudCalls">
+            <div class="empty-state">No active calls</div>
+        </div>
+        <div class="hud-actions">
+            <button class="panic-btn" id="panicBtn" onclick="sendPanic()">
+                <span class="panic-icon">SOS</span>
+                <span class="panic-label">PANIC</span>
+            </button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

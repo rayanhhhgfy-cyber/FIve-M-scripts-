@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CID Operations Center</title>
+    <link rel="stylesheet" href="nui://nui-theme/web/theme.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="opsConsole" class="ops-hidden">
+        <div class="ops-header">
+            <div class="ops-title">
+                <h1>OPERATIONS CENTER</h1>
+                <span id="opsName" class="ops-name-display"></span>
+            </div>
+            <div class="ops-header-right">
+                <span class="ops-threat-badge" id="threatBadge">LOW</span>
+                <span id="opsStatusBadge" class="ops-status-badge">Standing By</span>
+                <button class="btn btn-ghost ops-close-btn" onclick="closeDashboard()">✕</button>
+            </div>
+        </div>
+        <div class="ops-body">
+            <div class="ops-sidebar">
+                <div class="ops-panel">
+                    <div class="panel-header">
+                        <h3>TEAM</h3>
+                        <span id="teamCountBadge" class="panel-badge">0</span>
+                    </div>
+                    <div id="teamList" class="team-list">
+                        <div class="skeleton-list" id="teamSkeleton">
+                            <div class="skeleton-item"></div>
+                            <div class="skeleton-item"></div>
+                            <div class="skeleton-item"></div>
+                        </div>
+                        <div class="team-empty" id="teamEmpty">Awaiting team data...</div>
+                    </div>
+                </div>
+                <div class="ops-panel">
+                    <div class="panel-header">
+                        <h3>OBJECTIVES</h3>
+                    </div>
+                    <div id="objectivesDisplay" class="objectives-display">
+                        <div class="skeleton-text" id="objSkeleton">
+                            <div class="skeleton-line"></div>
+                            <div class="skeleton-line" style="width:70%"></div>
+                        </div>
+                        <p class="ops-empty" id="objEmpty">No objectives set</p>
+                    </div>
+                </div>
+            </div>
+            <div class="ops-main">
+                <div class="ops-map" id="opsMap">
+                    <div class="map-overlay">
+                        <div class="map-header">
+                            <span class="map-title">TACTICAL MAP</span>
+                            <div class="map-header-right">
+                                <span id="teamCount" class="map-status-text">0 agents online</span>
+                            </div>
+                        </div>
+                        <div class="map-grid" id="mapGrid">
+                            <div class="map-center" id="mapCenter">
+                                <div class="compass-rose">
+                                    <span class="compass-n">N</span>
+                                    <span class="compass-s">S</span>
+                                    <span class="compass-e">E</span>
+                                    <span class="compass-w">W</span>
+                                </div>
+                                <p class="map-status" id="mapStatus">Waiting for GPS data...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ops-timeline" id="timelinePanel">
+                    <div class="timeline-header">
+                        <h3>TIMELINE</h3>
+                        <button class="btn btn-sm btn-ghost timeline-add-btn" onclick="addTimelineEvent()">+</button>
+                    </div>
+                    <div id="timelineFeed" class="timeline-feed">
+                        <div class="timeline-empty">No events logged yet</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,91 @@
+Config = Config or {}
+
+Config.AnimMenu = {
+    defaultDuration = 8000,
+    cancelKey = 73, -- X key
+}
+
+Config.Emotes = {
+    Dances = {
+        { label = 'Club Dance', command = 'dance', dict = 'anim@amb@nightclub@dancers@solomun_entourage@', anim = 'ddance_dance_lvl1_entrance_v1', flag = 1 },
+        { label = 'Electro Dance', command = 'dance2', dict = 'anim@amb@nightclub@mini@electro_dance@dance@', anim = 'ped_dance', flag = 1 },
+        { label = 'Pop Lock', command = 'dance3', dict = 'anim@amb@nightclub@mini@dance@dance_solo@female@var_b@', anim = 'high_center', flag = 1 },
+        { label = 'Slow Dance', command = 'dance4', dict = 'anim@amb@nightclub@london@dance@', anim = 'slow_dance', flag = 1 },
+        { label = 'Salsa', command = 'dance5', dict = 'mini@strip_club@private_dance@part1', anim = 'priv_dance_p1', flag = 1 },
+        { label = 'Jump', command = 'jump', dict = 'move_jump@variations@directional@', anim = 'directional_jump', flag = 1 },
+    },
+    Gestures = {
+        { label = 'Salute', command = 'salute', dict = 'anim@mp_player_intincarsalutestd@ps@', anim = 'idle_a', flag = 49 },
+        { label = 'Wave', command = 'wave', dict = 'anim@mp_player_intcelebrationmale@wave', anim = 'wave', flag = 49 },
+        { label = 'Point', command = 'point', dict = 'anim@mp_point', anim = 'idle_a', flag = 49 },
+        { label = 'Thumbs Up', command = 'thumbsup', dict = 'anim@mp_player_intincarthumbs_uplow@ds@', anim = 'idle_a', flag = 49 },
+        { label = 'Rock On', command = 'rockon', dict = 'anim@mp_player_intincarrockstd@ps@', anim = 'idle_a', flag = 49 },
+        { label = 'Peace', command = 'peace', dict = 'anim@mp_player_intincarpeacestd@ps@', anim = 'idle_a', flag = 49 },
+        { label = 'Come Here', command = 'comehere', dict = 'anim@mp_player_intcelebrationmale@come_here', anim = 'come_here', flag = 49 },
+        { label = 'Facepalm', command = 'facepalm', dict = 'anim@mp_player_intcelebrationmale@face_palm', anim = 'face_palm', flag = 49 },
+        { label = 'Shush', command = 'shush', dict = 'anim@mp_player_intincarshushstd@ps@', anim = 'idle_a', flag = 49 },
+        { label = 'Middle Finger', command = 'middlefinger', dict = 'anim@mp_player_intincarmiddle_fingerstd@ps@', anim = 'idle_a', flag = 49 },
+    },
+    Idles = {
+        { label = 'Lean Against Wall', command = 'lean', dict = 'amb@world_human_leaning@male@wall@back@legs_cross@idle_a', anim = 'idle_a', flag = 1 },
+        { label = 'Sit on Ground', command = 'sit', dict = 'amb@world_human_picnic@male@idle_a', anim = 'idle_a', flag = 1 },
+        { label = 'Lean on Car', command = 'leancar', dict = 'amb@world_human_lean_male_foot_up@idle_a', anim = 'idle_a', flag = 1 },
+        { label = 'Sit on Bench', command = 'sitbench', dict = 'amb@world_human_strip_chase_guard@male@idle_a', anim = 'idle_a', flag = 1 },
+        { label = 'Arms Crossed', command = 'armscrossed', dict = 'amb@world_human_hang_out_street@male_hold_left@idle_a', anim = 'idle_a', flag = 1 },
+        { label = 'Look Around', command = 'lookaround', dict = 'amb@world_human_guard_patrol@male@idle_a', anim = 'idle_a', flag = 1 },
+        { label = 'Smoke', command = 'smoke', dict = 'amb@world_human_smoking@male@idle_a', anim = 'idle_b', flag = 1 },
+        { label = 'Lean on Counter', command = 'leancounter', dict = 'amb@prop_human_atm@male@idle_a', anim = 'idle_a', flag = 1 },
+    },
+    Expressions = {
+        { label = 'Friendly', command = 'friendly', dict = 'mp_facial@animals@dogs@excitable@', anim = 'base', flag = 1, facial = true },
+        { label = 'Angry', command = 'angry', dict = 'mp_facial@male_anger@', anim = 'base', flag = 1, facial = true },
+        { label = 'Sad', command = 'sad', dict = 'mp_facial@male_sadness@', anim = 'base', flag = 1, facial = true },
+        { label = 'Surprised', command = 'surprised', dict = 'mp_facial@male_surprise@', anim = 'base', flag = 1, facial = true },
+        { label = 'Suspicious', command = 'suspicious', dict = 'mp_facial@male_suspicion@', anim = 'base', flag = 1, facial = true },
+        { label = 'Drunk', command = 'drunk', dict = 'mp_facial@male_drunk@', anim = 'base', flag = 1, facial = true },
+    },
+    Greetings = {
+        { label = 'Handshake', command = 'handshake', dict = 'mp_common', anim = 'givetake1_a', flag = 49 },
+        { label = 'Hug', command = 'hug', dict = 'mp_ped_interaction', anim = 'hugs_guy_a', flag = 49 },
+        { label = 'Bow', command = 'bow', dict = 'anim@mp_player_intcelebrationmale@bow', anim = 'bow', flag = 49 },
+        { label = 'Jog On', command = 'jogon', dict = 'missfbi4prepp1', anim = 'jog_on_spot', flag = 1 },
+        { label = 'Nod', command = 'nod', dict = 'anim@mp_player_intcelebrationmale@nod', anim = 'nod', flag = 49 },
+    },
+    Actions = {
+        { label = 'Hands Up', command = 'handsup', dict = 'mp_arresting', anim = 'idle', flag = 49 },
+        { label = 'Surrender', command = 'surrender', dict = 'random@arrests@busted', anim = 'idle_a', flag = 49 },
+        { label = 'Crouch', command = 'crouch', dict = 'move_crouch_proto', anim = 'idle_a', flag = 1 },
+        { label = 'Kneel', command = 'kneel', dict = 'amb@world_human_bum_freeway@male@idle_a', anim = 'idle_a', flag = 1 },
+        { label = 'Push-ups', command = 'pushups', dict = 'amb@world_human_push_ups@male@idle_a', anim = 'idle_a', flag = 1 },
+        { label = 'Sit-ups', command = 'situps', dict = 'amb@world_human_sit_ups@male@idle_a', anim = 'idle_a', flag = 1 },
+        { label = 'Yoga', command = 'yoga', dict = 'amb@world_human_yoga@male@idle_a', anim = 'idle_a', flag = 1 },
+        { label = 'Meditate', command = 'meditate', dict = 'amb@world_human_meditating@male@idle_a', anim = 'idle_a', flag = 1 },
+        { label = 'Selfie', command = 'selfie', dict = 'cellphone@', anim = 'cellphone_selfie_anim', flag = 49 },
+        { label = 'Binoculars', command = 'binoculars', dict = 'amb@world_human_binoculars@male@idle_a', anim = 'idle_a', flag = 49 },
+        { label = 'Fishing', command = 'fishing', dict = 'amb@world_human_stand_fishing@male@idle_a', anim = 'idle_a', flag = 1 },
+        { label = 'Cleaning', command = 'cleaning', dict = 'amb@world_human_maid_clean@', anim = 'base', flag = 1 },
+    },
+}
+
+Config.WalkStyles = {
+    { label = 'Default', style = 'move_m@multiplayer', reset = true },
+    { label = 'Brave', style = 'move_m@brave', reset = false },
+    { label = 'Confident', style = 'move_m@confident', reset = false },
+    { label = 'Business', style = 'move_m@business@a', reset = false },
+    { label = 'Casual', style = 'move_m@casual@a', reset = false },
+    { label = 'Drunk', style = 'move_m@drunk@verydrunk', reset = false },
+    { label = 'Fat', style = 'move_m@fat@a', reset = false },
+    { label = 'Gangster', style = 'move_m@gangster@var_f', reset = false },
+    { label = 'Hurry', style = 'move_m@hurry@a', reset = false },
+    { label = 'Injured', style = 'move_m@injured', reset = false },
+    { label = 'Quick', style = 'move_m@quick', reset = false },
+    { label = 'Sad', style = 'move_m@sad@a', reset = false },
+    { label = 'Tough', style = 'move_m@tough_guy@', reset = false },
+    { label = 'Scared', style = 'move_m@scared', reset = false },
+    { label = 'Swagger', style = 'move_m@swagger', reset = false },
+    { label = 'Woman', style = 'move_f@femme@a', reset = false },
+    { label = 'Heels', style = 'move_f@heels@c', reset = false },
+    { label = 'Man Eater', style = 'move_f@maneater', reset = false },
+    { label = 'Proud', style = 'move_m@proud', reset = false },
+    { label = 'Hiking', style = 'move_m@hiking', reset = false },
+}

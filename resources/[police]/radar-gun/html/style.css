@@ -1,0 +1,20 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Courier New', monospace;
+    display: flex; justify-content: center; align-items: flex-start;
+    height: 100vh; padding-top: 60px; background: transparent; display: none;
+}
+.radar {
+    width: 300px; background: rgba(0, 0, 0, 0.85);
+    border: 2px solid #2a6aff; border-radius: 12px;
+    padding: 20px; color: #e0e0e0; text-align: center;
+    box-shadow: 0 0 20px rgba(42, 106, 255, 0.3);
+}
+.radar-header { font-size: 14px; color: #2a6aff; letter-spacing: 4px; margin-bottom: 12px; font-weight: bold; }
+.speed-display { margin: 16px 0; }
+#speedValue { font-size: 64px; font-weight: bold; color: #32ff64; transition: color 0.3s; }
+.unit { font-size: 18px; color: #888; margin-left: 4px; }
+.info-row { display: flex; justify-content: space-between; padding: 8px 12px; background: rgba(255,255,255,0.05); border-radius: 6px; margin-bottom: 6px; }
+.info-row .label { color: #888; font-size: 12px; }
+.info-row .value { color: #fff; font-size: 14px; font-weight: 600; }
+.radar-footer { margin-top: 16px; font-size: 10px; color: #555; }

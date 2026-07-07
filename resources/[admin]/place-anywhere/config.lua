@@ -1,0 +1,60 @@
+Config = Config or {}
+Config.PlaceAnywhere = Config.PlaceAnywhere or {}
+
+Config.PlaceAnywhere = {
+    adminGroups = { 'god' },
+    maxObjects = 50,
+    moveSpeed = 0.5,
+    rotateSpeed = 5.0,
+
+    -- Whitelist of placeable object models
+    allowedModels = {
+        'prop_rock_4_b',
+        'prop_rock_4_c',
+        'prop_rock_3_b',
+        'prop_rock_3_c',
+        'prop_barrier_work01a',
+        'prop_barrier_work05a',
+        'prop_roadcone02a',
+        'prop_roadcone02b',
+        'prop_consign_01a',
+        'prop_consign_02a',
+        'prop_bollard_01a',
+        'prop_bollard_02a',
+        'prop_post_med_01',
+        'prop_sign_road_01a',
+        'prop_sign_road_02a',
+        'prop_sign_road_03a',
+        'prop_sign_road_04a',
+        'prop_sign_road_05a',
+        'prop_fncsec_01a',
+        'prop_fncsec_02a',
+        'prop_fncsec_03a',
+        'prop_fncsec_04a',
+        'prop_fncsec_05a',
+        'prop_fncsec_06a',
+        'prop_fncsec_07a',
+        'prop_fncsec_08a',
+        'prop_fncsec_09a',
+        'prop_mp_halbox_01a',
+        'prop_mp_halbox_02a',
+        'prop_mp_halbox_03a',
+        'prop_mp_halbox_04a',
+        'prop_box_wood01a',
+        'prop_box_wood02a',
+        'prop_box_wood03a',
+        'prop_box_wood04a',
+        'prop_box_wood05a',
+    },
+
+    -- Quick-place models from the /place menu
+    quickModels = {
+        { model = 'prop_roadcone02a', label = 'Road Cone' },
+        { model = 'prop_barrier_work01a', label = 'Work Barrier' },
+        { model = 'prop_consign_01a', label = 'Construction Sign' },
+        { model = 'prop_bollard_01a', label = 'Bollard' },
+        { model = 'prop_mp_halbox_01a', label = 'HAL Box' },
+        { model = 'prop_fncsec_01a', label = 'Security Fence' },
+        { model = 'prop_box_wood01a', label = 'Wooden Box' },
+    },
+}

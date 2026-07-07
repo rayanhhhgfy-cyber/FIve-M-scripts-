@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radar Gun</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <div class="radar">
+            <div class="radar-header">RADAR</div>
+            <div class="speed-display">
+                <span id="speedValue">0</span>
+                <span class="unit">KM/H</span>
+            </div>
+            <div class="info-row"><span class="label">Plate</span><span id="plateValue" class="value">---</span></div>
+            <div class="info-row"><span class="label">Vehicle</span><span id="modelValue" class="value">---</span></div>
+            <div class="radar-footer">Press ESC to stow</div>
+        </div>
+    </div>
+    <script>
+        window.addEventListener('message', function(e) {
+            const data = e.data;
+            if (data.action === 'open') {
+                document.body.style.display = 'flex';
+            } else if (data.action === 'close') {
+                document.body.style.display = 'none';
+            } else if (data.action === 'update') {
+                document.getElementById('speedValue').textContent = data.speed || 0;
+                document.getElementById('plateValue').textContent = data.plate || '---';
+                document.getElementById('modelValue').textContent = data.model || '---';
+                const speedEl = document.getElementById('speedValue');
+                if (data.speed > 120) speedEl.style.color = '#ff3333';
+                else if (data.speed > 80) speedEl.style.color = '#ffaa00';
+                else speedEl.style.color = '#32ff64';
+            }
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                fetch('https://radar-gun/radarClose', { method: 'POST', body: '{}' });
+            }
+        });
+    </script>
+</body>
+</html>

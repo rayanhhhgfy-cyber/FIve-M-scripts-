@@ -1,0 +1,1 @@
+-- Client stub — all cleanup is server-authoritative.

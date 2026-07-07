@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>God Menu</title>
+    <link rel="stylesheet" href="nui://nui-theme/web/theme.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <div id="sidebar" class="glass">
+            <div class="sidebar-header">
+                <span class="logo">&#9889;</span>
+                <h1>GOD</h1>
+                <span class="version">v1.0</span>
+            </div>
+            <nav id="nav">
+                <div class="nav-item active" data-tab="players">
+                    <span class="nav-icon">&#9783;</span>
+                    <span>Players</span>
+                    <span class="nav-badge" id="playerCount">0</span>
+                </div>
+                <div class="nav-item" data-tab="vehicles">
+                    <span class="nav-icon">&#128663;</span>
+                    <span>Vehicles</span>
+                </div>
+                <div class="nav-item" data-tab="inventory">
+                    <span class="nav-icon">&#128083;</span>
+                    <span>Inventory</span>
+                </div>
+                <div class="nav-item" data-tab="items">
+                    <span class="nav-icon">&#128230;</span>
+                    <span>Items</span>
+                </div>
+                <div class="nav-item" data-tab="money">
+                    <span class="nav-icon">&#128176;</span>
+                    <span>Money</span>
+                </div>
+                <div class="nav-item" data-tab="weather">
+                    <span class="nav-icon">&#9926;</span>
+                    <span>Weather</span>
+                </div>
+                <div class="nav-item" data-tab="time">
+                    <span class="nav-icon">&#128339;</span>
+                    <span>Time</span>
+                </div>
+                <div class="nav-item" data-tab="teleport">
+                    <span class="nav-icon">&#128674;</span>
+                    <span>Teleport</span>
+                </div>
+                <div class="nav-item" data-tab="server">
+                    <span class="nav-icon">&#9881;</span>
+                    <span>Server</span>
+                </div>
+                <div class="nav-item" data-tab="bans">
+                    <span class="nav-icon">&#128683;</span>
+                    <span>Bans</span>
+                </div>
+                <div class="nav-item" data-tab="garage">
+                    <span class="nav-icon">&#128664;</span>
+                    <span>Garage</span>
+                </div>
+                <div class="nav-item" data-tab="staff">
+                    <span class="nav-icon">&#128101;</span>
+                    <span>Staff</span>
+                </div>
+                <div class="nav-item" data-tab="reports">
+                    <span class="nav-icon">&#128196;</span>
+                    <span>Reports</span>
+                    <span class="nav-badge" id="reportBadge" style="display:none">0</span>
+                </div>
+                <div class="nav-item" data-tab="tools">
+                    <span class="nav-icon">&#128295;</span>
+                    <span>Tools</span>
+                </div>
+                <div class="nav-item" data-tab="doors">
+                    <span class="nav-icon">&#128682;</span>
+                    <span>Doors</span>
+                </div>
+                <div class="nav-item" data-tab="zones">
+                    <span class="nav-icon">&#127758;</span>
+                    <span>Zones</span>
+                </div>
+            </nav>
+            <div class="sidebar-footer">
+                <button id="closeBtn" class="btn btn-ghost">&times; Close</button>
+            </div>
+        </div>
+        <div id="content">
+            <div class="tab-content active animate-fadeInUp" id="tab-players">
+                <div class="tab-header">
+                    <h2>Player Management</h2>
+                    <div class="search-box">
+                        <input type="text" id="playerSearch" class="input" placeholder="Search by name or ID...">
+                    </div>
+                </div>
+                <div class="skeleton-loader" id="playerSkeleton">
+                    <div class="skeleton-row"></div>
+                    <div class="skeleton-row"></div>
+                    <div class="skeleton-row"></div>
+                    <div class="skeleton-row"></div>
+                </div>
+                <div class="table-container" id="playerTableContainer">
+                    <table id="playerTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>CID</th>
+                                <th>Ping</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="playerList"></tbody>
+                    </table>
+                </div>
+                <div class="action-bar">
+                    <button class="btn btn-red" onclick="doAll('revive')">Revive All</button>
+                    <button class="btn btn-danger" onclick="doAll('kill')">Kill All</button>
+                    <button class="btn btn-info" onclick="doAll('freeze')">Freeze All</button>
+                    <button class="btn btn-primary" onclick="doAll('tpToMe')">TP All to Me</button>
+                </div>
+            </div>
+
+            <div class="tab-content animate-fadeInUp" id="tab-vehicles">
+                <div class="tab-header">
+                    <h2>Vehicle Spawner</h2>
+                </div>
+                <div class="glass-card">
+                    <label>Spawn Vehicle</label>
+                    <div class="input-group">
+                        <input type="text" id="vehicleModel" class="input" placeholder="Model name (e.g. adder)">
+                        <button class="btn btn-primary" onclick="spawnVehicle()">Spawn</button>
+                    </div>
+                </div>
+                <div class="glass-card">
+                    <button class="btn btn-primary full" onclick="fixVehicle()">Fix Current Vehicle</button>
+                    <button class="btn btn-red full" onclick="deleteVehicle()" style="margin-top:8px">Delete Current Vehicle</button>
+                </div>
+                <div class="glass-card">
+                    <label>Spawn Vehicle for Player (in front of them)</label>
+                    <div class="input-group">
+                        <input type="number" id="spawnForPlayerId" class="input" placeholder="Player ID" min="1">
+                        <input type="text" id="spawnForPlayerModel" class="input" placeholder="Model name">
+                        <button class="btn btn-primary" onclick="spawnVehicleForPlayer()">Spawn</button>
+                    </div>
+                </div>
+                <div class="glass-card">
+                    <label>Give Car to Player's Garage</label>
+                    <div class="input-group">
+                        <input type="number" id="garagePlayerId" class="input" placeholder="Player ID" min="1">
+                        <input type="text" id="garageVehicleModel" class="input" placeholder="Model name">
+                        <button class="btn btn-primary" onclick="giveCarToGarage()">Give</button>
+                    </div>
+                </div>
+                <div class="glass-card">
+                    <label>Transfer Vehicle Ownership</label>
+                    <div class="input-group">
+                        <input type="text" id="transferPlate" class="input" placeholder="Plate (e.g. ABC123)">
+                        <input type="number" id="transferNewOwner" class="input" placeholder="New Owner ID" min="1">
+                        <button class="btn btn-warning" onclick="transferVehicle()">Transfer</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content animate-fadeInUp" id="tab-inventory">
+                <div class="tab-header">
+                    <h2>Player Inventory Viewer</h2>
+                    <div class="inv-controls">
+                        <select id="invPlayerSelect" class="input" style="width:200px">
+                            <option value="">-- Select player --</option>
+                        </select>
+                        <input type="text" id="invSearch" class="input" placeholder="Search items..." style="width:180px">
+                    </div>
+                </div>
+                <div class="inv-categories" id="invCategories">
+                    <span class="inv-cat active" data-cat="all">All</span>
+                    <span class="inv-cat" data-cat="weapons">Weapons</span>
+                    <span class="inv-cat" data-cat="attachments">Attachments</span>
+                    <span class="inv-cat" data-cat="ammo">Ammo</span>
+                    <span class="inv-cat" data-cat="items">Items</span>
+                    <span class="inv-cat" data-cat="clothing">Clothing</span>
+                </div>
+                <div id="invPlayerInfo" class="glass-card" style="display:none">
+                    <div class="inv-player-stats">
+                        <span><strong id="invPlayerName"></strong> <span id="invPlayerCid" class="text-muted"></span></span>
+                        <span>Job: <span id="invPlayerJob"></span> | Group: <span id="invPlayerGroup"></span></span>
+                        <span>Cash: <span class="text-gold" id="invPlayerCash">$0</span> | Bank: <span class="text-gold" id="invPlayerBank">$0</span></span>
+                        <span>Items: <span id="invItemCount">0</span></span>
+                    </div>
+                </div>
+                <div class="skeleton-loader" id="invSkeleton">
+                    <div class="skeleton-row"></div>
+                    <div class="skeleton-row"></div>
+                    <div class="skeleton-row"></div>
+                    <div class="skeleton-row"></div>
+                </div>
+                <div id="invGrid" class="inv-grid"></div>
+            </div>
+
+            <div class="tab-content animate-fadeInUp" id="tab-items">
+                <div class="tab-header">
+                    <h2>Give Items</h2>
+                </div>
+                <div class="glass-card">
+                    <label>Give Item to Player</label>
+                    <div class="input-group">
+                        <input type="number" id="itemPlayerId" class="input" placeholder="Player ID" min="1">
+                        <select id="itemSelect" class="input"></select>
+                        <input type="number" id="itemCount" class="input" placeholder="Count" value="1" min="1">
+                        <button class="btn btn-primary" onclick="giveItem()">Give</button>
+                    </div>
+                </div>
+                <div class="glass-card">
+                    <label>Custom Item</label>
+                    <div class="input-group">
+                        <input type="number" id="customItemPlayerId" class="input" placeholder="Player ID" min="1">
+                        <input type="text" id="customItemName" class="input" placeholder="Item name">
+                        <input type="number" id="customItemCount" class="input" placeholder="Count" value="1" min="1">
+                        <button class="btn btn-primary" onclick="giveCustomItem()">Give</button>
+                    </div>
+                </div>
+                <div class="glass-card">
+                    <label>Give to All Players</label>
+                    <div class="input-group">
+                        <select id="allItemSelect" class="input"></select>
+                        <input type="number" id="allItemCount" class="input" placeholder="Count" value="1" min="1">
+                        <button class="btn btn-ghost" onclick="giveAllItem()">Give All</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content animate-fadeInUp" id="tab-money">
+                <div class="tab-header">
+                    <h2>Money Management</h2>
+                </div>
+                <div class="glass-card">
+                    <label>Give Money to Player</label>
+                    <div class="input-group">
+                        <input type="number" id="moneyPlayerId" class="input" placeholder="Player ID" min="1">
+                        <input type="number" id="moneyAmount" class="input" placeholder="Amount" min="1">
+                        <select id="moneyType" class="input">
+                            <option value="cash">Cash</option>
+                            <option value="bank">Bank</option>
+                        </select>
+                        <button class="btn btn-primary" onclick="giveMoney()">Give</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content animate-fadeInUp" id="tab-weather">
+                <div class="tab-header">
+                    <h2>Weather Control</h2>
+                </div>
+                <div class="glass-card">
+                    <div class="weather-grid" id="weatherGrid"></div>
+                </div>
+            </div>
+
+            <div class="tab-content animate-fadeInUp" id="tab-time">
+                <div class="tab-header">
+                    <h2>Time Control</h2>
+                </div>
+                <div class="glass-card">
+                    <label>Set Time</label>
+                    <div class="input-group">
+                        <input type="number" id="timeHour" class="input" placeholder="Hour (0-23)" min="0" max="23" value="12">
+                        <span style="color:var(--text-muted);font-size:24px;padding:0 4px">:</span>
+                        <input type="number" id="timeMinute" class="input" placeholder="Min (0-59)" min="0" max="59" value="0">
+                        <button class="btn btn-primary" onclick="setTime()">Set</button>
+                    </div>
+                </div>
+                <div class="preset-times">
+                    <button class="btn" onclick="setTimePreset(6,0)">Dawn</button>
+                    <button class="btn" onclick="setTimePreset(12,0)">Noon</button>
+                    <button class="btn" onclick="setTimePreset(18,0)">Dusk</button>
+                    <button class="btn" onclick="setTimePreset(0,0)">Midnight</button>
+                </div>
+            </div>
+
+            <div class="tab-content animate-fadeInUp" id="tab-teleport">
+                <div class="tab-header">
+                    <h2>Teleport</h2>
+                </div>
+                <div class="glass-card">
+                    <label>Custom Coords</label>
+                    <div class="input-group triple">
+                        <input type="number" id="tpX" class="input" placeholder="X" step="0.01">
+                        <input type="number" id="tpY" class="input" placeholder="Y" step="0.01">
+                        <input type="number" id="tpZ" class="input" placeholder="Z" step="0.01">
+                        <button class="btn btn-primary" onclick="teleportCoords()">Go</button>
+                    </div>
+                </div>
+                <div class="glass-card">
+                    <button class="btn btn-primary full" onclick="teleportWaypoint()">Teleport to Waypoint</button>
+                </div>
+                <div class="glass-card">
+                    <label>Preset Locations</label>
+                    <div class="preset-grid" id="tpPresets"></div>
+                </div>
+            </div>
+
+            <div class="tab-content animate-fadeInUp" id="tab-server">
+                <div class="tab-header">
+                    <h2>Server Controls</h2>
+                </div>
+                <div class="glass-card">
+                    <label>Announcement</label>
+                    <div class="input-group">
+                        <input type="text" id="announceMsg" class="input" placeholder="Message to all players">
+                        <button class="btn btn-primary" onclick="sendAnnounce()">Send</button>
+                    </div>
+                </div>
+                <div class="server-actions">
+                    <button class="btn btn-red" onclick="clearArea()">Clear Area (50m)</button>
+                    <button class="btn btn-success" onclick="reviveAll()">Revive All</button>
+                    <button class="btn btn-danger" onclick="killAll()">Kill All</button>
+                    <button class="btn btn-info" onclick="freezeAll()">Freeze All</button>
+                    <button class="btn btn-primary" onclick="teleportAllToMe()">TP All to Me</button>
+                    <button class="btn btn-warning" onclick="restartCountdown()">Restart</button>
+                </div>
+                <div class="glass-card">
+                    <label>Give Money to All Players</label>
+                    <div class="input-group">
+                        <input type="number" id="allMoneyAmount" class="input" placeholder="Amount" min="1">
+                        <select id="allMoneyType" class="input">
+                            <option value="cash">Cash</option>
+                            <option value="bank">Bank</option>
+                        </select>
+                        <button class="btn btn-primary" onclick="giveAllMoney()">Give</button>
+                    </div>
+                </div>
+                <div class="glass-card">
+                    <label>Set Job for All Players</label>
+                    <div class="input-group">
+                        <input type="text" id="allJobName" class="input" placeholder="Job name">
+                        <input type="number" id="allJobGrade" class="input" placeholder="Grade" min="0" value="0">
+                        <button class="btn btn-primary" onclick="setAllJob()">Set</button>
+                    </div>
+                </div>
+                <div class="glass-card" id="serverInfo">
+                    <label>Server Info</label>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">Players</span>
+                            <span class="info-value" id="infoPlayers">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Server</span>
+                            <span class="info-value">FiveM</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content animate-fadeInUp" id="tab-bans">
+                <div class="tab-header">
+                    <h2>Ban Management</h2>
+                    <div class="search-box">
+                        <input type="text" id="banSearch" class="input" placeholder="Search by name or identifier...">
+                    </div>
+                </div>
+                <div class="glass-card">
+                    <div class="ban-stats">
+                        <span>Total Active Bans: <strong id="banTotalCount">0</strong></span>
+                    </div>
+                </div>
+                <div class="skeleton-loader" id="banSkeleton">
+                    <div class="skeleton-row"></div>
+                    <div class="skeleton-row"></div>
+                    <div class="skeleton-row"></div>
+                </div>
+                <div class="table-container" id="banTableContainer">
+                    <table id="banTable">
+                        <thead>
+                            <tr>
+                                <th>Player</th>
+                                <th>Identifier</th>
+                                <th>Reason</th>
+                                <th>Banned By</th>
+                                <th>Duration</th>
+                                <th>Remaining</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="banList"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="tab-content animate-fadeInUp" id="tab-garage">
+                <div class="tab-header">
+                    <h2>Vehicle Garage Viewer</h2>
+                    <div class="inv-controls">
+                        <input type="text" id="garageCitizenId" class="input" placeholder="Enter CitizenID..." style="width:200px">
+                        <button class="btn btn-primary" onclick="loadGarageByCid()">Search</button>
+                    </div>
+                </div>
+                <div class="glass-card" id="garagePlayerInfo" style="display:none">
+                    <div class="inv-player-stats">
+                        <span><strong id="garagePlayerLabel"></strong></span>
+                        <span>Vehicles: <span id="garageVehicleCount">0</span></span>
+                    </div>
+                </div>
+                <div class="garage-summary">
+                    <span class="garage-summary-item"><span class="garage-dot stored"></span> Stored: <strong id="garageStoredCount">0</strong></span>
+                    <span class="garage-summary-item"><span class="garage-dot out"></span> Out: <strong id="garageOutCount">0</strong></span>
+                    <span class="garage-summary-item"><span class="garage-dot impounded"></span> Impounded: <strong id="garageImpoundedCount">0</strong></span>
+                </div>
+                <div class="skeleton-loader" id="garageSkeleton">
+                    <div class="skeleton-row"></div>
+                    <div class="skeleton-row"></div>
+                    <div class="skeleton-row"></div>
+                </div>
+                <div id="garageList" class="garage-grid"></div>
+            </div>
+
+            <div class="tab-content animate-fadeInUp" id="tab-staff">
+                <div class="tab-header">
+                    <h2>Admin Staff Management</h2>
+                    <span id="staffOnlineCount" class="nav-badge">0 online</span>
+                </div>
+                <div class="skeleton-loader" id="staffSkeleton">
+                    <div class="skeleton-row"></div>
+                    <div class="skeleton-row"></div>
+                    <div class="skeleton-row"></div>
+                </div>
+                <div id="staffGrid" class="staff-grid"></div>
+            </div>
+
+            <!-- Staff Action Log Modal -->
+            <div id="staffLogModal" class="modal-overlay" style="display:none">
+                <div class="modal glass" style="width:650px">
+                    <div class="modal-header">
+                        <h3 id="staffLogTitle">Staff Action Log</h3>
+                        <button class="btn btn-ghost" onclick="closeStaffLogModal()">&times;</button>
+                    </div>
+                    <div class="modal-body" id="staffLogBody"></div>
+                </div>
+            </div>
+
+            <div class="tab-content animate-fadeInUp" id="tab-reports">
+                <div class="tab-header">
+                    <h2>Report Queue</h2>
+                    <button class="btn btn-sm btn-ghost" onclick="refreshReports()">&#8635; Refresh</button>
+                </div>
+                <div class="glass-card">
+                    <div class="report-stats">
+                        <span>Open: <strong id="reportOpenCount">0</strong></span>
+                        <span>Handling: <strong id="reportHandlingCount">0</strong></span>
+                    </div>
+                </div>
+                <div class="skeleton-loader" id="reportSkeleton">
+                    <div class="skeleton-row"></div>
+                    <div class="skeleton-row"></div>
+                    <div class="skeleton-row"></div>
+                </div>
+                <div id="reportList"></div>
+            </div>
+
+            <div class="tab-content animate-fadeInUp" id="tab-tools">
+                <div class="tab-header">
+                    <h2>Tools</h2>
+                </div>
+                <div class="glass-card">
+                    <div class="tool-grid">
+                        <div class="tool-btn" onclick="toggleNoclip()" title="Toggle Noclip">
+                            <span class="tool-icon">&#9992;</span>
+                            <span class="tool-label">Noclip</span>
+                            <span class="tool-status" id="noclipStatus">Off</span>
+                        </div>
+                        <div class="tool-btn" onclick="promptSpectate()" title="Spectate a player">
+                            <span class="tool-icon">&#128065;</span>
+                            <span class="tool-label">Spectate</span>
+                            <span class="tool-status" id="spectateStatus">Off</span>
+                        </div>
+                        <div class="tool-btn" onclick="stopSpectate()" title="Stop spectating">
+                            <span class="tool-icon">&#128190;</span>
+                            <span class="tool-label">Stop Spectate</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-content animate-fadeInUp" id="tab-doors">
+                <div class="tab-header">
+                    <h2>Door Lock Management</h2>
+                </div>
+                <div class="glass-card">
+                    <div class="door-actions">
+                        <button class="btn btn-primary" onclick="detectCurrentDoor()">&#128269; Detect Current Door</button>
+                        <button class="btn btn-success" onclick="showDoorSetup(null)">&#10133; Add Manually</button>
+                    </div>
+                </div>
+                <div class="glass-card">
+                    <div class="door-bulk-actions">
+                        <button class="btn btn-warning" onclick="lockAllDoors()">&#128274; Lock All</button>
+                        <button class="btn btn-success" onclick="unlockAllDoors()">&#128275; Unlock All</button>
+                    </div>
+                </div>
+                <div class="skeleton-loader" id="doorSkeleton">
+                    <div class="skeleton-row"></div>
+                    <div class="skeleton-row"></div>
+                    <div class="skeleton-row"></div>
+                </div>
+                <div id="doorList"></div>
+            </div>
+            <div class="tab-content animate-fadeInUp" id="tab-zones">
+                <div class="tab-header">
+                    <h2>Dynamic Zone Management</h2>
+                </div>
+                <div class="glass-card">
+                    <div class="zone-actions">
+                        <button class="btn btn-primary" onclick="detectCurrentPosition()">&#128269; Detect Current Position</button>
+                        <button class="btn btn-success" onclick="showZoneSetup(null)">&#10133; Create Zone</button>
+                    </div>
+                </div>
+                <div class="skeleton-loader" id="zoneSkeleton">
+                    <div class="skeleton-row"></div>
+                    <div class="skeleton-row"></div>
+                    <div class="skeleton-row"></div>
+                </div>
+                <div id="zoneList"></div>
+            </div>
+        </div>
+    </div>
+    <!-- Zone Setup Modal -->
+    <div id="zoneModal" class="modal-overlay" style="display:none">
+        <div class="modal glass">
+            <div class="modal-header">
+                <h3 id="zoneModalTitle">Create Zone</h3>
+                <button class="btn btn-ghost" onclick="closeZoneModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" id="zoneName" class="input" placeholder="e.g. LSPD Rooftop Armory">
+                </div>
+                <div class="form-group">
+                    <label>Type</label>
+                    <select id="zoneType" class="input">
+                        <option value="armory">Armory</option>
+                        <option value="shop">Shop</option>
+                        <option value="storage">Storage</option>
+                        <option value="wardrobe">Wardrobe</option>
+                        <option value="duty">Duty</option>
+                        <option value="garage">Garage</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Coordinates</label>
+                    <div class="input-group triple">
+                        <input type="number" id="zoneX" class="input" placeholder="X" step="0.01">
+                        <input type="number" id="zoneY" class="input" placeholder="Y" step="0.01">
+                        <input type="number" id="zoneZ" class="input" placeholder="Z" step="0.01">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Radius</label>
+                    <input type="number" id="zoneRadius" class="input" placeholder="2.0" step="0.1" value="2.0">
+                </div>
+                <div class="form-group">
+                    <label>Allowed Jobs</label>
+                    <div id="zoneJobCheckboxes" class="job-checkboxes"></div>
+                </div>
+                <div class="form-group">
+                    <label>Minimum Grade</label>
+                    <input type="number" id="zoneMinGrade" class="input" placeholder="0" min="0" value="0">
+                </div>
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="zoneRequireDuty"> Require On Duty
+                    </label>
+                </div>
+                <div class="form-group" id="zoneActiveGroup">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="zoneIsActive" checked> Active
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" onclick="closeZoneModal()">Cancel</button>
+                <button class="btn btn-primary" id="zoneSaveBtn" onclick="saveZone()">Save Zone</button>
+            </div>
+        </div>
+    </div>
+    <!-- Zone Items Modal -->
+    <div id="zoneItemsModal" class="modal-overlay" style="display:none">
+        <div class="modal glass" style="width:600px">
+            <div class="modal-header">
+                <h3 id="zoneItemsModalTitle">Zone Items</h3>
+                <button class="btn btn-ghost" onclick="closeZoneItemsModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="text" id="zoneNewItemName" class="input" placeholder="Item name (e.g. WEAPON_PISTOL)">
+                        <input type="text" id="zoneNewItemLabel" class="input" placeholder="Label (e.g. Pistol)">
+                        <input type="number" id="zoneNewItemPrice" class="input" placeholder="Price (0 = free)" value="0" min="0" style="width:100px">
+                        <input type="number" id="zoneNewItemMinRank" class="input" placeholder="Min rank" value="0" min="0" style="width:80px">
+                        <button class="btn btn-success" onclick="addZoneItem()">+</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Currency</label>
+                    <select id="zoneNewItemCurrency" class="input" style="width:150px">
+                        <option value="money">Cash</option>
+                        <option value="black_money">Black Money</option>
+                    </select>
+                    <label style="margin-left:12px">Category</label>
+                    <select id="zoneNewItemCategory" class="input" style="width:150px">
+                        <option value="general">General</option>
+                        <option value="weapons">Weapons</option>
+                        <option value="ammo">Ammo</option>
+                        <option value="attachments">Attachments</option>
+                        <option value="clothing">Clothing</option>
+                        <option value="equipment">Equipment</option>
+                    </select>
+                </div>
+                <div id="zoneItemsList"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" onclick="closeZoneItemsModal()">Close</button>
+            </div>
+        </div>
+    </div>
+    <!-- Door Setup Modal -->
+    <div id="doorModal" class="modal-overlay" style="display:none">
+        <div class="modal glass">
+            <div class="modal-header">
+                <h3 id="doorModalTitle">Add Door Lock</h3>
+                <button class="btn btn-ghost" onclick="closeDoorModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Label</label>
+                    <input type="text" id="doorLabel" class="input" placeholder="e.g. City Hall Main Door">
+                </div>
+                <div class="form-group">
+                    <label>Door Model Hash</label>
+                    <input type="text" id="doorModelInput" class="input" placeholder="Auto-detected or enter manually">
+                </div>
+                <div class="form-group">
+                    <label>Coordinates</label>
+                    <div class="input-group triple">
+                        <input type="number" id="doorX" class="input" placeholder="X" step="0.01">
+                        <input type="number" id="doorY" class="input" placeholder="Y" step="0.01">
+                        <input type="number" id="doorZ" class="input" placeholder="Z" step="0.01">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Heading</label>
+                    <input type="number" id="doorHeading" class="input" placeholder="Heading" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label>Lock Type</label>
+                    <select id="doorLockType" class="input" onchange="onLockTypeChange()">
+                        <option value="permanent">Permanent (Always Locked)</option>
+                        <option value="passcode">Passcode (Numeric Code)</option>
+                        <option value="job">Job (Specific Jobs Only)</option>
+                    </select>
+                </div>
+                <div id="doorPasscodeGroup" class="form-group" style="display:none">
+                    <label>Passcode</label>
+                    <input type="password" id="doorPasscode" class="input" placeholder="Enter numeric passcode">
+                </div>
+                <div id="doorJobGroup" class="form-group" style="display:none">
+                    <label>Allowed Jobs</label>
+                    <div id="doorJobCheckboxes" class="job-checkboxes"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" onclick="closeDoorModal()">Cancel</button>
+                <button class="btn btn-primary" id="doorSaveBtn" onclick="saveDoor()">Save Door</button>
+            </div>
+        </div>
+    </div>
+    <!-- Player Details Modal -->
+    <div id="detailsModal" class="modal-overlay" style="display:none">
+        <div class="modal glass">
+            <div class="modal-header">
+                <h3 id="detailsTitle">Player Details</h3>
+                <button class="btn btn-ghost" onclick="closeDetails()">&times;</button>
+            </div>
+            <div class="modal-body" id="detailsBody"></div>
+        </div>
+    </div>
+    <!-- Ban Modal -->
+    <div id="banModal" class="modal-overlay" style="display:none">
+        <div class="modal glass" style="width:450px">
+            <div class="modal-header">
+                <h3 id="banModalTitle">Ban Player</h3>
+                <button class="btn btn-ghost" onclick="closeBanModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Player</label>
+                    <select id="banPlayerSelect" class="input">
+                        <option value="">-- Select player --</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Reason</label>
+                    <input type="text" id="banReason" class="input" placeholder="Reason for ban">
+                </div>
+                <div class="form-group">
+                    <label>Duration</label>
+                    <div class="ban-duration-grid">
+                        <button class="btn btn-sm ban-dur-btn active" data-dur="3600">1h</button>
+                        <button class="btn btn-sm ban-dur-btn" data-dur="21600">6h</button>
+                        <button class="btn btn-sm ban-dur-btn" data-dur="86400">24h</button>
+                        <button class="btn btn-sm ban-dur-btn" data-dur="604800">7d</button>
+                        <button class="btn btn-sm ban-dur-btn" data-dur="2592000">30d</button>
+                        <button class="btn btn-sm ban-dur-btn" data-dur="-1">Perm</button>
+                        <input type="number" id="banCustomDuration" class="input" placeholder="Custom seconds" style="width:140px">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" onclick="closeBanModal()">Cancel</button>
+                <button class="btn btn-danger" onclick="executeBan()">Ban Player</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Item Detail Modal -->
+    <div id="invItemModal" class="modal-overlay" style="display:none">
+        <div class="modal glass" style="width:450px">
+            <div class="modal-header">
+                <h3 id="invItemModalTitle">Item Details</h3>
+                <button class="btn btn-ghost" onclick="closeInvItemModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="invItemModalBody"></div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" onclick="closeInvItemModal()">Close</button>
+                <button class="btn btn-danger" id="invItemRemoveBtn" onclick="removeInvItem()">Remove Item</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dealership</title>
+    <link rel="stylesheet" href="nui://nui-theme/web/theme.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="dealership-ui" class="glass-panel">
+        <div id="dealer-header">
+            <div id="dealer-title-section">
+                <span id="dealer-title">Dealership</span>
+                <span id="dealer-cash">Cash: $0</span>
+                <span id="dealer-bank">Bank: $0</span>
+            </div>
+            <button id="dealer-close" class="btn btn-ghost">&times;</button>
+        </div>
+        <div id="dealer-body">
+            <div id="dealer-categories"></div>
+            <div id="dealer-grid"></div>
+            <div id="dealer-detail" class="hidden animate-fadeInUp">
+                <div id="dealer-detail-header">
+                    <button id="dealer-detail-back" class="btn btn-ghost">&#8592; Back</button>
+                    <span id="dealer-detail-name"></span>
+                </div>
+                <div id="dealer-detail-info">
+                    <p id="dealer-detail-desc"></p>
+                    <p id="dealer-detail-price"></p>
+                    <p id="dealer-detail-stock"></p>
+                    <p id="dealer-detail-finance"></p>
+                </div>
+                <div id="dealer-detail-actions">
+                    <button id="dealer-buy-cash" class="btn btn-primary">Buy (Cash)</button>
+                    <button id="dealer-buy-bank" class="btn btn-primary">Buy (Bank)</button>
+                    <button id="dealer-buy-finance" class="btn btn-ghost">Finance</button>
+                    <button id="dealer-preview" class="btn btn-ghost">Preview</button>
+                    <button id="dealer-testdrive" class="btn btn-ghost">Test Drive</button>
+                </div>
+            </div>
+        </div>
+        <div id="dealer-sell-section">
+            <div id="dealer-sell-header" class="dealer-collapsible">
+                <span>Sell Your Vehicle</span>
+                <span class="collapse-icon">&#9660;</span>
+            </div>
+            <div id="dealer-sell-content" class="hidden">
+                <select id="dealer-sell-select" class="input"></select>
+                <button id="dealer-sell-btn" class="btn btn-primary">Sell Vehicle</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

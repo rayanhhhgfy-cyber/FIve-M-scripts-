@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notepad</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <div class="notepad">
+            <div class="header">
+                <h2>Notepad</h2>
+                <button class="close-btn" onclick="closeNotepad()">&times;</button>
+            </div>
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('write')">Write</button>
+                <button class="tab" onclick="switchTab('notes')">Saved Notes</button>
+            </div>
+            <div id="writeTab" class="tab-content active">
+                <input type="text" id="noteTitle" class="input" placeholder="Title..." maxlength="100">
+                <textarea id="noteContent" placeholder="Write your notes here..." rows="10"></textarea>
+                <button class="save-btn" onclick="saveNote()">Save Note</button>
+            </div>
+            <div id="notesTab" class="tab-content">
+                <div id="notesList"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function closeNotepad() {
+            fetch('https://notepad/notepadClose', { method: 'POST', body: '{}' });
+        }
+        function switchTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.getElementById(tab + 'Tab').classList.add('active');
+            document.querySelector(`.tab[onclick*="${tab}"]`).classList.add('active');
+            if (tab === 'notes') loadNotes();
+        }
+        async function saveNote() {
+            const title = document.getElementById('noteTitle').value.trim();
+            const content = document.getElementById('noteContent').value.trim();
+            if (!title || !content) { alert('Enter a title and content.'); return; }
+            await fetch('https://notepad/notepadSave', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title, content }) });
+            document.getElementById('noteTitle').value = '';
+            document.getElementById('noteContent').value = '';
+            alert('Note saved!');
+        }
+        async function loadNotes() {
+            const resp = await fetch('https://notepad/notepadGetNotes', { method: 'POST', body: '{}' });
+            const data = await resp.json();
+            const container = document.getElementById('notesList');
+            if (!data || data.length === 0) {
+                container.innerHTML = '<div class="empty">No saved notes.</div>';
+                return;
+            }
+            container.innerHTML = data.map(n => `
+                <div class="note-card">
+                    <div class="note-title">${escapeHtml(n.title)}</div>
+                    <div class="note-date">${n.updated_at || n.created_at || ''}</div>
+                    <div class="note-preview">${escapeHtml((n.content || '').substring(0, 200))}</div>
+                    <button class="delete-btn" onclick="deleteNote(${n.id})">Delete</button>
+                </div>
+            `).join('');
+        }
+        async function deleteNote(id) {
+            if (!confirm('Delete this note?')) return;
+            await fetch('https://notepad/notepadDelete', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ noteId: id }) });
+            loadNotes();
+        }
+        function escapeHtml(str) {
+            const d = document.createElement('div');
+            d.textContent = str;
+            return d.innerHTML;
+        }
+        window.addEventListener('message', function(e) {
+            if (e.data.action === 'open') {
+                document.body.style.display = 'flex';
+            } else if (e.data.action === 'close') {
+                document.body.style.display = 'none';
+            }
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeNotepad();
+        });
+    </script>
+</body>
+</html>

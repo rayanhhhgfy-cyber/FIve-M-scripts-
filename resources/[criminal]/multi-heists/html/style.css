@@ -1,0 +1,61 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow: hidden; background: transparent;
+    display: flex; justify-content: center; align-items: center;
+    height: 100vh; width: 100vw;
+}
+#hack-container {
+    background: rgba(10, 22, 34, 0.92);
+    border: 1px solid #00bcd4;
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+    width: 380px;
+    box-shadow: 0 0 40px rgba(0, 188, 212, 0.2);
+    backdrop-filter: blur(8px);
+}
+#hack-header {
+    font-size: 16px; font-weight: 600;
+    color: #e0e0e0; margin-bottom: 16px;
+}
+#hack-header i { color: #00bcd4; margin-right: 8px; }
+#hack-status {
+    font-size: 13px; color: #8899aa; margin-bottom: 16px;
+    min-height: 20px;
+}
+#pattern-display {
+    display: flex; justify-content: center; gap: 10px;
+    margin-bottom: 20px; min-height: 40px;
+}
+.pattern-dot {
+    width: 12px; height: 12px; border-radius: 50%;
+    background: #1a2d3d; border: 1px solid #2a3f4f;
+    transition: all 0.3s;
+}
+.pattern-dot.active { background: #00bcd4; box-shadow: 0 0 12px rgba(0, 188, 212, 0.6); }
+#hack-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 10px; margin-bottom: 16px;
+}
+.hack-cell {
+    aspect-ratio: 1; border-radius: 8px;
+    background: #0f1f30; border: 2px solid #1a2d3d;
+    cursor: pointer; transition: all 0.2s;
+}
+.hack-cell:hover { border-color: #2a3f4f; }
+.hack-cell.lit-0 { background: #4caf50; border-color: #4caf50; box-shadow: 0 0 20px rgba(76, 175, 80, 0.5); }
+.hack-cell.lit-1 { background: #f44336; border-color: #f44336; box-shadow: 0 0 20px rgba(244, 67, 54, 0.5); }
+.hack-cell.lit-2 { background: #2196f3; border-color: #2196f3; box-shadow: 0 0 20px rgba(33, 150, 243, 0.5); }
+.hack-cell.lit-3 { background: #ff9800; border-color: #ff9800; box-shadow: 0 0 20px rgba(255, 152, 0, 0.5); }
+.hack-cell.wrong { background: #f44336 !important; border-color: #f44336 !important; }
+.hack-cell.correct { background: #4caf50 !important; border-color: #4caf50 !important; }
+#hack-progress {
+    width: 100%; height: 4px; background: #1a2d3d;
+    border-radius: 2px; margin-bottom: 12px; overflow: hidden;
+}
+#progress-fill {
+    width: 0%; height: 100%; background: linear-gradient(90deg, #00bcd4, #4caf50);
+    transition: width 0.5s; border-radius: 2px;
+}
+#hack-footer { font-size: 11px; color: #607080; }

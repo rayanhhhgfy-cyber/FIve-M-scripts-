@@ -1,0 +1,1 @@
+--- Building Interiors — lightweight (no server DB needed, all client-side teleport)

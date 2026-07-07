@@ -1,0 +1,2 @@
+--- Server-side placeholder for vehicle interactions
+--- All logic is client-side, but server stub exists for future validation

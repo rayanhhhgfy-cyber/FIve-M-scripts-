@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CID Management Terminal</title>
+    <link rel="stylesheet" href="nui://nui-theme/web/theme.css">
+    <link rel="stylesheet" href="cids.css">
+</head>
+<body>
+    <div id="cidsContainer" class="cids-hidden">
+        <div class="cids-sidebar">
+            <div class="cids-sidebar-header">
+                <div class="cids-logo">CID</div>
+                <div class="cids-subtitle">Management Terminal</div>
+            </div>
+            <div class="cids-tabs" id="cidsTabs">
+                <div class="cids-tab active" data-tab="dashboard"><span class="tab-icon">📊</span> Dashboard</div>
+                <div class="cids-tab" data-tab="staff"><span class="tab-icon">👥</span> Staff</div>
+                <div class="cids-tab" data-tab="grades"><span class="tab-icon">📋</span> Grades</div>
+                <div class="cids-tab" data-tab="payroll"><span class="tab-icon">💰</span> Payroll</div>
+                <div class="cids-tab" data-tab="armory"><span class="tab-icon">🔫</span> Armory</div>
+                <div class="cids-tab" data-tab="cases"><span class="tab-icon">🔍</span> Cases</div>
+                <div class="cids-tab" data-tab="warrants"><span class="tab-icon">⚖️</span> Warrants</div>
+                <div class="cids-tab" data-tab="bolos"><span class="tab-icon">🚨</span> BOLOs</div>
+                <div class="cids-tab" data-tab="persons"><span class="tab-icon">🆔</span> Person DB</div>
+                <div class="cids-tab" data-tab="vehiclespawns"><span class="tab-icon">🚗</span> Vehicle Spawns</div>
+                <div class="cids-tab" data-tab="audit"><span class="tab-icon">📜</span> Audit Log</div>
+                <div class="cids-tab" data-tab="announce"><span class="tab-icon">📢</span> Announce</div>
+            </div>
+            <div class="cids-sidebar-footer">
+                <div class="cids-close" onclick="closeTerminal()">✕ CLOSE</div>
+            </div>
+        </div>
+        <div class="cids-content" id="cidsContent">
+            <div class="cids-panel active" id="panel-dashboard">
+                <div class="panel-title">DASHBOARD</div>
+                <div class="dashboard-grid" id="dashGrid">
+                    <div class="dash-card" id="dashCardAgents"><div class="dash-num" id="dashAgents">—</div><div class="dash-label">Total Agents</div><div class="skeleton-shimmer"></div></div>
+                    <div class="dash-card" id="dashCardOnline"><div class="dash-num" id="dashOnline">—</div><div class="dash-label">Online Now</div><div class="skeleton-shimmer"></div></div>
+                    <div class="dash-card" id="dashCardCases"><div class="dash-num" id="dashCases">—</div><div class="dash-label">Active Cases</div><div class="skeleton-shimmer"></div></div>
+                    <div class="dash-card" id="dashCardOps"><div class="dash-num" id="dashOps">—</div><div class="dash-label">Active Ops</div><div class="skeleton-shimmer"></div></div>
+                    <div class="dash-card" id="dashCardBolos"><div class="dash-num" id="dashBolos">—</div><div class="dash-label">Active BOLOs</div><div class="skeleton-shimmer"></div></div>
+                    <div class="dash-card" id="dashCardSpawns"><div class="dash-num" id="dashSpawns">—</div><div class="dash-label">Vehicle Spawns</div><div class="skeleton-shimmer"></div></div>
+                </div>
+            </div>
+            <div class="cids-panel" id="panel-staff">
+                <div class="panel-title">STAFF MANAGEMENT</div>
+                <div class="panel-toolbar"><button class="cids-btn primary" onclick="showHireDialog()">+ Hire</button></div>
+                <div class="cids-table-wrap"><table class="cids-table" id="staffTable"><thead><tr><th>Name</th><th>Job</th><th>Grade</th><th>Status</th><th>Actions</th></tr></thead><tbody id="staffBody"><tr class="loading-row"><td colspan="5"><div class="spinner-sm"></div></td></tr></tbody></table></div>
+            </div>
+            <div class="cids-panel" id="panel-grades">
+                <div class="panel-title">GRADE CONFIGURATION</div>
+                <div class="cids-table-wrap"><table class="cids-table" id="gradesTable"><thead><tr><th>Grade</th><th>Label</th><th>Salary</th><th>Actions</th></tr></thead><tbody id="gradesBody"><tr class="loading-row"><td colspan="4"><div class="spinner-sm"></div></td></tr></tbody></table></div>
+            </div>
+            <div class="cids-panel" id="panel-payroll">
+                <div class="panel-title">PAYROLL</div>
+                <div class="panel-toolbar"><button class="cids-btn primary" onclick="triggerPayroll()">Run Payroll Now</button></div>
+                <div class="panel-subtitle">Last 20 Payroll Runs</div>
+                <div class="cids-table-wrap"><table class="cids-table" id="payrollTable"><thead><tr><th>Date</th><th>By</th><th>Details</th></tr></thead><tbody id="payrollBody"><tr class="loading-row"><td colspan="3"><div class="spinner-sm"></div></td></tr></tbody></table></div>
+            </div>
+            <div class="cids-panel" id="panel-armory">
+                <div class="panel-title">ARMORY MANAGEMENT</div>
+                <div class="panel-toolbar"><button class="cids-btn primary" onclick="showAddArmoryItem()">+ Add Item</button></div>
+                <div class="cids-table-wrap"><table class="cids-table" id="armoryTable"><thead><tr><th>Item</th><th>Label</th><th>Rank</th><th>Price</th><th>Category</th><th>Actions</th></tr></thead><tbody id="armoryBody"><tr class="loading-row"><td colspan="6"><div class="spinner-sm"></div></td></tr></tbody></table></div>
+            </div>
+            <div class="cids-panel" id="panel-cases">
+                <div class="panel-title">INVESTIGATION CASES</div>
+                <div class="panel-toolbar"><button class="cids-btn primary" onclick="showCreateCase()">+ New Case</button></div>
+                <div class="cids-table-wrap"><table class="cids-table" id="casesTable"><thead><tr><th>ID</th><th>Title</th><th>Assigned</th><th>Status</th><th>Created</th><th>Actions</th></tr></thead><tbody id="casesBody"><tr class="loading-row"><td colspan="6"><div class="spinner-sm"></div></td></tr></tbody></table></div>
+            </div>
+            <div class="cids-panel" id="panel-warrants">
+                <div class="panel-title">ARREST WARRANTS</div>
+                <div class="panel-toolbar"><button class="cids-btn primary" onclick="showIssueWarrant()">+ Issue Warrant</button></div>
+                <div class="cids-table-wrap"><table class="cids-table" id="warrantsTable"><thead><tr><th>ID</th><th>Target</th><th>Crime</th><th>Status</th><th>Issued</th><th>Actions</th></tr></thead><tbody id="warrantsBody"><tr class="loading-row"><td colspan="6"><div class="spinner-sm"></div></td></tr></tbody></table></div>
+            </div>
+            <div class="cids-panel" id="panel-bolos">
+                <div class="panel-title">BOLO MANAGEMENT</div>
+                <div class="panel-toolbar"><button class="cids-btn primary" onclick="showCreateBOLO()">+ New BOLO</button></div>
+                <div class="cids-table-wrap"><table class="cids-table" id="bolosTable"><thead><tr><th>Type</th><th>Plate/Info</th><th>Reason</th><th>Status</th><th>Actions</th></tr></thead><tbody id="bolosBody"><tr class="loading-row"><td colspan="5"><div class="spinner-sm"></div></td></tr></tbody></table></div>
+            </div>
+            <div class="cids-panel" id="panel-persons">
+                <div class="panel-title">PERSON DATABASE</div>
+                <div class="panel-toolbar">
+                    <input class="cids-input" id="personSearchInput" placeholder="Search by name, citizen ID, or phone...">
+                    <button class="cids-btn primary" onclick="searchPerson()">Search</button>
+                </div>
+                <div id="personResults"></div>
+            </div>
+            <div class="cids-panel" id="panel-vehiclespawns">
+                <div class="panel-title">VEHICLE SPAWN TRACKER</div>
+                <div class="dash-card" style="margin-bottom:12px"><div class="dash-num" id="spawnTotal">—</div><div class="dash-label">Total Vehicles Spawned</div></div>
+                <div class="cids-table-wrap"><table class="cids-table" id="spawnTable"><thead><tr><th>Who</th><th>Model</th><th>Date</th></tr></thead><tbody id="spawnBody"><tr class="loading-row"><td colspan="3"><div class="spinner-sm"></div></td></tr></tbody></table></div>
+            </div>
+            <div class="cids-panel" id="panel-audit">
+                <div class="panel-title">AUDIT LOG</div>
+                <div class="cids-table-wrap"><table class="cids-table" id="auditTable"><thead><tr><th>Action</th><th>Target/Details</th><th>By</th><th>Date</th></tr></thead><tbody id="auditBody"><tr class="loading-row"><td colspan="4"><div class="spinner-sm"></div></td></tr></tbody></table></div>
+            </div>
+            <div class="cids-panel" id="panel-announce">
+                <div class="panel-title">DEPARTMENT ANNOUNCEMENT</div>
+                <div style="padding:16px">
+                    <textarea class="cids-textarea" id="announceInput" placeholder="Type announcement message..."></textarea>
+                    <button class="cids-btn primary" onclick="sendAnnouncement()" style="margin-top:10px;width:100%">Send to All CID/Police</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="toastContainer" class="toast-container"></div>
+    <script src="cids.js"></script>
+</body>
+</html>

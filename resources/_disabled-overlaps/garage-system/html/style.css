@@ -1,0 +1,124 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: var(--font-sans, 'Segoe UI', sans-serif);
+    background: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+    user-select: none;
+}
+
+.glass-panel {
+    width: 500px;
+    max-height: 480px;
+    background: var(--glass-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+}
+
+#garage-header {
+    display: flex;
+    align-items: center;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border-color);
+    gap: 10px;
+}
+
+#garage-title { flex: 1; font-size: 16px; font-weight: 600; color: var(--text-primary); }
+
+#garage-type-badge {
+    font-size: 11px;
+    background: rgba(0, 150, 255, 0.2);
+    color: var(--accent-blue, #4a9eff);
+    padding: 3px 10px;
+    border-radius: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+#garage-close {
+    font-size: 18px;
+    padding: 4px 10px;
+}
+
+#garage-body { flex: 1; padding: 14px 18px; overflow-y: auto; }
+
+#garage-actions { margin-bottom: 12px; }
+
+#garage-stats { margin-bottom: 12px; text-align: right; font-size: 12px; color: var(--text-muted); }
+
+#vehicle-list { display: flex; flex-direction: column; gap: 6px; }
+
+.vehicle-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 10px;
+    transition: all 0.15s;
+}
+
+.vehicle-card:hover {
+    background: rgba(255,255,255,0.07);
+    transform: translateX(3px);
+}
+
+.vehicle-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.vehicle-model { font-size: 14px; color: var(--text-primary); font-weight: 500; }
+.vehicle-plate { font-size: 11px; color: var(--text-muted); }
+
+.vehicle-state {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 2px 8px;
+    border-radius: 6px;
+    margin-top: 4px;
+    display: inline-block;
+    width: fit-content;
+}
+
+.state-stored { background: rgba(0, 200, 100, 0.15); color: #00c864; }
+.state-out { background: rgba(255, 180, 0, 0.15); color: #ffb400; }
+.state-impounded { background: rgba(255, 50, 50, 0.15); color: #ff3232; }
+
+.vehicle-actions {
+    display: flex;
+    gap: 6px;
+}
+
+.veh-action-btn {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--text-secondary);
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.15s;
+}
+
+.veh-action-btn:hover { background: rgba(0, 150, 255, 0.15); color: var(--accent-blue, #4a9eff); border-color: rgba(0, 150, 255, 0.3); }
+.veh-action-btn.impound-btn:hover { background: rgba(255, 50, 50, 0.15); color: #ff3232; border-color: rgba(255, 50, 50, 0.3); }
+.veh-action-btn.track-btn:hover { background: rgba(0, 200, 100, 0.15); color: #00c864; border-color: rgba(0, 200, 100, 0.3); }
+
+.vehicle-empty {
+    text-align: center;
+    padding: 40px 0;
+    color: var(--text-muted);
+    font-size: 14px;
+}

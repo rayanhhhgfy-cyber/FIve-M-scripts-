@@ -1,0 +1,10 @@
+fx_version 'cerulean'
+game 'gta5'
+lua54 'yes'
+name 'loading-screen'
+description 'Premium loading screen with animated background'
+author 'QBox Framework'
+version '2.0.0'
+client_script 'client/main.lua'
+ui_page 'client/ui/index.html'
+files { 'client/ui/index.html', 'client/ui/style.css', 'client/ui/script.js', 'client/ui/logo.png' }

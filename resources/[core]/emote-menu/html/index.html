@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emote Menu</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <div id="emote-menu">
+        <div id="emote-header">
+            <input id="emote-search" type="text" placeholder="Search emotes...">
+            <button id="emote-close"><i class="fas fa-times"></i></button>
+        </div>
+        <div id="emote-body">
+            <div id="emote-categories">
+                <div id="emote-cat-favorites" class="emote-category active" data-cat="favorites">
+                    <i class="fas fa-star"></i><span>Favorites</span>
+                </div>
+            </div>
+            <div id="emote-content">
+                <div id="emote-grid"></div>
+            </div>
+        </div>
+        <div id="emote-preview">
+            <span id="emote-preview-name">Select an emote</span>
+            <span id="emote-preview-category"></span>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CID Surveillance Console</title>
+    <link rel="stylesheet" href="nui://nui-theme/web/theme.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="console" class="console-hidden">
+        <div class="scanline-overlay"></div>
+        <div class="static-overlay"></div>
+        <div class="header">
+            <div class="header-left">
+                <div class="cid-icon">CID</div>
+                <h1>SURVEILLANCE CONSOLE</h1>
+            </div>
+            <div class="header-center">
+                <span class="status-badge" id="bugCount">0 Active</span>
+            </div>
+            <div class="header-right">
+                <span id="lastUpdate" class="update-time">Updating...</span>
+                <button class="btn btn-ghost close-btn" onclick="closeConsole()">✕</button>
+            </div>
+        </div>
+        <div class="tabs">
+            <button class="tab active" data-tab="feeds"><span class="tab-indicator"></span>Live Feeds</button>
+            <button class="tab" data-tab="bugs"><span class="tab-indicator"></span>Audio Bugs</button>
+            <button class="tab" data-tab="map"><span class="tab-indicator"></span>GPS Trackers</button>
+            <button class="tab" data-tab="history"><span class="tab-indicator"></span>History</button>
+        </div>
+        <div class="content glass">
+            <div id="tab-feeds" class="tab-content active">
+                <div class="feed-grid" id="feedGrid">
+                    <div class="feed-empty">No active camera feeds. Deploy surveillance bugs to begin monitoring.</div>
+                </div>
+            </div>
+            <div id="tab-bugs" class="tab-content">
+                <div class="bug-table-wrap">
+                    <table class="bug-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Type</th>
+                                <th>Location</th>
+                                <th>Duration</th>
+                                <th>Placed By</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bugTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="tab-map" class="tab-content">
+                <div class="map-container glass-card">
+                    <div class="map-header-bar">
+                        <span class="mono-label">GPS TRACKER NETWORK</span>
+                        <span id="gpsCount" class="gps-count">0 active</span>
+                    </div>
+                    <div class="map-canvas" id="mapCanvas">
+                        <div class="map-grid-overlay"></div>
+                        <div class="map-tracker-dots" id="gpsList">
+                            <p class="gps-empty">No active GPS trackers.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="tab-history" class="tab-content">
+                <div class="history-header">
+                    <span class="mono-label">SURVEILLANCE ACTIVITY LOG</span>
+                    <button class="btn btn-sm btn-ghost" onclick="clearHistory()">Clear Log</button>
+                </div>
+                <div class="history-feed" id="historyFeed">
+                    <div class="history-empty">No surveillance history recorded.</div>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+            <span class="footer-brand">CID SURVEILLANCE NETWORK</span>
+            <span class="footer-mono">SECURE · ENCRYPTED · v3.2</span>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

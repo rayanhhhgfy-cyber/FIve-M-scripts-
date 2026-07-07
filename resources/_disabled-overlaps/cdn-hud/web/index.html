@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CDN-HUD</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="hudContainer">
+        <!-- Top Bar -->
+        <div id="topBar">
+            <div id="topLeft">
+                <span id="jobDisplay"></span>
+                <span id="voiceDisplay"></span>
+            </div>
+            <div id="topCenter">
+                <span id="cashDisplay"></span>
+                <span id="bankDisplay"></span>
+            </div>
+            <div id="topRight">
+                <span id="timeDisplay"></span>
+            </div>
+        </div>
+
+        <!-- Left Status Bars -->
+        <div id="statusBars">
+            <div class="stat-row" id="statHealth">
+                <div class="stat-icon">❤</div>
+                <div class="stat-bar-bg"><div class="stat-bar-fill" id="healthFill"></div></div>
+                <span class="stat-val" id="healthVal">100</span>
+            </div>
+            <div class="stat-row" id="statArmor">
+                <div class="stat-icon">🛡</div>
+                <div class="stat-bar-bg"><div class="stat-bar-fill" id="armorFill"></div></div>
+                <span class="stat-val" id="armorVal">0</span>
+            </div>
+            <div class="stat-row" id="statHunger">
+                <div class="stat-icon">🍔</div>
+                <div class="stat-bar-bg"><div class="stat-bar-fill" id="hungerFill"></div></div>
+                <span class="stat-val" id="hungerVal">100</span>
+            </div>
+            <div class="stat-row" id="statThirst">
+                <div class="stat-icon">💧</div>
+                <div class="stat-bar-bg"><div class="stat-bar-fill" id="thirstFill"></div></div>
+                <span class="stat-val" id="thirstVal">100</span>
+            </div>
+            <div class="stat-row" id="statStress">
+                <div class="stat-icon">😰</div>
+                <div class="stat-bar-bg"><div class="stat-bar-fill" id="stressFill"></div></div>
+                <span class="stat-val" id="stressVal">0</span>
+            </div>
+            <div class="stat-row" id="statStamina">
+                <div class="stat-icon">⚡</div>
+                <div class="stat-bar-bg"><div class="stat-bar-fill" id="staminaFill"></div></div>
+                <span class="stat-val" id="staminaVal">100</span>
+            </div>
+        </div>
+
+        <!-- Bottom Center: Street -->
+        <div id="bottomStreet">
+            <span id="streetDisplay"></span>
+        </div>
+
+        <!-- Vehicle HUD -->
+        <div id="vehicleHud">
+            <div id="speedDisplay"><span id="speedValue">0</span> <span id="speedUnit">KM/H</span></div>
+            <div id="vehicleDetails">
+                <span id="seatbeltDisplay">🔴 BELT</span>
+                <div id="fuelRow"><div class="fuel-bar-bg"><div class="fuel-bar-fill" id="fuelFill"></div></div><span id="fuelVal">100%</span></div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

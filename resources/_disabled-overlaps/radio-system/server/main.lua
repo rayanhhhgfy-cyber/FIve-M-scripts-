@@ -1,0 +1,2 @@
+-- Radio System Server
+-- Items are registered via ox_inventory data/items.lua or inventory config

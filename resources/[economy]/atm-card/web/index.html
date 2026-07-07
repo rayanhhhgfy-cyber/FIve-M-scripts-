@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ATM</title>
+    <link rel="stylesheet" href="nui://nui-theme/web/theme.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <div class="atm glass-panel">
+            <div class="atm-header">
+                <div class="atm-brand">FLEECA</div>
+                <div class="atm-brand-sub">National Bank</div>
+                <button class="btn btn-ghost close-btn" onclick="closeATM()">&times;</button>
+            </div>
+
+            <div class="bank-card">
+                <div class="card-accent"></div>
+                <div class="card-chip"></div>
+                <div class="card-number">•••• •••• •••• ••••</div>
+                <div class="card-row">
+                    <div class="card-holder">
+                        <span class="card-field-label">Card Holder</span>
+                        <span>---</span>
+                    </div>
+                    <div class="card-expiry">
+                        <span class="card-field-label">Expiry</span>
+                        <span>**/**</span>
+                    </div>
+                    <div class="card-cvv">
+                        <span class="card-field-label">CVV</span>
+                        <span>***</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="account-select" class="account-select">
+                <div class="section-title">Select Account</div>
+                <div id="account-list" class="account-list"></div>
+            </div>
+
+            <div id="atm-actions" class="atm-actions hidden">
+                <div class="account-info glass" id="account-info"></div>
+                <div class="section-title">Actions</div>
+                <button class="action-btn btn-deposit" onclick="showDeposit()">
+                    <span class="action-icon">+</span> Deposit Cash
+                </button>
+                <button class="action-btn btn-withdraw" onclick="showWithdraw()">
+                    <span class="action-icon">-</span> Withdraw Cash
+                </button>
+                <button class="action-btn btn-ghost" onclick="backToAccounts()">
+                    Switch Account
+                </button>
+            </div>
+
+            <div id="deposit-form" class="form-panel glass hidden">
+                <div class="section-title">Deposit Cash</div>
+                <input type="number" id="deposit-amount" class="input" placeholder="Enter amount..." min="1">
+                <div class="form-actions">
+                    <button class="btn btn-primary" onclick="confirmDeposit()">Deposit</button>
+                    <button class="btn btn-ghost" onclick="hideForms()">Cancel</button>
+                </div>
+            </div>
+
+            <div id="withdraw-form" class="form-panel glass hidden">
+                <div class="section-title">Withdraw Cash</div>
+                <div class="fee-note">Fee: $<span id="withdraw-fee">2</span></div>
+                <input type="number" id="withdraw-amount" class="input" placeholder="Enter amount..." min="1">
+                <div class="form-actions">
+                    <button class="btn btn-primary" onclick="confirmWithdraw()">Withdraw</button>
+                    <button class="btn btn-ghost" onclick="hideForms()">Cancel</button>
+                </div>
+            </div>
+
+            <div id="loading-spinner" class="spinner hidden"></div>
+
+            <div id="status-msg" class="status-msg hidden"></div>
+
+            <div class="transaction-history glass hidden" id="transaction-history">
+                <div class="section-title">Recent Transactions</div>
+                <div id="transaction-list"></div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

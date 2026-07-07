@@ -1,0 +1,8 @@
+fx_version 'cerulean'
+game 'gta5'
+lua54 'yes'
+name 'no-wanted'
+description 'Disables vanilla GTA wanted level system'
+author 'FiveM Scripts'
+version '1.0.0'
+client_script 'client.lua'

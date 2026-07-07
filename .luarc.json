@@ -1,0 +1,73 @@
+{
+    "$schema": "https://raw.githubusercontent.com/sumneko/vscode-lua/master/setting/schema.json",
+    "runtime": {
+        "version": "Lua 5.4",
+        "path": [
+            "?.lua",
+            "?/init.lua"
+        ]
+    },
+    "workspace": {
+        "checkThirdParty": false,
+        "library": [
+            "${workspaceFolder}/resources/[shared]/libs"
+        ],
+        "ignoreDir": [
+            ".git",
+            "node_modules",
+            "cache"
+        ]
+    },
+    "diagnostics": {
+        "disable": [
+            "need-check-nil",
+            "param-unused",
+            "inject-field",
+            "trailing-space",
+            "lowercase-global",
+            "redefined-local",
+            "duplicate-set-field",
+            "unused-vararg",
+            "undefined-global",
+            "lowercase-global",
+            "redundant-parameter",
+            "missing-parameter"
+        ],
+        "globals": [
+            "Citizen",
+            "exports",
+            "vector2",
+            "vector3",
+            "vector4",
+            "quat",
+            "msgpack",
+            "json",
+            "promise",
+            "Cfx",
+            "GetCurrentResourceName",
+            "GetInvokingResource",
+            "GetPlayerIdentifiers",
+            "AddEventHandler",
+            "RegisterNetEvent",
+            "TriggerEvent",
+            "TriggerServerEvent",
+            "TriggerClientEvent",
+            "RegisterCommand",
+            "RegisterServerEvent",
+            "PerformHttpRequest",
+            "CreateThread",
+            "Wait",
+            "SetTimeout",
+            "lib",
+            "cache",
+            "QBCore",
+            "ESX",
+            "PlayerData",
+            "source"
+        ],
+        "unusedLocalVariable": false,
+        "unusedFunction": false,
+        "unusedGlobalFunction": false
+    }
+}
+

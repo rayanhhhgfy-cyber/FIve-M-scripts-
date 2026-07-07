@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bunker Builder</title>
+    <link rel="stylesheet" href="nui://nui-theme/web/theme.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app" class="hidden">
+        <div class="glass-panel">
+            <div class="header">
+                <h1>BUNKER BUILDER</h1>
+                <div class="step-indicator">
+                    <div class="step active" id="step1" data-step="1">
+                        <span class="step-num">1</span>
+                        <span class="step-label">Label</span>
+                    </div>
+                    <div class="step-connector"></div>
+                    <div class="step" id="step2" data-step="2">
+                        <span class="step-num">2</span>
+                        <span class="step-label">Entrance</span>
+                    </div>
+                    <div class="step-connector"></div>
+                    <div class="step" id="step3" data-step="3">
+                        <span class="step-num">3</span>
+                        <span class="step-label">Interior</span>
+                    </div>
+                    <div class="step-connector"></div>
+                    <div class="step" id="step4" data-step="4">
+                        <span class="step-num">4</span>
+                        <span class="step-label">Passcode</span>
+                    </div>
+                    <div class="step-connector"></div>
+                    <div class="step" id="step5" data-step="5">
+                        <span class="step-num">5</span>
+                        <span class="step-label">Confirm</span>
+                    </div>
+                </div>
+            </div>
+            <div class="content">
+                <div id="page1" class="page active animate-fadeInUp">
+                    <h2>Name Your Bunker</h2>
+                    <input type="text" id="bunkerLabel" class="input" placeholder="e.g. CID Black Site Bunker" maxlength="64">
+                    <p class="hint">Choose a descriptive name players will see on the target prompt.</p>
+                </div>
+                <div id="page2" class="page animate-fadeInUp">
+                    <h2>Set Entrance Location</h2>
+                    <div class="coord-display glass">
+                        <div><strong>Current Position:</strong></div>
+                        <div id="entranceCoords">Walk to the entrance location...</div>
+                    </div>
+                    <button class="btn btn-primary" onclick="captureEntrance()">Capture Entrance Coords</button>
+                    <div class="rock-picker">
+                        <h3>Select Rock Cover</h3>
+                        <div id="rockOptions"></div>
+                    </div>
+                </div>
+                <div id="page3" class="page animate-fadeInUp">
+                    <h2>Select Interior</h2>
+                    <div id="interiorList"></div>
+                    <h3>Interior Spawn Position</h3>
+                    <div class="coord-display glass">
+                        <div id="interiorCoords">Not set yet...</div>
+                    </div>
+                    <button class="btn btn-primary" onclick="captureInterior()">Capture Interior Coords</button>
+                    <h3>Interior Type</h3>
+                    <div id="interiorTypeList"></div>
+                </div>
+                <div id="page4" class="page animate-fadeInUp">
+                    <h2>Passcode & Access</h2>
+                    <label class="toggle-row">
+                        <span>Lock bunker with passcode?</span>
+                        <input type="checkbox" id="lockToggle" class="toggle-input" checked onchange="toggleLock()">
+                        <span class="toggle-slider"></span>
+                    </label>
+                    <div id="passcodeInput" class="glass-card">
+                        <label style="display:block;font-size:13px;margin-bottom:6px;">Passcode:</label>
+                        <input type="text" id="bunkerPasscode" class="input" value="2193" maxlength="10" placeholder="e.g. 2193">
+                        <p class="hint">CID agents use this code. Default: 2193. Change it to restrict access.</p>
+                    </div>
+                    <label class="toggle-row">
+                        <span>Require CID on-duty to auto-bypass?</span>
+                        <input type="checkbox" id="cidBypassToggle" class="toggle-input" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                    <p class="hint" style="margin-top:4px;">When enabled, CID/police/sheriff on duty can enter without the passcode.</p>
+                    <hr style="border-color:rgba(255,255,255,0.06);margin:12px 0;">
+                    <h3>Optional Features</h3>
+                    <label class="toggle-row">
+                        <span>Add vehicle spawn?</span>
+                        <input type="checkbox" id="vehToggle" class="toggle-input" onchange="toggleVehSpawn()">
+                        <span class="toggle-slider"></span>
+                    </label>
+                    <label class="toggle-row">
+                        <span>Add helipad?</span>
+                        <input type="checkbox" id="heliToggle" class="toggle-input" onchange="toggleHeliSpawn()">
+                        <span class="toggle-slider"></span>
+                    </label>
+                    <label class="toggle-row">
+                        <span>Add roof props (for helipad clearance)?</span>
+                        <input type="checkbox" id="roofToggle" class="toggle-input">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div id="page5" class="page animate-fadeInUp">
+                    <h2>Review & Confirm</h2>
+                    <div class="summary glass-card">
+                        <div class="summary-row">
+                            <span class="summary-label">Label</span>
+                            <span class="summary-value" id="summaryLabel">-</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Entrance</span>
+                            <span class="summary-value" id="summaryEntrance">-</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Interior</span>
+                            <span class="summary-value" id="summaryInterior">-</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Interior Type</span>
+                            <span class="summary-value" id="summaryInteriorType">-</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Passcode</span>
+                            <span class="summary-value" id="summaryPasscode">2193</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Locked</span>
+                            <span class="summary-value" id="summaryLocked">Yes</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">CID Bypass</span>
+                            <span class="summary-value" id="summaryCidBypass">Yes</span>
+                        </div>
+                    </div>
+                    <div class="btn-row">
+                        <button class="btn btn-red" onclick="cancel()">Cancel</button>
+                        <button class="btn btn-primary" onclick="confirmSave()">Create Bunker</button>
+                    </div>
+                </div>
+            </div>
+            <div class="footer">
+                <button class="btn btn-ghost hidden" id="backBtn" onclick="prevStep()">Back</button>
+                <button class="btn btn-primary" id="nextBtn" onclick="nextStep()">Next</button>
+            </div>
+        </div>
+    </div>
+    <div id="editApp" class="hidden">
+        <div class="glass-panel" style="width:480px;">
+            <div class="header">
+                <h1>EDIT BUNKER</h1>
+            </div>
+            <div class="content">
+                <div class="page active">
+                    <div id="editFields"></div>
+                    <div class="btn-row" style="margin-top:16px;">
+                        <button class="btn btn-ghost" onclick="closeEdit()">Close</button>
+                        <button class="btn btn-primary" onclick="saveEdit()">Save Changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

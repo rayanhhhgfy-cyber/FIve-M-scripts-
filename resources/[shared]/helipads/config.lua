@@ -1,0 +1,90 @@
+Config = Config or {}
+Config.Helipads = Config.Helipads or {}
+
+Config.Helipads = {
+    PoliceHelicopters = {
+        { model = 'polmav', label = 'Police Maverick', speed = 160, seats = 4, rank = 3 },
+        { model = 'buzzard', label = 'Buzzard', speed = 180, seats = 2, rank = 3 },
+        { model = 'frogger', label = 'Frogger', speed = 170, seats = 4, rank = 3 },
+        { model = 'seasparrow', label = 'Sea Sparrow', speed = 165, seats = 2, rank = 3 },
+        { model = 'valkyrie', label = 'Transport Heli', speed = 155, seats = 8, rank = 3 },
+        { model = 'buzzard2', label = 'Armed Buzzard', speed = 190, seats = 2, rank = 4 },
+        { model = 'hunter', label = 'Hunter Attack Heli', speed = 200, seats = 2, rank = 4 },
+        { model = 'akula', label = 'Akula Stealth Heli', speed = 195, seats = 2, rank = 4 },
+        { model = 'savage', label = 'Savage Attack Heli', speed = 185, seats = 2, rank = 4 },
+        { model = 'annihilator', label = 'Annihilator Gunship', speed = 175, seats = 6, rank = 4 },
+        { model = 'hydra', label = 'Hydra VTOL Jet', speed = 250, seats = 1, rank = 4 },
+        { model = 'lazer', label = 'P-996 Lazer', speed = 260, seats = 1, rank = 4 },
+        { model = 'b11_strikeforce', label = 'B-11 Strikeforce', speed = 230, seats = 2, rank = 4 },
+    },
+
+    Locations = {
+        {
+            id = 'mrpd_helipad',
+            label = 'MRPD Helipad',
+            coords = vec3(449.0, -981.0, 43.7),
+            heading = 0.0,
+            type = 'police',
+            blip = { sprite = 43, color = 38 },
+        },
+        {
+            id = 'sandy_shores_helipad',
+            label = 'Sandy Shores Helipad',
+            coords = vec3(1850.0, 3705.0, 38.0),
+            heading = 180.0,
+            type = 'police',
+            blip = { sprite = 43, color = 38 },
+        },
+        {
+            id = 'paleto_helipad',
+            label = 'Paleto Bay Helipad',
+            coords = vec3(-240.0, 6340.0, 36.0),
+            heading = 0.0,
+            type = 'police',
+            blip = { sprite = 43, color = 38 },
+        },
+        {
+            id = 'pillbox_helipad',
+            label = 'Pillbox Hospital Helipad',
+            coords = vec3(-230.0, -1340.0, 50.0),
+            heading = 180.0,
+            type = 'police',
+            blip = { sprite = 43, color = 1 },
+        },
+        {
+            id = 'lsia_heliport',
+            label = 'LSIA Heliport',
+            coords = vec3(-1050.0, -2370.0, 14.5),
+            heading = 0.0,
+            type = 'public',
+            blip = { sprite = 43, color = 3 },
+        },
+        {
+            id = 'fort_zancudo',
+            label = 'Fort Zancudo Airfield',
+            coords = vec3(-1960.0, 2945.0, 32.0),
+            heading = 0.0,
+            type = 'police',
+            blip = { sprite = 43, color = 38 },
+        },
+        {
+            id = 'vespucci_helipad',
+            label = 'Vespucci Beach Helipad',
+            coords = vec3(-1150.0, -1520.0, 10.0),
+            heading = 0.0,
+            type = 'public',
+            blip = { sprite = 43, color = 3 },
+        },
+        {
+            id = 'del_perro_helipad',
+            label = 'Del Perro Helipad',
+            coords = vec3(-1580.0, -560.0, 108.0),
+            heading = 0.0,
+            type = 'public',
+            blip = { sprite = 43, color = 3 },
+        },
+    },
+
+    InteractionDistance = 3.0,
+    SpawnHeightOffset = 1.0,
+}

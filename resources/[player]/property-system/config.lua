@@ -1,0 +1,70 @@
+Config = Config or {}
+Config.Properties = Config.Properties or {}
+
+Config.Properties = {
+    adminGroups = { 'admin', 'superadmin', 'god' },
+    maxDistance = 3.0,
+
+    properties = {
+        {
+            id = 'apt_1',
+            label = 'Del Perro Apartment',
+            type = 'apartment',
+            coords = vector3(-1578.0, -570.0, 108.0),
+            interior = vector3(-786.0, 315.0, 217.0),
+            price = 250000,
+            garage = { slots = 2, coords = vector3(-1585.0, -575.0, 108.0) },
+            owner = nil,
+        },
+        {
+            id = 'apt_2',
+            label = 'Mirror Park Apartment',
+            type = 'apartment',
+            coords = vector3(300.0, -1000.0, -100.0),
+            interior = vector3(-174.0, 497.0, 137.0),
+            price = 350000,
+            garage = { slots = 2, coords = vector3(295.0, -1005.0, -100.0) },
+            owner = nil,
+        },
+        {
+            id = 'house_1',
+            label = 'Morningwood House',
+            type = 'house',
+            coords = vector3(-1350.0, -590.0, 30.0),
+            interior = vector3(-30.0, -600.0, 30.0),
+            price = 650000,
+            garage = { slots = 4, coords = vector3(-1355.0, -595.0, 30.0) },
+            owner = nil,
+        },
+        {
+            id = 'house_2',
+            label = 'Vinewood Hills Mansion',
+            type = 'mansion',
+            coords = vector3(-575.0, 550.0, 120.0),
+            interior = vector3(-145.0, -485.0, 44.0),
+            price = 1500000,
+            garage = { slots = 6, coords = vector3(-580.0, 545.0, 120.0) },
+            owner = nil,
+        },
+        {
+            id = 'house_3',
+            label = 'Paleto Bay House',
+            type = 'house',
+            coords = vector3(-100.0, 6600.0, 30.0),
+            interior = vector3(132.0, -130.0, 58.0),
+            price = 180000,
+            garage = { slots = 2, coords = vector3(-95.0, 6595.0, 30.0) },
+            owner = nil,
+        },
+        {
+            id = 'apt_3',
+            label = 'Sandy Shores Trailer',
+            type = 'apartment',
+            coords = vector3(1400.0, 3700.0, 35.0),
+            interior = vector3(134.0, -132.0, 58.0),
+            price = 80000,
+            garage = { slots = 1, coords = vector3(1395.0, 3695.0, 35.0) },
+            owner = nil,
+        },
+    },
+}

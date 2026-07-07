@@ -1,0 +1,44 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow: hidden; background: transparent;
+    display: flex; justify-content: center; align-items: center;
+    height: 100vh; width: 100vw;
+}
+#lockpick-container {
+    background: rgba(15, 25, 35, 0.92);
+    border: 1px solid #2a3f4f;
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+    width: 340px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+    backdrop-filter: blur(8px);
+}
+#lockpick-header {
+    font-size: 18px; font-weight: 600;
+    color: #e0e0e0; margin-bottom: 12px;
+}
+#lockpick-header i { color: #00bcd4; margin-right: 8px; }
+#lockpick-info {
+    display: flex; justify-content: space-between;
+    margin-bottom: 12px; font-size: 13px;
+    color: #8899aa;
+}
+#lockpick-canvas {
+    display: block; margin: 0 auto 12px;
+    border-radius: 50%;
+    background: #0d1520;
+    border: 2px solid #1a2d3d;
+    cursor: pointer;
+}
+#lockpick-instructions {
+    font-size: 13px; color: #8899aa; margin-bottom: 8px;
+}
+.gold { color: #ffd700; font-weight: 600; }
+#lockpick-status {
+    font-size: 14px; font-weight: 600; min-height: 20px;
+    margin-top: 4px;
+}
+#lockpick-status.success { color: #4caf50; }
+#lockpick-status.fail { color: #f44336; }

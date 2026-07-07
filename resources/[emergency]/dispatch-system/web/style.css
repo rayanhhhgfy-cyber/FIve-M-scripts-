@@ -1,0 +1,262 @@
+body {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    height: 100vh;
+    font-family: var(--font-sans, 'Inter', sans-serif);
+    user-select: none;
+}
+
+.dispatch-hud {
+    position: fixed;
+    top: 120px;
+    left: 20px;
+    width: 300px;
+    padding: 14px;
+    color: #fff;
+    font-size: 12px;
+    z-index: 1000;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.dispatch-hud.minimized .hud-calls,
+.dispatch-hud.minimized .hud-actions {
+    display: none;
+}
+
+.hud-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-subtle, rgba(255,255,255,0.06));
+}
+
+.hud-header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.hud-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--text-muted, rgba(255,255,255,0.4));
+}
+
+.hud-calls-count {
+    background: var(--danger, #ff3b30);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 12px rgba(255, 59, 48, 0.5);
+    animation: countPulse 2s ease-in-out infinite;
+}
+
+@keyframes countPulse {
+    0%, 100% { box-shadow: 0 0 12px rgba(255, 59, 48, 0.5); }
+    50% { box-shadow: 0 0 20px rgba(255, 59, 48, 0.8); }
+}
+
+.minimize-btn {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: var(--text-muted, rgba(255,255,255,0.4));
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+}
+.minimize-btn:hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+}
+
+.hud-calls {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 340px;
+    overflow-y: auto;
+    padding-right: 2px;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 24px 0;
+    color: var(--text-muted, rgba(255,255,255,0.15));
+    font-size: 11px;
+    font-style: italic;
+}
+
+.hud-call {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 10px 12px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 8px;
+    border-left: 3px solid #555;
+    animation: callSlideIn 0.3s ease-out;
+    transition: background 0.15s;
+}
+.hud-call:hover {
+    background: rgba(255,255,255,0.06);
+}
+
+@keyframes callSlideIn {
+    from { opacity: 0; transform: translateX(-12px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.hud-call.pulse-new {
+    animation: callPulse 1s ease-out;
+}
+
+@keyframes callPulse {
+    0% { box-shadow: 0 0 0 0 rgba(255, 59, 48, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(255, 59, 48, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 59, 48, 0); }
+}
+
+.hud-call.priority-high { border-left-color: var(--danger, #ff3b30); }
+.hud-call.priority-medium { border-left-color: var(--warning, #ffcc00); }
+.hud-call.priority-low { border-left-color: var(--accent-blue, #4d8aff); }
+
+.hud-call-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+
+.hud-call-type {
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.hud-call-priority {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+.hud-call-priority.high { background: rgba(255, 59, 48, 0.2); color: var(--danger, #ff3b30); }
+.hud-call-priority.medium { background: rgba(255, 204, 0, 0.2); color: var(--warning, #ffcc00); }
+.hud-call-priority.low { background: rgba(77, 138, 255, 0.2); color: var(--accent-blue, #4d8aff); }
+
+.hud-call-info {
+    font-size: 10px;
+    color: var(--text-secondary, rgba(255,255,255,0.4));
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.hud-call-location {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 10px;
+    color: var(--text-secondary, rgba(255,255,255,0.35));
+}
+
+.hud-call-actions {
+    display: flex;
+    gap: 6px;
+    margin-top: 6px;
+}
+
+.hud-call-btn {
+    padding: 5px 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.12s;
+    font-family: var(--font-sans, 'Inter', sans-serif);
+}
+.hud-call-btn:active { transform: scale(0.95); }
+
+.hud-call-btn.accept {
+    background: var(--success, #30d158);
+    color: #fff;
+}
+.hud-call-btn.accept:hover { background: #28c04e; }
+
+.hud-call-btn.skip {
+    background: rgba(255,255,255,0.08);
+    color: var(--text-secondary, rgba(255,255,255,0.6));
+    border: 1px solid rgba(255,255,255,0.06);
+}
+.hud-call-btn.skip:hover { background: rgba(255,255,255,0.12); }
+
+.hud-actions {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border-subtle, rgba(255,255,255,0.06));
+}
+
+.panic-btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 800;
+    cursor: pointer;
+    letter-spacing: 2px;
+    background: var(--danger, #ff3b30);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 0 20px rgba(255, 59, 48, 0.3);
+    animation: panicPulse 2s ease-in-out infinite;
+    transition: background 0.15s;
+    font-family: var(--font-sans, 'Inter', sans-serif);
+}
+.panic-btn:hover {
+    background: #e0352b;
+    box-shadow: 0 0 30px rgba(255, 59, 48, 0.5);
+}
+.panic-btn:active { transform: scale(0.97); }
+
+@keyframes panicPulse {
+    0%, 100% { box-shadow: 0 0 20px rgba(255, 59, 48, 0.3); }
+    50% { box-shadow: 0 0 35px rgba(255, 59, 48, 0.6); }
+}
+
+.panic-icon {
+    font-size: 16px;
+    font-weight: 900;
+}
+
+.panic-label {
+    font-size: 13px;
+}
+
+.hud-calls::-webkit-scrollbar { width: 3px; }
+.hud-calls::-webkit-scrollbar-track { background: transparent; }
+.hud-calls::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 3px; }
+.hud-calls::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.15); }

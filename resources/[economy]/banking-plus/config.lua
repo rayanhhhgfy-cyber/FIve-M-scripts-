@@ -1,0 +1,58 @@
+Config = Config or {}
+Config.BankingPlus = {
+    atmLocations = {
+        vector3(-540.4, -854.5, 28.2),
+        vector3(150.3, -1040.5, 29.4),
+        vector3(-2076.2, -315.9, 13.3),
+        vector3(1138.2, -468.9, 65.8),
+        vector3(315.4, -277.9, 54.5),
+        vector3(-846.2, -340.0, 38.7),
+        vector3(-1212.9, -327.5, 38.0),
+        vector3(24.4, -946.0, 29.4),
+        vector3(255.5, 216.0, 106.3),
+        vector3(-30.2, -724.8, 44.5),
+        vector3(-165.2, 645.0, 171.3),
+        vector3(-718.1, -915.1, 19.2),
+        vector3(174.2, 6637.9, 32.6),
+        vector3(1077.3, -776.2, 57.0),
+        vector3(380.5, 323.4, 103.6),
+    },
+    transferFeePercent = 0.02,
+    dailyTransferLimit = 100000,
+    creditScore = {
+        startingScore = 600,
+        maxScore = 999,
+        minScore = 100,
+        onTimePayment = 5,
+        missedPayment = -25,
+        loanDefault = -100,
+    },
+    loans = {
+        types = {
+            personal = { minAmount = 1000, maxAmount = 50000, interestRate = 0.08, termDays = 30 },
+            auto = { minAmount = 5000, maxAmount = 200000, interestRate = 0.05, termDays = 60 },
+            home = { minAmount = 50000, maxAmount = 500000, interestRate = 0.035, termDays = 365 },
+            business = { minAmount = 10000, maxAmount = 250000, interestRate = 0.06, termDays = 180 },
+        },
+        lateFeePercent = 0.05,
+        missedPaymentPenalty = -20,
+    },
+    investments = {
+        types = {
+            { id = 'bonds', name = 'Government Bonds', risk = 'low', minReturn = 0.02, maxReturn = 0.05, minAmount = 10000, duration = 30 },
+            { id = 'stocks', name = 'Stock Market', risk = 'medium', minReturn = -0.05, maxReturn = 0.15, minAmount = 5000, duration = 7 },
+            { id = 'crypto', name = 'Cryptocurrency', risk = 'high', minReturn = -0.30, maxReturn = 0.50, minAmount = 1000, duration = 1 },
+            { id = 'realestate', name = 'Real Estate Fund', risk = 'medium', minReturn = -0.02, maxReturn = 0.10, minAmount = 25000, duration = 90 },
+        },
+        withdrawalFeePercent = 0.01,
+    },
+    atmRobbery = {
+        hackTime = 15000,
+        policeNotifyChance = 0.7,
+        minLoot = 500,
+        maxLoot = 5000,
+        skillCheckDifficulty = 3,
+        cooldown = 300,
+    },
+    adminGroups = { 'admin', 'superadmin', 'god' },
+}

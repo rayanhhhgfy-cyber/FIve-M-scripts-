@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Outfit Manager</title>
+    <link rel="stylesheet" href="nui://nui-theme/web/theme.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <div class="glass-panel">
+            <div class="header">
+                <h1>Outfit Manager</h1>
+                <button class="btn btn-ghost close-btn" onclick="closePanel()">&times;</button>
+            </div>
+
+            <div class="toolbar">
+                <button class="btn btn-primary" onclick="showSaveDialog()" id="saveBtn">
+                    <span class="btn-icon">+</span> Save Outfit
+                    <span class="spinner-sm hidden" id="saveSpinner"></span>
+                </button>
+            </div>
+
+            <div id="save-dialog" class="save-dialog glass hidden">
+                <input type="text" id="outfit-name" class="input" placeholder="Enter outfit name..." maxlength="50">
+                <div class="dialog-actions">
+                    <button class="btn btn-primary" onclick="confirmSave()">Save</button>
+                    <button class="btn btn-ghost" onclick="hideSaveDialog()">Cancel</button>
+                </div>
+            </div>
+
+            <div id="outfit-list" class="outfit-list"></div>
+
+            <div id="empty-state" class="empty-state hidden">
+                <div class="empty-icon">&#128084;</div>
+                <p>No outfits saved yet.</p>
+                <p class="empty-sub">Click "Save Outfit" to create one.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="confirm-modal" class="modal-overlay hidden">
+        <div class="modal glass-panel scale-in">
+            <div class="modal-header">
+                <h3>Delete Outfit</h3>
+                <button class="btn btn-ghost modal-close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this outfit?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-red" id="confirmDeleteBtn">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

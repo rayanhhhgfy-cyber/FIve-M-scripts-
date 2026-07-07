@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Dealership</title>
+    <link rel="stylesheet" href="nui://nui-theme/web/theme.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="showroom" class="sr-hidden">
+        <div class="sr-header glass">
+            <div class="sr-title">
+                <h1 id="locationLabel">Premium Dealership</h1>
+                <span class="sr-subtitle">Browse our premium selection</span>
+            </div>
+            <div class="sr-header-right">
+                <span id="testDriveTimer" class="td-timer">--:--</span>
+                <button class="btn btn-red" onclick="closeShowroom()">Close</button>
+            </div>
+        </div>
+        <div class="sr-content">
+            <div class="sr-sidebar glass">
+                <div class="sr-categories" id="categoryList"></div>
+                <div class="sr-actions">
+                    <h3>Actions</h3>
+                    <button class="btn btn-ghost full" onclick="showTradeIn()">Trade In</button>
+                    <button class="btn btn-ghost full" onclick="showSell()">Sell Vehicle</button>
+                </div>
+            </div>
+            <div class="sr-main">
+                <div class="sr-vehicle-list" id="vehicleList"></div>
+                <div class="sr-detail" id="vehicleDetail">
+                    <div class="detail-empty">Select a vehicle to view details</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="purchaseModal" class="modal-hidden">
+        <div class="modal-content glass-panel">
+            <div class="modal-header">
+                <h2>Purchase Vehicle</h2>
+                <button class="btn btn-ghost modal-close-btn" onclick="closeModal('purchaseModal')">&times;</button>
+            </div>
+            <div class="modal-body" id="purchaseBody"></div>
+        </div>
+    </div>
+
+    <div id="tradeInModal" class="modal-hidden">
+        <div class="modal-content glass-panel">
+            <div class="modal-header">
+                <h2>Trade In Vehicle</h2>
+                <button class="btn btn-ghost modal-close-btn" onclick="closeModal('tradeInModal')">&times;</button>
+            </div>
+            <div class="modal-body" id="tradeInBody"></div>
+        </div>
+    </div>
+
+    <div id="sellModal" class="modal-hidden">
+        <div class="modal-content glass-panel">
+            <div class="modal-header">
+                <h2>Sell Vehicle</h2>
+                <button class="btn btn-ghost modal-close-btn" onclick="closeModal('sellModal')">&times;</button>
+            </div>
+            <div class="modal-body" id="sellBody"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

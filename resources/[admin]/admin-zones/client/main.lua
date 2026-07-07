@@ -73,7 +73,7 @@ local function openShop(zone)
     local menuItems = {}
     for _, item in ipairs(items) do
         if jobGrade >= item.min_rank then
-            local priceStr = item.price == 0 and 'Free' : '$' .. item.price
+            local priceStr = item.price == 0 and 'Free' or '$' .. item.price
             menuItems[#menuItems + 1] = {
                 title = item.label .. ' (' .. priceStr .. ')',
                 description = item.currency == 'black_money' and 'Black Money' or 'Cash',
@@ -209,6 +209,7 @@ end
 
 function removeZoneTarget(zoneId)
     if zoneTargets[zoneId] then
+        exports.ox_target:removeZone(zoneTargets[zoneId])
         zoneTargets[zoneId] = nil
     end
 end

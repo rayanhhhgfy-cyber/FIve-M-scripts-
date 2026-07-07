@@ -667,7 +667,7 @@ local function updateVehicleHud(data)
 end
 
 local lastFuelUpdate = 0
-local lastFuelCheck = {}
+local lastFuelCheck = 0
 
 local function getFuelLevel(vehicle)
     local updateTick = GetGameTimer()
@@ -701,7 +701,8 @@ CreateThread(function()
                     armed = false
                 end
             end
-            playerDead = IsEntityDead(player) or PlayerData.metadata['inlaststand'] or PlayerData.metadata['isdead'] or false
+            local meta = PlayerData.metadata or {}
+            playerDead = IsEntityDead(player) or meta['inlaststand'] or meta['isdead'] or false
             parachute = GetPedParachuteState(player)
             -- Stamina
             if not IsEntityInWater(player) then

@@ -73,7 +73,7 @@ Citizen.CreateThreadNow(function()
         -- 		if data.owner == snip then
         -- 			local name = data.name:sub(0, #data.name - #snip)
 
-        -- 			count += 1
+        -- 			count = count + 1
         -- 			parameters[count] = { query = 'UPDATE ox_inventory SET `name` = ? WHERE `owner` = ? AND `name` = ?', values = { name, data.owner, data.name } }
         -- 		end
         -- 	end
@@ -162,7 +162,7 @@ local function countRows(rows)
     local n = 0
 
     for i = 1, #rows do
-        if rows[i] == 1 then n += 1 end
+        if rows[i] == 1 then n = n + 1 end
     end
 
     return n
@@ -191,11 +191,11 @@ function db.saveInventories(players, trunks, gloveboxes, stashes, total)
     shared.info(('Saving %s inventories to the database'):format(total[5]))
 
     if total[1] > 0 then
-        pending += 1
+        pending = pending + 1
 
         Citizen.CreateThreadNow(function()
             local resp = safeQuery(MySQL.prepare.await, Query.UPDATE_PLAYER, players)
-            pending -= 1
+            pending = pending - 1
 
             if resp then
                 shared.info(saveStr:format(countRows(resp), total[1], 'players', (os.nanotime() - start) / 1e6))
@@ -204,11 +204,11 @@ function db.saveInventories(players, trunks, gloveboxes, stashes, total)
     end
 
     if total[2] > 0 then
-        pending += 1
+        pending = pending + 1
 
         Citizen.CreateThreadNow(function()
             local resp = safeQuery(MySQL.prepare.await, Query.UPDATE_TRUNK, trunks)
-            pending -= 1
+            pending = pending - 1
 
             if resp then
                 shared.info(saveStr:format(countRows(resp), total[2], 'trunks', (os.nanotime() - start) / 1e6))
@@ -217,11 +217,11 @@ function db.saveInventories(players, trunks, gloveboxes, stashes, total)
     end
 
     if total[3] > 0 then
-        pending += 1
+        pending = pending + 1
 
         Citizen.CreateThreadNow(function()
             local resp = safeQuery(MySQL.prepare.await, Query.UPDATE_GLOVEBOX, gloveboxes)
-            pending -= 1
+            pending = pending - 1
 
             if resp then
                 shared.info(saveStr:format(countRows(resp), total[3], 'gloveboxes', (os.nanotime() - start) / 1e6))
@@ -230,15 +230,15 @@ function db.saveInventories(players, trunks, gloveboxes, stashes, total)
     end
 
     if total[4] > 0 then
-        pending += 1
+        pending = pending + 1
 
         if server.bulkstashsave then
-            total[4] /= 3
+            total[4] = total[4] / 3
 
             Citizen.CreateThreadNow(function()
                 local query = Query.UPSERT_STASH:gsub('%(%?, %?, %?%)', string.rep('(?, ?, ?)', total[4], ', '))
                 local resp = safeQuery(MySQL.query.await, query, stashes)
-                pending -= 1
+                pending = pending - 1
 
                 if resp then
                     local affectedRows = resp.affectedRows
@@ -246,7 +246,7 @@ function db.saveInventories(players, trunks, gloveboxes, stashes, total)
                     if total[4] == 1 then
                         if affectedRows == 2 then affectedRows = 1 end
                     else
-                        affectedRows -= tonumber(resp.info:match('Duplicates: (%d+)'), 10) or 0
+                        affectedRows = affectedRows - tonumber(resp.info:match('Duplicates: (%d+)'), 10) or 0
                     end
 
                     shared.info(saveStr:format(affectedRows, total[4], 'stashes', (os.nanotime() - start) / 1e6))
@@ -255,7 +255,7 @@ function db.saveInventories(players, trunks, gloveboxes, stashes, total)
         else
             Citizen.CreateThreadNow(function()
                 local resp = safeQuery(MySQL.rawExecute.await, Query.UPSERT_STASH, stashes)
-                pending -= 1
+                pending = pending - 1
 
                 if resp then
                     local affectedRows = 0
@@ -264,7 +264,7 @@ function db.saveInventories(players, trunks, gloveboxes, stashes, total)
                         if resp.affectedRows > 0 then affectedRows = 1 end
                     else
                         for i = 1, #resp do
-                            if resp[i].affectedRows > 0 then affectedRows += 1 end
+                            if resp[i].affectedRows > 0 then affectedRows = affectedRows + 1 end
                         end
                     end
 

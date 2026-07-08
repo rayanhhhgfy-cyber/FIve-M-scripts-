@@ -133,7 +133,7 @@ local function refreshShops()
 					local shopid = ('%s-%s'):format(type, i)
 
 					if target.ped then
-						id += 1
+						id = id + 1
 
 						shops[id] = lib.points.new({
 							coords = target.loc,
@@ -156,7 +156,7 @@ local function refreshShops()
 					else
 						if not hasShopAccess(shop) then goto nextShop end
 
-						id += 1
+						id = id + 1
 
 						shops[id] = {
 							zoneId = Utils.CreateBoxZone(target, {
@@ -185,7 +185,7 @@ local function refreshShops()
 
 			for i = 1, #shop.locations do
 				local coords = shop.locations[i]
-				id += 1
+				id = id + 1
 
 				shops[id] = lib.points.new(coords, 16, {
 					coords = coords,

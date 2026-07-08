@@ -26,7 +26,7 @@ SetTimeout(500, function()
 	server.GetPlayerFromId = ESX.GetPlayerFromId
 
 	for _, player in pairs(ESX.Players) do
-		server.setPlayerInventory(player, player?.inventory)
+		server.setPlayerInventory(player, player and player.inventory)
 	end
 end)
 
@@ -107,7 +107,7 @@ function server.convertInventory(playerId, items)
 				local metadata = Items.Metadata(playerId, item, false, count)
 				local weight = Inventory.SlotWeight(item, {count=count, metadata=metadata})
 				totalWeight = totalWeight + weight
-				slot += 1
+				slot = slot + 1
 				returnData[slot] = {name = item.name, label = item.label, weight = weight, slot = slot, count = count, description = item.description, metadata = metadata, stack = item.stack, close = item.close}
 			end
 		end

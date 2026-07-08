@@ -65,7 +65,7 @@ function Inventory.CanAccessTrunk(entity)
     ---@type number | number[]
     local doorId = checkVehicle and 4 or 5
 
-    if not Vehicles.trunk.boneIndex?[vehicleHash] and not GetIsDoorValid(entity, doorId --[[@as number]]) then
+    if not (Vehicles.trunk.boneIndex and Vehicles.trunk.boneIndex[vehicleHash]) and not GetIsDoorValid(entity, doorId --[[@as number]]) then
         if vehicleClass ~= 11 and (doorId ~= 5 or GetEntityBoneIndexByName(entity, 'boot') ~= -1 or not GetIsDoorValid(entity, 2)) then
             return
         end
@@ -158,7 +158,7 @@ function Inventory.Search(search, item, metadata)
                         if search == 1 then
                             returnData[item][#returnData[item] + 1] = PlayerData.inventory[v.slot]
                         elseif search == 2 then
-                            returnData[item] += v.count
+                            returnData[item] = returnData[item] + v.count
                         end
                     end
                 end
@@ -220,7 +220,8 @@ exports('GetSlotWithItem', Inventory.GetSlotWithItem)
 ---@param strict? boolean Strictly match metadata properties, otherwise use partial matching.
 ---@return number?
 function Inventory.GetSlotIdWithItem(itemName, metadata, strict)
-    return Inventory.GetSlotWithItem(itemName, metadata, strict)?.slot
+    local slot = Inventory.GetSlotWithItem(itemName, metadata, strict)
+    return slot and slot.slot
 end
 
 exports('GetSlotIdWithItem', Inventory.GetSlotIdWithItem)
@@ -243,7 +244,7 @@ function Inventory.GetSlotsWithItem(itemName, metadata, strict)
 
     for _, slotData in pairs(inventory) do
         if slotData and slotData.name == item.name and (not metadata or tablematch(slotData.metadata, metadata)) then
-            n += 1
+            n = n + 1
             response[n] = slotData
         end
     end
@@ -291,7 +292,7 @@ function Inventory.GetItemCount(itemName, metadata, strict)
 
     for _, slotData in pairs(inventory) do
         if slotData and slotData.name == item.name and (not metadata or tablematch(slotData.metadata, metadata)) then
-            count += slotData.count
+            count = count + slotData.count
         end
     end
 

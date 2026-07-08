@@ -33,7 +33,7 @@ end
 ---@diagnostic disable-next-line: duplicate-set-field
 function server.setPlayerData(player)
 	if not player.groups then
-		warn(("server.setPlayerData did not receive any groups for '%s'"):format(player?.name or GetPlayerName(player)))
+		warn(("server.setPlayerData did not receive any groups for '%s'"):format(player and player.name or GetPlayerName(player)))
 	end
 
 	return {
@@ -55,7 +55,7 @@ local Inventory = require 'modules.inventory.server'
 function server.playerDropped(source)
 	local inv = Inventory(source) --[[@as OxInventory]]
 
-	if inv?.player then
+	if inv and inv.player then
 		inv:closeInventory()
 		Inventory.Remove(inv)
 	end

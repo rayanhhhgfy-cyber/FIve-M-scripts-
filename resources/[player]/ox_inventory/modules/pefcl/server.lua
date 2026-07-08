@@ -30,14 +30,15 @@ end)
 ---@param source number
 ---@return table?
 exports('getCards', function(source)
-	local items = Inventory(source)?.items
+	local inventory = Inventory(source)
+	local items = inventory and inventory.items
 
 	if items then
 		local retval, num = {}, 0
 
 		for _, data in pairs(items) do
 			if data.name == 'mastercard' then
-				num += 1
+				num = num + 1
 				retval[num] = {
 					id = data.metadata.id,
 					holder = data.metadata.holder,

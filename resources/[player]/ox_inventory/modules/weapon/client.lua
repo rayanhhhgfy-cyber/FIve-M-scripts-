@@ -95,7 +95,7 @@ function Weapon.Equip(item, data, noWeaponAnim)
 end
 
 function Weapon.Disarm(currentWeapon, noAnim)
-	if currentWeapon?.timer then
+	if currentWeapon and currentWeapon.timer then
 		currentWeapon.timer = nil
 
         TriggerServerEvent('ox_inventory:updateWeapon')
@@ -137,7 +137,7 @@ function Weapon.Disarm(currentWeapon, noAnim)
 		local chute = `GADGET_PARACHUTE`
 		GiveWeaponToPed(cache.ped, chute, 0, true, false)
 		SetPedGadget(cache.ped, chute, true)
-		SetPlayerParachuteTintIndex(PlayerData.id, client.parachute?[2] or -1)
+		SetPlayerParachuteTintIndex(PlayerData.id, client.parachute and client.parachute[2] or -1)
 	end
 end
 

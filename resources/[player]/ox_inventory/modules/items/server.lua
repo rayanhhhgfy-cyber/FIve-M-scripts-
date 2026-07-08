@@ -69,7 +69,7 @@ CreateThread(function()
 					item.description = item.description
 					item.weight = item.weight or 0
 					dump[i] = item
-					count += 1
+					count = count + 1
 				end
 			end
 
@@ -92,7 +92,7 @@ CreateThread(function()
 
 				for _, item in pairs(dump) do
 					if not ItemList[item.name] then
-						fileSize += 1
+						fileSize = fileSize + 1
 
 						local itemStr = itemFormat:format(item.name, item.label, item.weight, item.stack, item.close, item.description and json.encode(item.description) or 'nil')
 						-- temporary solution for nil values
@@ -120,7 +120,7 @@ CreateThread(function()
 	Wait(1000)
 
 	for _ in pairs(ItemList) do
-		count += 1
+		count = count + 1
 	end
 
 	shared.info(('Inventory has loaded %d items'):format(count))
@@ -182,7 +182,7 @@ function Items.Metadata(inv, item, metadata, count)
 		if not metadata.components then metadata.components = {} end
 
 		if metadata.registered ~= false and (metadata.ammo or item.name == 'WEAPON_STUNGUN') then
-			local registered = type(metadata.registered) == 'string' and metadata.registered or inv?.player?.name
+			local registered = type(metadata.registered) == 'string' and metadata.registered or inv and inv.player and player.name
 			metadata.registered = registered
 			metadata.serial = GenerateSerial(metadata.serial)
 		end
@@ -253,7 +253,7 @@ end
 function Items.CheckMetadata(metadata, item, name, ostime)
 	if metadata.bag then
 		metadata.container = metadata.bag
-		metadata.size = Items.containers[name]?.size or {5, 1000}
+		metadata.size = Items.containers[name] and containers[name].size or {5, 1000}
 		metadata.bag = nil
 	end
 
@@ -281,7 +281,7 @@ function Items.CheckMetadata(metadata, item, name, ostime)
 
 				for _, component in pairs(metadata.components) do
 					if component and ItemList[component] then
-						size += 1
+						size = size + 1
 						components[size] = component
 					end
 				end

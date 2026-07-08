@@ -120,5 +120,6 @@ end
 ---@return number | string
 ---@diagnostic disable-next-line: duplicate-set-field
 function server.getOwnedVehicleId(entityId)
-    return NDCore.getVehicle(entityId)?.id
+    local vehicle = NDCore.getVehicle(entityId)
+    return vehicle and vehicle.id
 end

@@ -74,7 +74,7 @@ local function createShop(shopType, id)
 
 	if not shop then return end
 
-	local store = (shop[locations] or shop.locations)?[id]
+	local store = (shop[locations] or shop.locations)[id]
 
 	if not store then return end
 
@@ -100,7 +100,7 @@ local function createShop(shopType, id)
 		slots = #shop.inventory,
 		type = 'shop',
 		coords = coords,
-		distance = shared.target and shop.targets?[id]?.distance,
+		distance = shared.target and shop.targets and shop.targets[id] and shop.targets[id].distance,
 	}
 
 	setupShopItems(id, shopType, shop.name, groups)
@@ -246,8 +246,8 @@ lib.callback.register('ox_inventory:buyItem', function(source, data)
 			local metadata, count = Items.Metadata(playerInv, fromItem, fromData.metadata and table.clone(fromData.metadata) or {}, data.count)
 			local price = count * fromData.price
 
-			if toData == nil or (fromItem.name == toItem?.name and fromItem.stack and table.matches(toData.metadata, metadata)) then
-				local newWeight = playerInv.weight + (fromItem.weight + (metadata?.weight or 0)) * count
+			if toData == nil or (fromItem.name == toItem and toItem.name and fromItem.stack and table.matches(toData.metadata, metadata)) then
+				local newWeight = playerInv.weight + (fromItem.weight + (metadata and metadata.weight or 0)) * count
 
 				if newWeight > playerInv.maxWeight then
 					return false, false, { type = 'error', description = locale('cannot_carry') }
@@ -260,7 +260,7 @@ lib.callback.register('ox_inventory:buyItem', function(source, data)
 				end
 
 				if fromData.count then
-					fromData.count -= count
+					fromData.count = fromData.count - count
 				end
 
 				local hooks <close> = TriggerEventHooks('buyItem', {
@@ -280,7 +280,7 @@ lib.callback.register('ox_inventory:buyItem', function(source, data)
 
 				if not hooks.success or not Inventory.SetSlot(playerInv, fromItem, count, metadata, data.toSlot) then
 					if fromData.count then
-						fromData.count += count
+						fromData.count = fromData.count + count
 					end
 
 					return false
@@ -291,7 +291,7 @@ lib.callback.register('ox_inventory:buyItem', function(source, data)
 
 				if server.syncInventory then server.syncInventory(playerInv) end
 
-				local message = locale('purchased_for', count, metadata?.label or fromItem.label, (currency == 'money' and locale('$') or math.groupdigits(price)), (currency == 'money' and math.groupdigits(price) or ' '..Items(currency).label))
+				local message = locale('purchased_for', count, metadata and metadata.label or fromItem.label, (currency == 'money' and locale('$') or math.groupdigits(price)), (currency == 'money' and math.groupdigits(price) or ' '..Items(currency).label))
 
 				if server.loglevel > 0 then
 					if server.loglevel > 1 or fromData.price >= 500 then

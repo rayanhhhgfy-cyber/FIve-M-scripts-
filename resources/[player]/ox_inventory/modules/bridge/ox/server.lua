@@ -16,8 +16,8 @@ end)
 
 ---@diagnostic disable-next-line: duplicate-set-field
 function server.setPlayerData(player)
-    player.groups = Ox.GetPlayer(player.source)?.getGroups()
-    return player
+    local oxPlayer = Ox.GetPlayer(player.source)
+    player.groups = oxPlayer and oxPlayer.getGroups()
 end
 
 ---@diagnostic disable-next-line: duplicate-set-field
@@ -59,5 +59,6 @@ end
 ---@return number | string
 ---@diagnostic disable-next-line: duplicate-set-field
 function server.getOwnedVehicleId(entityId)
-    return Ox.GetVehicleFromEntity(entityId)?.id
+    local vehicle = Ox.GetVehicleFromEntity(entityId)
+    return vehicle and vehicle.id
 end

@@ -77,7 +77,7 @@ setmetatable(Items --[[@as table]], {
 local function Item(name, cb)
 	local item = Items[name]
 	if item then
-		if not item.client?.export and not item.client?.event then
+		if not (item.client and item.client.export) and not (item.client and item.client.event) then
 			item.effect = cb
 		end
 	end
@@ -120,7 +120,7 @@ Item('parachute', function(data, slot)
 				GiveWeaponToPed(cache.ped, chute, 0, true, false)
 				SetPedGadget(cache.ped, chute, true)
 				lib.requestModel(1269906701)
-				client.parachute = {CreateParachuteBagObject(cache.ped, true, true), slot?.metadata?.type or -1}
+				client.parachute = {CreateParachuteBagObject(cache.ped, true, true), slot and slot.metadata and slot.metadata.type or -1}
 				if slot.metadata.type then
 					SetPlayerParachuteTintIndex(PlayerData.id, slot.metadata.type)
 				end

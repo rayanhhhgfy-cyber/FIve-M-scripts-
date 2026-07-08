@@ -83,7 +83,7 @@ lib.callback.register('ox_inventory:openCraftingBench', function(source, id, ind
 			local inv = Inventory(left.open) --[[@as OxInventory]]
 
 			-- Why would the player inventory open with an invalid target? Can't repro but whatever.
-			if inv?.player then
+			if inv and inv.player then
 				inv:closeInventory()
 			end
 		end
@@ -115,7 +115,7 @@ lib.callback.register('ox_inventory:craftItem', function(source, id, index, reci
 			local tbl, num = {}, 0
 
 			for name in pairs(recipe.ingredients) do
-				num += 1
+				num = num + 1
 				tbl[num] = name
 			end
 
@@ -131,13 +131,13 @@ lib.callback.register('ox_inventory:craftItem', function(source, id, index, reci
 				if needs > 0 then
 					local item = Items(name)
 					if item then
-						newWeight -= (item.weight * needs)
+						newWeight = newWeight - (item.weight * needs)
 					end
 				end
 			end
 
 			-- Add weight of crafted item
-			newWeight += (craftedItem.weight + (recipe.metadata?.weight or 0)) * craftCount
+			newWeight = newWeight + (craftedItem.weight + (recipe.metadata and metadata.weight or 0)) * craftCount
 
 			if newWeight > left.maxWeight then return false, 'cannot_carry' end
 
@@ -181,7 +181,7 @@ lib.callback.register('ox_inventory:craftItem', function(source, id, index, reci
 						break
 					else
 						tbl[slot.slot] = slot.count
-						needs -= slot.count
+						needs = needs - slot.count
 					end
 
 					if needs == 0 then break end
@@ -229,9 +229,9 @@ lib.callback.register('ox_inventory:craftItem', function(source, id, index, reci
 
 						if durability > 100 then
 							local degrade = (invSlot.metadata.degrade or item.degrade) * 60
-							durability -= degrade * count
+							durability = durability - degrade * count
 						else
-							durability -= count * 100
+							durability = durability - count * 100
 						end
 
 						if invSlot.count > 1 then
@@ -245,7 +245,7 @@ lib.callback.register('ox_inventory:craftItem', function(source, id, index, reci
 								end
 							end
 
-							invSlot.count -= 1
+							invSlot.count = invSlot.count - 1
                             invSlot.weight = Inventory.SlotWeight(item, invSlot)
 
 							left:syncSlotsWithClients({

@@ -29,7 +29,7 @@ local function newItem(data)
 	---@cast clientData -nil
 	---@cast serverData -nil
 
-	if not data.consume and (clientData and (clientData.status or clientData.usetime or clientData.export) or serverData?.export) then
+	if not data.consume and (clientData and (clientData.status or clientData.usetime or clientData.export) or serverData and serverData.export) then
 		data.consume = 1
 	end
 
@@ -97,7 +97,7 @@ for type, data in pairs(lib.load('data.weapons') or {}) do
 			v.server = nil
 			local clientData = v.client
 
-			if clientData?.image then
+			if clientData and clientData.image then
                 clientData.image = setImagePath(clientData.image)
 			end
 		end

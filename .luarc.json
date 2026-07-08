@@ -42,7 +42,19 @@
             "await-in-sync",
             "not-yet-defined",
             "err-nonstandard-symbol",
-            "nonstandard-symbol"
+            "nonstandard-symbol",
+            "assign-type-mismatch",
+            "cast-local-type",
+            "different-requires",
+            "global-in-nil-env",
+            "locale-type-mismatch",
+            "missing-return",
+            "no-unknown",
+            "redundant-return",
+            "undefined-doc-name",
+            "missing-fields",
+            "doc-field-no-class",
+            "unused-label"
         ],
         "globals": [
             "Citizen",

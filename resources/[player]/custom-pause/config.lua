@@ -23,7 +23,6 @@ Config.Bindings = {
 }
 
 Config.KeyNames = {
-    [76] = 'L', [85] = 'U', [72] = 'H', [74] = 'J', [75] = 'K',
     [116] = 'F5', [117] = 'F6',
     [38] = 'E', [21] = 'SHIFT', [16] = 'LSHIFT',
     [8] = 'BACKSPACE', [13] = 'ENTER', [27] = 'ESC',

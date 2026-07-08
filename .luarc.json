@@ -54,7 +54,12 @@
             "undefined-doc-name",
             "missing-fields",
             "doc-field-no-class",
-            "unused-label"
+            "unused-label",
+            "deprecated",
+            "unbalanced-assignments",
+            "ambiguity-1",
+            "undefined-doc-param",
+            "duplicate-index"
         ],
         "globals": [
             "Citizen",

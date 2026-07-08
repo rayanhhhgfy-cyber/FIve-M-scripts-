@@ -246,7 +246,7 @@ function db.saveInventories(players, trunks, gloveboxes, stashes, total)
                     if total[4] == 1 then
                         if affectedRows == 2 then affectedRows = 1 end
                     else
-                        affectedRows = affectedRows - tonumber(resp.info:match('Duplicates: (%d+)'), 10) or 0
+                        affectedRows = affectedRows - (tonumber(resp.info:match('Duplicates: (%d+)'), 10) or 0)
                     end
 
                     shared.info(saveStr:format(affectedRows, total[4], 'stashes', (os.nanotime() - start) / 1e6))

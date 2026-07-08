@@ -434,7 +434,7 @@ end
 ---@param cb fun(response: SlotWithItem | false)?
 ---@param noAnim? boolean
 local function useItem(data, cb, noAnim)
-	local slotData, result = PlayerData.inventory[data.slot]
+	local slotData = PlayerData.inventory[data.slot]
 
 	if not slotData or not canUseItem(data.ammo and true) then
         if currentWeapon then
@@ -1221,7 +1221,7 @@ RegisterNetEvent('ox_inventory:setPlayerInventory', function(currentDrops, inven
 
 	if setStateBagHandler then setStateBagHandler(('player:%s'):format(cache.serverId)) end
 
-	local ItemData = table.create(0, #Items)
+	local ItemData = {}
 
 	for _, v in pairs(Items --[[@as table<string, OxClientItem>]]) do
 		local buttons = v.buttons and {} or nil

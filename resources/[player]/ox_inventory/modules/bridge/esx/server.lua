@@ -85,7 +85,7 @@ end
 function server.convertInventory(playerId, items)
 	if type(items) == 'table' then
 		local player = server.GetPlayerFromId(playerId)
-		local returnData, totalWeight = table.create(#items, 0), 0
+		local returnData, totalWeight = {}, 0
 		local slot = 0
 
 		if player then

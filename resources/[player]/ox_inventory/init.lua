@@ -30,7 +30,7 @@ do
         shared.police = { shared.police }
     end
 
-    local police = table.create(0, shared.police and #shared.police or 0)
+    local police = {}
 
     for i = 1, #shared.police do
         police[shared.police[i]] = 0
@@ -76,7 +76,7 @@ if IsDuplicityVersion() then
     }
 
     local accounts = json.decode(GetConvar('inventory:accounts', '["money"]'))
-    server.accounts = table.create(0, #accounts)
+    server.accounts = {}
 
     for i = 1, #accounts do
         server.accounts[accounts[i]] = 0
@@ -105,7 +105,7 @@ else
         enablestealcommand = GetConvarBool('inventory:enablestealcommand', true)
     }
 
-    local ignoreweapons = table.create(0, (client.ignoreweapons and #client.ignoreweapons or 0) + 3)
+    local ignoreweapons = {}
 
     for i = 1, #client.ignoreweapons do
         local weapon = client.ignoreweapons[i]

@@ -808,7 +808,7 @@ local function generateItems(inv, invType, items)
 		items = {}
 	end
 
-	local returnData, totalWeight = table.create(#items, 0), 0
+	local returnData, totalWeight = {}, 0
 	for i = 1, #items do
 		local v = items[i]
 		local item = Items(v[1])
@@ -1140,7 +1140,7 @@ function Inventory.AddItem(inv, item, count, metadata, slot, cb)
 	if not inv and inv.slots then return false, 'invalid_inventory' end
 
 	local toSlot, slotMetadata, slotCount
-	local success, response = false
+	local success = false
 	local invokingResource = server.loglevel > 1 and GetInvokingResource()
 
 	metadata = assertMetadata(metadata)
@@ -1426,7 +1426,7 @@ function Inventory.RemoveItem(inv, item, count, metadata, slot, ignoreTotal, str
 			server.syncInventory(inv)
 		end
 
-		local array = table.create(#slots, 0)
+		local array = {}
 
 		for k, v in pairs(slots) do
 			array[k] = {item = type(v) == 'number' and { slot = v } or v, inventory = inv.id}
@@ -1777,7 +1777,8 @@ lib.callback.register('ox_inventory:swapItems', function(source, data)
             if fromData.metadata.container and toInventory.type == 'container' then return false end
             if toData and toData.metadata.container and fromInventory.type == 'container' then return false end
 
-			local container, containerItem = (not sameInventory and playerInventory.containerSlot) and (fromInventory.type == 'container' and fromInventory or toInventory)
+			local container = (not sameInventory and playerInventory.containerSlot) and (fromInventory.type == 'container' and fromInventory or toInventory)
+			local containerItem
 
 			if container then
 				containerItem = playerInventory.items[playerInventory.containerSlot]

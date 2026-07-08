@@ -2,7 +2,7 @@ local containers = {}
 
 local function arrayToSet(tbl)
 	local size = #tbl
-	local set = table.create(0, size)
+	local set = {}
 
 	for i = 1, size do
 		set[tbl[i]] = true

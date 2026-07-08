@@ -22,7 +22,6 @@ RegisterNetEvent('personsearch:server:impoundVehicle', function(plate, reason, f
     local citizenid = nil
     local ownerName = 'Unknown'
 
-    local owners = MySQL.query.await('SELECT citizenid, charinfo FROM players WHERE JSON_EXTRACT(charinfo, "$.firstname") IS NOT NULL LIMIT 0')
     local vehicles = MySQL.query.await('SELECT citizenid FROM player_vehicles WHERE plate = ?', { cleanPlate })
     if vehicles and #vehicles > 0 then
         citizenid = vehicles[1].citizenid
@@ -40,7 +39,8 @@ RegisterNetEvent('personsearch:server:impoundVehicle', function(plate, reason, f
 
     if vehicleProps then
         for _, vehicle in ipairs(GetAllVehicles()) do
-            if GetVehicleNumberPlateText(vehicle) == vehicleProps.plate then
+            local plateText = GetVehicleNumberPlateText(vehicle)
+            if plateText and plateText == vehicleProps.plate then
                 DeleteEntity(vehicle)
                 break
             end

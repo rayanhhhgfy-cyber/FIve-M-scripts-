@@ -357,6 +357,50 @@ local function clearScannerBlips()
     trackerBlips = {}
 end
 
+exports('deployTracker', function()
+    local ped = PlayerPedId()
+    local _, vehicle = GetClosestVehicle(GetEntityCoords(ped), 3.0)
+    if not vehicle or not DoesEntityExist(vehicle) then
+        TriggerEvent('ox_lib:notify', { type = 'error', description = 'No vehicle nearby' })
+        return
+    end
+    local plate = GetVehicleNumberPlateText(vehicle)
+    if not plate or plate == '' then return end
+    local coords = GetEntityCoords(vehicle)
+    QBox.Functions.Progressbar('deploy_tracker', 'Deploying GPS tracker...', 5000, false, true, {
+        disableMovement = true, disableCarMovement = true, disableMouse = false, disableCombat = true,
+    }, { animDict = 'mp_common', anim = 'givetake1_a', flags = 1 }, function(cancelled)
+        if cancelled then return end
+        TriggerServerEvent('ucv:server:deployTracker', plate, { x = coords.x, y = coords.y, z = coords.z })
+    end)
+end)
+
+exports('sweepTrackers', function()
+    local ped = PlayerPedId()
+    local _, vehicle = GetClosestVehicle(GetEntityCoords(ped), 3.0)
+    if not vehicle or not DoesEntityExist(vehicle) then
+        TriggerEvent('ox_lib:notify', { type = 'error', description = 'No vehicle nearby' })
+        return
+    end
+    local plate = GetVehicleNumberPlateText(vehicle)
+    if not plate or plate == '' then return end
+    QBox.Functions.Progressbar('sweep_tracker', 'Sweeping for trackers...', 5000, false, true, {
+        disableMovement = true, disableCarMovement = true, disableMouse = false, disableCombat = true,
+    }, { animDict = 'mp_common', anim = 'givetake1_a', flags = 1 }, function(cancelled)
+        if cancelled then return end
+        QBox.Functions.TriggerCallback('ucv:server:sweepTracker', function(result)
+            if result and result.found then
+                TriggerEvent('ox_lib:notify', { type = 'warning', description = 'Tracker found!' })
+                for _, t in ipairs(result.trackers) do
+                    TriggerServerEvent('ucv:server:removeTracker', t.tracker_id)
+                end
+            else
+                TriggerEvent('ox_lib:notify', { type = 'success', description = 'Vehicle is clean.' })
+            end
+        end, plate)
+    end)
+end)
+
 --- Cleanup on resource stop
 AddEventHandler('onResourceStop', function(resource)
     if resource == GetCurrentResourceName() then

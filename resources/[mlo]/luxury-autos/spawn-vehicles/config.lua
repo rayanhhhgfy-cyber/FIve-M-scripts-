@@ -3,7 +3,7 @@
 --   color = GTA color index (0 = black)
 --   plate = plate text (max 8 chars)
 
-Config = {}
+Config = Config or {}
 
 Config.PLATFORMS = {
 

@@ -162,6 +162,44 @@ Citizen.CreateThread(function()
     end
 end)
 
+exports('deployCamera', function()
+    local ped = PlayerPedId()
+    local coords = GetEntityCoords(ped)
+    local entities = GetGamePool('CObject')
+    local closest, closestDist = nil, 5.0
+    for _, obj in ipairs(entities) do
+        local objCoords = GetEntityCoords(obj)
+        local dist = #(coords - objCoords)
+        if dist < closestDist then
+            closest, closestDist = obj, dist
+        end
+    end
+    if not closest then
+        TriggerEvent('ox_lib:notify', { type = 'error', description = 'No target nearby' })
+        return
+    end
+    deployBug('surveillance_camera', closest)
+end)
+
+exports('deployAudio', function()
+    local ped = PlayerPedId()
+    local coords = GetEntityCoords(ped)
+    local entities = GetGamePool('CObject')
+    local closest, closestDist = nil, 5.0
+    for _, obj in ipairs(entities) do
+        local objCoords = GetEntityCoords(obj)
+        local dist = #(coords - objCoords)
+        if dist < closestDist then
+            closest, closestDist = obj, dist
+        end
+    end
+    if not closest then
+        TriggerEvent('ox_lib:notify', { type = 'error', description = 'No target nearby' })
+        return
+    end
+    deployBug('audio_bug', closest)
+end)
+
 --- Cleanup
 AddEventHandler('onResourceStop', function(resource)
     if resource == GetCurrentResourceName() then

@@ -1,5 +1,5 @@
-QBox = exports['qbx_core']:GetCoreObject()
-PlayerData = QBox.Functions.GetPlayerData()
+local QBox = exports['qbx_core']:GetCoreObject()
+local PlayerData = QBox.Functions.GetPlayerData()
 local inRadialMenu = false
 
 local jobIndex = nil

@@ -5,7 +5,11 @@
         "path": [
             "?.lua",
             "?/init.lua"
-        ]
+        ],
+        "plugin": ".lua-lsp-plugin.lua",
+        "special": {
+            "`(.-)`": "GetHashKey"
+        }
     },
     "workspace": {
         "checkThirdParty": false,
@@ -15,7 +19,9 @@
         "ignoreDir": [
             ".git",
             "node_modules",
-            "cache"
+            "cache",
+            "new scrpits",
+            "new mlos and vehicles"
         ]
     },
     "diagnostics": {
@@ -29,9 +35,14 @@
             "duplicate-set-field",
             "unused-vararg",
             "undefined-global",
-            "lowercase-global",
             "redundant-parameter",
-            "missing-parameter"
+            "missing-parameter",
+            "undefined-field",
+            "codestyle-check",
+            "await-in-sync",
+            "not-yet-defined",
+            "err-nonstandard-symbol",
+            "nonstandard-symbol"
         ],
         "globals": [
             "Citizen",
@@ -63,7 +74,49 @@
             "QBCore",
             "ESX",
             "PlayerData",
-            "source"
+            "source",
+            "Config",
+            "GetHashKey",
+            "joaat",
+            "IsDuplicityVersion",
+            "GetGameTimer",
+            "GetFrameTime",
+            "LocalPlayer",
+            "PlayerPedId",
+            "GetEntityCoords",
+            "GetPlayerPed",
+            "GetPlayerServerId",
+            "GetPlayerFromServerId",
+            "NetworkGetNetworkIdFromEntity",
+            "NetworkGetEntityFromNetworkId",
+            "VehToNet",
+            "NetToVeh",
+            "SetNuiFocus",
+            "SetNuiFocusKeepInput",
+            "SendNUIMessage",
+            "GetResourceState",
+            "GetCurrentResourceName",
+            "GetConsoleBuffer",
+            "GetConvar",
+            "GetConvarBool",
+            "GetConvarInt",
+            "SetConvar",
+            "SetResourceKvp",
+            "GetResourceKvpString",
+            "GetResourceKvpInt",
+            "DeleteResourceKvp",
+            "RegisterNUICallback",
+            "GetPlayerIdentifiers",
+            "GetPlayerName",
+            "GetPlayerEndpoint",
+            "GetPlayerPing",
+            "DropPlayer",
+            "GetPlayers",
+            "MySQL",
+            "oxMySQL",
+            "Ox",
+            "ox",
+            "localPlayer"
         ],
         "unusedLocalVariable": false,
         "unusedFunction": false,

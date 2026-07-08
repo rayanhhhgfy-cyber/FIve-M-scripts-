@@ -240,6 +240,53 @@ RegisterNetEvent('covert:client:unlockDoor', function(doorModel, x, y, z)
     end
 end)
 
+exports('lockpick', function()
+    local ped = PlayerPedId()
+    local door = GetClosestDoorToPosition(GetEntityCoords(ped), 3.0, 0, false)
+    if door == 0 or not DoesEntityExist(door) then
+        TriggerEvent('ox_lib:notify', { type = 'error', description = 'No door nearby' })
+        return
+    end
+    local coords = GetEntityCoords(door)
+    local doorModel = GetEntityModel(door)
+    QBox.Functions.Progressbar('covert_lockpick', 'Picking lock silently...', Config.CovertEntry.Lockpick.duration, false, true, {
+        disableMovement = true, disableCarMovement = true, disableMouse = false, disableCombat = true,
+    }, { animDict = 'mp_common', anim = 'givetake1_a', flags = 1 }, function(cancelled)
+        if cancelled then return end
+        local success = lib.skillCheck({ areaSize = 40, speedMultiplier = 3 }, { 'medium', 'medium', 'hard' })
+        if success then
+            TriggerServerEvent('covert:server:lockpickSuccess', doorModel, { x = coords.x, y = coords.y, z = coords.z })
+            TriggerEvent('ox_lib:notify', { type = 'success', description = 'Lockpick successful' })
+        else
+            TriggerEvent('ox_lib:notify', { type = 'error', description = 'Lockpick failed' })
+        end
+    end)
+end)
+
+exports('bypassAlarm', function()
+    local ped = PlayerPedId()
+    local door = GetClosestDoorToPosition(GetEntityCoords(ped), 3.0, 0, false)
+    if door == 0 or not DoesEntityExist(door) then
+        TriggerEvent('ox_lib:notify', { type = 'error', description = 'No door nearby' })
+        return
+    end
+    local coords = GetEntityCoords(door)
+    local doorModel = GetEntityModel(door)
+    QBox.Functions.Progressbar('alarm_bypass', 'Bypassing alarm...', Config.CovertEntry.AlarmBypass.duration, false, true, {
+        disableMovement = true, disableCarMovement = true, disableMouse = false, disableCombat = true,
+    }, { animDict = 'mp_common', anim = 'givetake1_a', flags = 1 }, function(cancelled)
+        if cancelled then return end
+        local success = lib.skillCheck({ areaSize = 50, speedMultiplier = 2.5 }, { 'easy', 'medium', 'medium' })
+        if success then
+            TriggerServerEvent('covert:server:alarmBypass', doorModel, { x = coords.x, y = coords.y, z = coords.z })
+            TriggerEvent('ox_lib:notify', { type = 'success', description = 'Alarm bypassed' })
+        else
+            TriggerServerEvent('covert:server:failAlarm', 'Alarm bypass failed', { x = coords.x, y = coords.y, z = coords.z })
+            TriggerEvent('ox_lib:notify', { type = 'error', description = 'Alarm triggered!' })
+        end
+    end)
+end)
+
 --- Cleanup
 AddEventHandler('onResourceStop', function(resource)
     if resource == GetCurrentResourceName() then

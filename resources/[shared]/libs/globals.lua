@@ -181,11 +181,11 @@ Wrappers = nil
 Locale = nil
 
 ---@type ox_lib
-exports.ox_lib = nil
+--exports.ox_lib = nil
 
 ---@type DiscordLogs
-exports.discord_logs = nil
-exports['discord-logs'] = nil
+--exports.discord_logs = nil
+--exports['discord-logs'] = nil
 
 ---@type table<string, table>
 Config = nil
@@ -1473,7 +1473,7 @@ function Player(playerId) end
 ---@field GetPlayers fun(): number[]
 ---@field GetPlayersFromCoords fun(x: number, y: number, z: number, distance: number): number[]
 
-exports.ox_target = nil
+--exports.ox_target = nil
 
 -- ox_inventory
 ---@class ox_inventory
@@ -1489,7 +1489,7 @@ exports.ox_target = nil
 ---@field GetSlots fun(source: number): number
 ---@field GetWeight fun(source: number): number
 
-exports.ox_inventory = nil
+--exports.ox_inventory = nil
 
 -- PolyZone
 ---@class PolyZone
@@ -1505,4 +1505,4 @@ exports.ox_inventory = nil
 ---@field destroy fun(self)
 ---@field setRadius fun(self, radius: number)
 
-exports['polyzone'] = nil
+--exports['polyzone'] = nil

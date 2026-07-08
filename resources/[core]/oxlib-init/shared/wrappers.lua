@@ -1,22 +1,26 @@
 if not Wrappers then Wrappers = {} end
 
-function Wrappers.Notify(data)
+function Wrappers.Notify(data, type_, duration)
     if type(data) == 'string' then
-        data = { description = data }
+        data = { description = data, type = type_ or 'info', duration = duration }
+    elseif type(data) == 'number' then
+        data = { description = type_, type = duration or 'info' }
     end
+    if type(data) ~= 'table' then return end
     data.type = data.type or 'info'
     data.duration = data.duration or Config.Notify.duration
     data.position = data.position or Config.Notify.position
     TriggerEvent('ox_lib:notify', data)
 end
 
-function Wrappers.NotifyServer(data)
+function Wrappers.NotifyServer(source, data, type_)
     if type(data) == 'string' then
-        data = { description = data }
+        data = { description = data, type = type_ or 'info' }
     end
+    if type(data) ~= 'table' then return end
     data.type = data.type or 'info'
     data.duration = data.duration or Config.Notify.duration
-    TriggerClientEvent('ox_lib:notify', -1, data)
+    TriggerClientEvent('ox_lib:notify', source or -1, data)
 end
 
 function Wrappers.ProgressBar(data)

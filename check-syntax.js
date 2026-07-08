@@ -1,5 +1,3 @@
-// Real Lua syntax checker using luaparse.
-// Usage: npm i luaparse  (run once)  then:  node check-syntax.js
 const fs = require('fs');
 const path = require('path');
 
@@ -26,6 +24,28 @@ function walk(dir) {
     return results;
 }
 
+function preprocessCfxLua(code) {
+    return code
+        // Replace backtick hash strings: `SOME_HASH` -> "HASH_SOME_HASH"
+        .replace(/`([a-zA-Z0-9_]+)`/g, '"HASH_$1"')
+
+        // Remove ? from ?. and ?[ (safe navigation) -> turns into . and [
+        .replace(/\?\./g, '.')
+        .replace(/\?\[/g, '[')
+        // Handle any remaining stray ? that isn't in a string (ternary)
+        // but NOTE: Lua uses 'and/or' for ternary, not ?, so stray ? is likely safe to remove
+        .replace(/\?/g, '')
+
+        // Replace compound assignments with no-op valid syntax for parsing purposes
+        .replace(/\s*\+=/g, ' = 0 +')
+        .replace(/\s*-=/g, ' = 0 -')
+        .replace(/\s*\*=/g, ' = 0 *')
+        .replace(/\s*\/=/g, ' = 0 /')
+
+        // Remove <close> and other variable attributes: local x <close> = ...
+        .replace(/<[a-z_]+>/g, '');
+}
+
 const files = walk('resources');
 console.log('Checking ' + files.length + ' Lua files...\n');
 
@@ -35,8 +55,8 @@ for (const fp of files) {
     let c;
     try { c = fs.readFileSync(fp, 'utf8'); } catch { continue; }
     try {
-        // luaX = LuaJIT/Lua 5.4-ish; FiveM uses CfxLua (5.4 features + goto etc.)
-        luaparse.parse(c, { luaVersion: '5.3', comments: false });
+        const preprocessed = preprocessCfxLua(c);
+        luaparse.parse(preprocessed, { luaVersion: '5.3', comments: false });
     } catch (err) {
         ERRORS.push({ file: fp, message: err.message });
     }

@@ -19,6 +19,13 @@ Config.MenuItems = {
                 event = 'qb-phone:client:GiveContactDetails',
                 shouldClose = true
             }, {
+                id = 'stealplayer_root',
+                title = 'Rob Player',
+                icon = 'mask',
+                type = 'client',
+                event = 'police:client:RobPlayer',
+                shouldClose = true
+            }, {
             id = 'getintrunk',
             title = 'Get In Trunk',
             icon = 'car',
@@ -472,6 +479,63 @@ Config.VehicleDoors = {
         event = 'qb-radialmenu:client:openDoor',
         shouldClose = false
     }
+    }
+}
+
+Config.VehicleWindows = {
+    id = 'vehiclewindows',
+    title = 'Vehicle Windows',
+    icon = 'window-maximize',
+    items = {
+        {
+            id = 'window0',
+            title = 'Front Left Window',
+            icon = 'window-minimize',
+            type = 'client',
+            event = 'qb-radialmenu:client:toggleWindow',
+            shouldClose = false,
+            data = { window = 0 }
+        }, {
+            id = 'window1',
+            title = 'Front Right Window',
+            icon = 'window-minimize',
+            type = 'client',
+            event = 'qb-radialmenu:client:toggleWindow',
+            shouldClose = false,
+            data = { window = 1 }
+        }, {
+            id = 'window2',
+            title = 'Rear Left Window',
+            icon = 'window-minimize',
+            type = 'client',
+            event = 'qb-radialmenu:client:toggleWindow',
+            shouldClose = false,
+            data = { window = 2 }
+        }, {
+            id = 'window3',
+            title = 'Rear Right Window',
+            icon = 'window-minimize',
+            type = 'client',
+            event = 'qb-radialmenu:client:toggleWindow',
+            shouldClose = false,
+            data = { window = 3 }
+        }, {
+            id = 'window_all_down',
+            title = 'All Down',
+            icon = 'window-minimize',
+            type = 'client',
+            event = 'qb-radialmenu:client:toggleWindow',
+            shouldClose = false,
+            data = { window = 'all_down' }
+        }, {
+            id = 'window_all_up',
+            title = 'All Up',
+            icon = 'window-minimize',
+            type = 'client',
+            event = 'qb-radialmenu:client:toggleWindow',
+            shouldClose = false,
+            data = { window = 'all_up' }
+        }
     }
 }
 

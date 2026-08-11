@@ -25,6 +25,30 @@ RegisterCommand('windows', function(source, args)
     end
 end)
 
+RegisterCommand('seat', function(source, args)
+    local seatIdx = tonumber(args[1])
+    if not seatIdx or seatIdx < 1 or seatIdx > 6 then
+        Wrappers.Notify('Usage: /seat [1-6]', 'error')
+        return
+    end
+
+    local ped = PlayerPedId()
+    local veh = GetVehiclePedIsIn(ped, false)
+    if veh == 0 then
+        Wrappers.Notify('Not in a vehicle', 'error')
+        return
+    end
+
+    -- Convert 1-based index to GTA V seat index (-1 is driver, 0 is passenger, etc.)
+    local gtaSeat = seatIdx - 2
+    if IsVehicleSeatFree(veh, gtaSeat) then
+        SetPedIntoVehicle(ped, veh, gtaSeat)
+        Wrappers.Notify('Switched to seat ' .. seatIdx, 'success')
+    else
+        Wrappers.Notify('Seat is occupied', 'error')
+    end
+end)
+
 RegisterCommand('door', function(source, args)
     local doorIdx = tonumber(args[1])
     if not doorIdx or doorIdx < 0 or doorIdx > 5 then

@@ -90,7 +90,7 @@ else
         keys = json.decode(GetConvar('inventory:keys', '')) or { 'F2', 'K', 'TAB' },
         enablekeys = json.decode(GetConvar('inventory:enablekeys', '[249]')),
         aimedfiring = GetConvarBool('inventory:aimedfiring', false),
-        giveplayerlist = GetConvarBool('inventory:giveplayerlist', false),
+        giveplayerlist = GetConvarBool('inventory:giveplayerlist', true),
         weaponanims = GetConvarBool('inventory:weaponanims', true),
         itemnotify = GetConvarBool('inventory:itemnotify', true),
         weaponnotify = GetConvarBool('inventory:weaponnotify', true),

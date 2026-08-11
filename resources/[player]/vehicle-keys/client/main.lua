@@ -180,6 +180,7 @@ local function lockpickAction()
 end
 
 -- Give vehicle key to nearest player
+-- Give vehicle key to nearest player or vehicle passenger
 local function giveKeyAction()
     local keys = lib.callback.await('vehicle-keys:getKeyList', false)
     if not keys or #keys == 0 then
@@ -187,30 +188,63 @@ local function giveKeyAction()
         return
     end
 
-    local closestPlayers = QBox.Functions.GetPlayersFromCoords(GetEntityCoords(PlayerPedId()), Config.VehicleKeys.giveKeyRange)
-    local target = nil
-    for _, p in ipairs(closestPlayers) do
-        if p ~= cache.serverId then
-            target = p
-            break
+    local ped = PlayerPedId()
+    local vehicle = GetVehiclePedIsIn(ped, false)
+    local targetList = {}
+
+    if vehicle ~= 0 then
+        -- Find passengers in the same vehicle
+        local maxSeats = GetVehicleModelNumberOfSeats(GetEntityModel(vehicle))
+        for i = -1, maxSeats - 2 do
+            local occupant = GetPedInVehicleSeat(vehicle, i)
+            if occupant ~= 0 and occupant ~= ped and IsPedAPlayer(occupant) then
+                local playerIdx = NetworkGetPlayerIndexFromPed(occupant)
+                if NetworkIsPlayerActive(playerIdx) then
+                    local sId = GetPlayerServerId(playerIdx)
+                    if sId ~= 0 then
+                        table.insert(targetList, { id = sId, name = GetPlayerName(playerIdx) .. ' (Seat ' .. i .. ')' })
+                    end
+                end
+            end
         end
     end
-    if not target then
-        exports.ox_lib:notify({ type = 'error', description = 'No players nearby' })
+
+    -- Fallback to nearest players if no vehicle passengers found
+    if #targetList == 0 then
+        local closestPlayers = QBox.Functions.GetPlayersFromCoords(GetEntityCoords(ped), Config.VehicleKeys.giveKeyRange)
+        for _, p in ipairs(closestPlayers) do
+            if p ~= cache.serverId then
+                table.insert(targetList, { id = p, name = 'Player ID ' .. p })
+            end
+        end
+    end
+
+    if #targetList == 0 then
+        exports.ox_lib:notify({ type = 'error', description = 'No players nearby or inside the vehicle' })
         return
     end
 
-    local options = {}
+    -- Ask user to select the key and the player
+    local keyOptions = {}
     for _, k in ipairs(keys) do
-        table.insert(options, { value = k.plate .. '|' .. k.model, label = k.label })
+        table.insert(keyOptions, { value = k.plate .. '|' .. k.model, label = k.label })
     end
+
+    local playerOptions = {}
+    for _, t in ipairs(targetList) do
+        table.insert(playerOptions, { value = tostring(t.id), label = t.name })
+    end
+
     local selected = lib.inputDialog('Give Vehicle Key', {
-        { type = 'select', label = 'Select Key', options = options, required = true },
+        { type = 'select', label = 'Select Key', options = keyOptions, required = true },
+        { type = 'select', label = 'Select Player', options = playerOptions, required = true },
     })
     if not selected then return end
 
     local plate, model = selected[1]:match('(.-)|(.*)')
-    if plate then
+    local target = tonumber(selected[2])
+
+    if plate and target then
         TriggerServerEvent('vehicle-keys:giveKey', plate, model, target)
     end
 end
@@ -276,10 +310,10 @@ EnsureRadialMenuItems = function()
     return items
 end
 
-AddEventHandler('vehicle-keys:radial:Lock', vehicleLockAction)
-AddEventHandler('vehicle-keys:radial:Lockpick', lockpickAction)
-AddEventHandler('vehicle-keys:radial:GiveKey', giveKeyAction)
-AddEventHandler('vehicle-keys:radial:CreateKey', createKeyAction)
+RegisterNetEvent('vehicle-keys:radial:Lock', vehicleLockAction)
+RegisterNetEvent('vehicle-keys:radial:Lockpick', lockpickAction)
+RegisterNetEvent('vehicle-keys:radial:GiveKey', giveKeyAction)
+RegisterNetEvent('vehicle-keys:radial:CreateKey', createKeyAction)
 
 -- Keybind for quick lock/unlock
 RegisterCommand('vehiclelock', function()

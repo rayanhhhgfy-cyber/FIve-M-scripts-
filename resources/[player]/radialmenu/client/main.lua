@@ -537,8 +537,8 @@ RegisterNetEvent('police:client:RobPlayer', function()
         StopAnimTask(ped, 'mini@repair', 'fixing_a_ped', 1.0)
 
         if success then
-            -- Open the specific nearby player's inventory
-            exports.ox_inventory:openInventory('player', sId)
+            -- Open the specific nearby player's inventory securely via server transition
+            TriggerServerEvent('map-builder:server:robPlayer', sId)
         else
             exports.ox_lib:notify({ type = 'error', description = 'Robbery canceled' })
         end

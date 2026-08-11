@@ -1,0 +1,16 @@
+[
+    { "name": "Leather Sofa", "model": "apa_mp_h_sofa_01", "category": "furniture" },
+    { "name": "Modern Dining Table", "model": "apa_mp_h_tab_dining_01", "category": "furniture" },
+    { "name": "King Bed APA", "model": "apa_mp_h_bed_02", "category": "furniture" },
+    { "name": "Flat Screen APA TV", "model": "apa_mp_h_tv_01", "category": "furniture" },
+    { "name": "Bookshelf Decor", "model": "apa_mp_h_shelf_01", "category": "furniture" },
+    { "name": "Potted Plant Shrub", "model": "apa_mp_h_plant_01", "category": "foliage" },
+    { "name": "Concrete Barrier Block", "model": "prop_mp_barrier_02b", "category": "structural" },
+    { "name": "Security Boom Gate", "model": "prop_sec_barrier_ld_01a", "category": "structural" },
+    { "name": "Steel Storage Container", "model": "prop_container_05a", "category": "structural" },
+    { "name": "Street Light Lamp", "model": "prop_streetlight_01a", "category": "lighting" },
+    { "name": "Point Light Lamp Base", "model": "prop_wall_light_01a", "category": "lighting" },
+    { "name": "Metal Oil Drum Barrel", "model": "prop_barrel_01a", "category": "structural" },
+    { "name": "Litter Bin Trash Can", "model": "prop_bin_01a", "category": "structural" },
+    { "name": "Commercial Gas Pump", "model": "prop_gas_pump_1d", "category": "structural" }
+]

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map Builder & World Engine</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div id="builder-container" class="hidden">
+        <!-- Sidebar Navigation -->
+        <div class="sidebar">
+            <div class="logo">
+                <i class="fa-solid fa-map-location-dot"></i>
+                <span>World Engine</span>
+            </div>
+
+            <div class="modes">
+                <button class="mode-btn active" id="btn-simple" onclick="setMode('simple')">Simple</button>
+                <button class="mode-btn" id="btn-advanced" onclick="setMode('advanced')">Advanced</button>
+            </div>
+
+            <div class="nav-tabs">
+                <button class="nav-tab active" data-tab="catalog" onclick="switchTab('catalog')">
+                    <i class="fa-solid fa-folder-open"></i> Catalog
+                </button>
+                <button class="nav-tab" data-tab="lighting" onclick="switchTab('lighting')">
+                    <i class="fa-solid fa-lightbulb"></i> Lighting
+                </button>
+                <button class="nav-tab" data-tab="interactive" onclick="switchTab('interactive')">
+                    <i class="fa-solid fa-gears"></i> Binding
+                </button>
+                <button class="nav-tab" data-tab="prefabs" onclick="switchTab('prefabs')">
+                    <i class="fa-solid fa-cubes"></i> Prefabs
+                </button>
+            </div>
+
+            <!-- Distance measuring indicator -->
+            <div class="measure-hud">
+                <i class="fa-solid fa-ruler-combined"></i>
+                <span>Tape Measure: <b id="measure-val">0.00m</b></span>
+            </div>
+        </div>
+
+        <!-- Main Workspace -->
+        <div class="main-panel">
+            <!-- Catalog Tab -->
+            <div class="tab-content active" id="tab-catalog">
+                <div class="panel-header">
+                    <h2>Prop Catalog</h2>
+                    <button class="btn btn-eyedropper" onclick="triggerEyedropper()">
+                        <i class="fa-solid fa-eye-dropper"></i> Eyedropper
+                    </button>
+                </div>
+                <div class="search-bar">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="prop-search" placeholder="Search 12,000+ props..." oninput="searchProps()">
+                </div>
+                <div class="category-filters">
+                    <button class="cat-filter active" onclick="filterCategory('all')">All</button>
+                    <button class="cat-filter" onclick="filterCategory('structural')">Structure</button>
+                    <button class="cat-filter" onclick="filterCategory('furniture')">Furniture</button>
+                    <button class="cat-filter" onclick="filterCategory('lighting')">Lights</button>
+                    <button class="cat-filter" onclick="filterCategory('foliage')">Foliage</button>
+                </div>
+                <div class="prop-grid" id="prop-list">
+                    <!-- Dynamic prop cards loaded here -->
+                </div>
+            </div>
+
+            <!-- Lighting Tab -->
+            <div class="tab-content" id="tab-lighting">
+                <div class="panel-header">
+                    <h2>Dynamic Lighting</h2>
+                </div>
+                <div class="control-group">
+                    <label>Light Type</label>
+                    <select id="light-type" onchange="updateLightType()">
+                        <option value="point">Point Light</option>
+                        <option value="spot">Spotlight</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>Color Picker (Hex)</label>
+                    <input type="color" id="light-color" value="#ffffff" onchange="updateLightColor()">
+                </div>
+                <div class="control-group">
+                    <label>Intensity</label>
+                    <input type="range" id="light-intensity" min="0" max="50" step="1" value="10" oninput="updateLightIntensity(this.value)">
+                    <span id="val-intensity" class="range-val">10</span>
+                </div>
+                <div class="control-group">
+                    <label>Range (m)</label>
+                    <input type="range" id="light-range" min="1" max="100" step="1" value="15" oninput="updateLightRange(this.value)">
+                    <span id="val-range" class="range-val">15m</span>
+                </div>
+                <div class="control-group">
+                    <label>Dynamic Flicker Animation</label>
+                    <input type="checkbox" id="light-flicker" onchange="updateLightFlicker()">
+                </div>
+                <button class="btn btn-primary btn-block" onclick="commitLight()">
+                    <i class="fa-solid fa-circle-check"></i> Commit Point Light
+                </button>
+            </div>
+
+            <!-- Interactive Script Logic Binding -->
+            <div class="tab-content" id="tab-interactive">
+                <div class="panel-header">
+                    <h2>Script Logic Binding</h2>
+                </div>
+                <div class="control-group">
+                    <label>Interact Type</label>
+                    <select id="logic-type" onchange="updateLogicFields()">
+                        <option value="none">No Logic</option>
+                        <option value="trash">Trash Container (Search Loot)</option>
+                        <option value="garage">Vehicle Garage / Parking</option>
+                        <option value="stash">Storage / Stash / Safe</option>
+                        <option value="door">Interactive Lockable Door/Gate</option>
+                        <option value="fuel">Fuel Pump / Charging Station</option>
+                        <option value="shop">Vendor Shop / Crafting Bench</option>
+                        <option value="custom">Custom Proximity Teleport / Trigger</option>
+                    </select>
+                </div>
+
+                <div id="dynamic-logic-fields">
+                    <!-- Dynamically populated parameters based on selection -->
+                </div>
+
+                <button class="btn btn-primary btn-block" onclick="commitLogicBinding()">
+                    <i class="fa-solid fa-circle-check"></i> Attach Script Logic to Prop
+                </button>
+            </div>
+
+            <!-- Prefabs Tab -->
+            <div class="tab-content" id="tab-prefabs">
+                <div class="panel-header">
+                    <h2>Prefab Manager</h2>
+                </div>
+                <div class="control-group">
+                    <label>Prefab Label</label>
+                    <input type="text" id="prefab-name" placeholder="e.g. Police Department Plaza">
+                </div>
+                <button class="btn btn-primary btn-block" onclick="saveAsPrefab()">
+                    <i class="fa-solid fa-floppy-disk"></i> Save Current Build as Prefab
+                </button>
+                <div class="divider">Exporters</div>
+                <button class="btn btn-secondary btn-block" onclick="exportMap('ymap')">
+                    <i class="fa-solid fa-file-code"></i> Export as CodeWalker YMAP XML
+                </button>
+                <button class="btn btn-secondary btn-block" onclick="exportMap('json')">
+                    <i class="fa-solid fa-file-lines"></i> Export as Raw JSON Table
+                </button>
+                <button class="btn btn-publish btn-block" onclick="exportMap('publish')">
+                    <i class="fa-solid fa-rocket"></i> One-Click Standalone Publish
+                </button>
+            </div>
+        </div>
+
+        <!-- Footer Control Strip -->
+        <div class="footer-strip">
+            <div class="tool-toggles">
+                <button class="tool-toggle active" id="toggle-collision" onclick="toggleCollision()">Collision</button>
+                <button class="tool-toggle active" id="toggle-align" onclick="toggleAlign()">Normal Match</button>
+                <button class="tool-toggle active" id="toggle-freeze" onclick="toggleFreeze()">Freeze</button>
+            </div>
+            <div class="grid-snap">
+                <span>Grid Snap:</span>
+                <select id="grid-snap-select" onchange="setGridSnap(this.value)">
+                    <option value="0.0">Off</option>
+                    <option value="0.1">0.1m</option>
+                    <option value="0.5">0.5m</option>
+                    <option value="1.0">1.0m</option>
+                    <option value="5.0">5.0m</option>
+                </select>
+            </div>
+            <button class="btn btn-place" onclick="placeSelectedProp()">
+                <i class="fa-solid fa-plus"></i> Place Prop
+            </button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

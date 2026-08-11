@@ -26,16 +26,48 @@ RegisterCommand('windows', function(source, args)
 end)
 
 RegisterCommand('seat', function(source, args)
-    local seatIdx = tonumber(args[1])
-    if not seatIdx or seatIdx < 1 or seatIdx > 6 then
-        Wrappers.Notify('Usage: /seat [1-6]', 'error')
-        return
-    end
-
     local ped = PlayerPedId()
     local veh = GetVehiclePedIsIn(ped, false)
     if veh == 0 then
         Wrappers.Notify('Not in a vehicle', 'error')
+        return
+    end
+
+    local seatIdx = tonumber(args[1])
+    if not seatIdx then
+        local seatTable = {
+            [1] = "Driver's Seat",
+            [2] = "Passenger Seat",
+            [3] = "Rear Left Seat",
+            [4] = "Rear Right Seat",
+        }
+        local amountOfSeats = GetVehicleModelNumberOfSeats(GetEntityModel(veh))
+        local items = {}
+        for i = 1, amountOfSeats do
+            local gtaSeat = i - 2
+            local label = seatTable[i] or ("Seat " .. i)
+            local isFree = IsVehicleSeatFree(veh, gtaSeat)
+            local statusStr = isFree and " (Free)" or " (Occupied)"
+            table.insert(items, {
+                title = label .. statusStr,
+                disabled = not isFree,
+                onSelect = function()
+                    if IsVehicleSeatFree(veh, gtaSeat) then
+                        SetPedIntoVehicle(ped, veh, gtaSeat)
+                        Wrappers.Notify('Switched to ' .. label, 'success')
+                    else
+                        Wrappers.Notify('Seat is occupied', 'error')
+                    end
+                end
+            })
+        end
+        Wrappers.ContextMenu({ id = 'vehicle_seats', title = 'Switch Seats', menuItems = items })
+        Wrappers.ShowContextMenu('vehicle_seats')
+        return
+    end
+
+    if seatIdx < 1 or seatIdx > 6 then
+        Wrappers.Notify('Usage: /seat [1-6]', 'error')
         return
     end
 

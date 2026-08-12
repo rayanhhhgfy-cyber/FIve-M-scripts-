@@ -165,6 +165,13 @@ function SaveMapsToDisk()
     print('^2[map-builder] Auto-saved persistence buffer to disk.^7')
 end
 
+RegisterNetEvent('map-builder:server:forceSaveDisk', function()
+    local src = source
+    if not IsAuthorized(src) then return end
+    SaveMapsToDisk()
+    TriggerClientEvent('ox_lib:notify', src, { type = 'success', description = 'All changes saved to server files successfully!' })
+end)
+
 RegisterNetEvent('map-builder:server:saveProp', function(propData)
     local src = source
     if not IsAuthorized(src) then return end

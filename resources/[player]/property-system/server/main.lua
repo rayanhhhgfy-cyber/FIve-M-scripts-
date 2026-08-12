@@ -85,3 +85,47 @@ end)
 QBox.Commands.Add('properties', 'List available properties', {}, false, function(source)
     TriggerClientEvent('property:client:openMenu', source)
 end)
+
+QBox.Commands.Add('giveproperty', 'Transfer ownership of the nearest property to a player', { { name = 'id', help = 'Server ID of the target player' } }, true, function(source, args)
+    local src = source
+    if not isAdmin(src) then
+        TriggerClientEvent('ox_lib:notify', src, { type = 'error', description = 'Unauthorized' })
+        return
+    end
+
+    local targetId = tonumber(args[1])
+    local targetPlayer = QBox.Functions.GetPlayer(targetId)
+    if not targetPlayer then
+        TriggerClientEvent('ox_lib:notify', src, { type = 'error', description = 'Target player not found' })
+        return
+    end
+
+    -- Find nearest property
+    local ped = GetPlayerPed(src)
+    local coords = GetEntityCoords(ped)
+    local closestProp = nil
+    local minDist = 5.0
+
+    for _, p in ipairs(Config.Properties.properties) do
+        local dist = #(coords - vector3(p.coords.x, p.coords.y, p.coords.z))
+        if dist < minDist then
+            minDist = dist
+            closestProp = p
+        end
+    end
+
+    if not closestProp then
+        TriggerClientEvent('ox_lib:notify', src, { type = 'error', description = 'You are not close to any property' })
+        return
+    end
+
+    -- Update database & cache
+    local targetCitizenId = targetPlayer.PlayerData.citizenid
+    propertyOwners[closestProp.id] = targetCitizenId
+
+    MySQL.query('DELETE FROM player_properties WHERE property_id = ?', { closestProp.id })
+    MySQL.insert('INSERT INTO player_properties (citizenid, property_id) VALUES (?, ?)', { targetCitizenId, closestProp.id })
+
+    TriggerClientEvent('ox_lib:notify', src, { type = 'success', description = 'Successfully transferred ' .. closestProp.label .. ' ownership to player ID ' .. targetId })
+    TriggerClientEvent('ox_lib:notify', targetId, { type = 'success', description = 'You are now the owner of ' .. closestProp.label })
+end)

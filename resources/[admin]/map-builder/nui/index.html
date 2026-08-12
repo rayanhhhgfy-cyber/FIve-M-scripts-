@@ -57,6 +57,13 @@
                     <i class="fa-solid fa-magnifying-glass"></i>
                     <input type="text" id="prop-search" placeholder="Search 12,000+ props..." oninput="searchProps()">
                 </div>
+                <div class="custom-model-input control-group" style="margin: 10px 0;">
+                    <label style="font-size: 11px; text-transform: uppercase; color: #aaa; margin-bottom: 4px; display: block;">Place Custom Model / MLO</label>
+                    <div style="display: flex; gap: 8px;">
+                        <input type="text" id="custom-model-name" placeholder="e.g. prop_tree_birch_01" style="flex: 1; padding: 6px; border-radius: 4px; border: 1px solid #444; background: #222; color: #fff;">
+                        <button class="btn" style="padding: 6px 12px; background: #27c93f; color: #fff; border: none; border-radius: 4px; cursor: pointer;" onclick="selectCustomModel()">Set</button>
+                    </div>
+                </div>
                 <div class="category-filters">
                     <button class="cat-filter active" onclick="filterCategory('all')">All</button>
                     <button class="cat-filter" onclick="filterCategory('structural')">Structure</button>
@@ -143,6 +150,9 @@
                 </div>
                 <button class="btn btn-primary btn-block" onclick="saveAsPrefab()">
                     <i class="fa-solid fa-floppy-disk"></i> Save Current Build as Prefab
+                </button>
+                <button class="btn btn-publish btn-block" style="background: #e0a800; margin-bottom: 10px; cursor: pointer;" onclick="saveChangesToDisk()">
+                    <i class="fa-solid fa-file-shield"></i> Save Changes to Server Files
                 </button>
                 <div class="divider">Exporters</div>
                 <button class="btn btn-secondary btn-block" onclick="exportMap('ymap')">

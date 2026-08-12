@@ -180,6 +180,29 @@ function updateLogicFields() {
                 <label>Lockpickable?</label>
                 <input type="checkbox" id="field-door-pick" checked>
             </div>
+            <div class="control-group">
+                <label>Authorized Job (Optional)</label>
+                <input type="text" id="field-door-job" placeholder="e.g. police">
+            </div>
+            <div class="control-group">
+                <label>Gate Password (Optional)</label>
+                <input type="password" id="field-door-password" placeholder="e.g. 1234">
+            </div>
+        `;
+    } else if (lType === 'shop') {
+        container.innerHTML = `
+            <div class="control-group">
+                <label>Is Crafting Bench?</label>
+                <input type="checkbox" id="field-shop-craft">
+            </div>
+            <div class="control-group">
+                <label>Shop/Bench Title</label>
+                <input type="text" id="field-shop-title" value="Interactive Vendor">
+            </div>
+            <div class="control-group">
+                <label>Shop Items (format: item:price, item:price)</label>
+                <input type="text" id="field-shop-items" value="sandwich:10, water:5, bandage:25">
+            </div>
         `;
     } else if (lType === 'custom') {
         container.innerHTML = `
@@ -227,6 +250,23 @@ function commitLogicBinding() {
         config.data.requireKeycard = document.getElementById('field-door-keycard').checked;
         config.data.keycardItem = document.getElementById('field-door-item').value;
         config.data.lockpickable = document.getElementById('field-door-pick').checked;
+        config.data.job = document.getElementById('field-door-job').value.trim();
+        config.data.password = document.getElementById('field-door-password').value.trim();
+    } else if (lType === 'shop') {
+        config.data.isCrafting = document.getElementById('field-shop-craft').checked;
+        config.data.title = document.getElementById('field-shop-title').value;
+        const itemsStr = document.getElementById('field-shop-items').value;
+        const itemsList = [];
+        if (itemsStr) {
+            const parts = itemsStr.split(',');
+            parts.forEach(p => {
+                const sub = p.split(':');
+                if (sub.length === 2) {
+                    itemsList.push({ name: sub[0].trim(), price: parseInt(sub[1].trim()) || 0 });
+                }
+            });
+        }
+        config.data.items = itemsList;
     } else if (lType === 'custom') {
         const teleVal = document.getElementById('field-custom-tele').value;
         config.data.teleportCoords = teleVal ? JSON.parse(teleVal) : null;
@@ -301,4 +341,17 @@ function postNUI(endpoint, payload) {
         },
         body: JSON.stringify(payload)
     });
+}
+
+function selectCustomModel() {
+    const val = document.getElementById('custom-model-name').value.trim();
+    if (val) {
+        selectedPropModel = val;
+        postNUI('selectCatalogProp', { model: val });
+        postNUI('notify', { text: 'Custom model selected: ' + val });
+    }
+}
+
+function saveChangesToDisk() {
+    postNUI('saveChangesToDisk', {});
 }

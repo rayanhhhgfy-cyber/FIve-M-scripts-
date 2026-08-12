@@ -10,6 +10,34 @@ function GetHash(model)
     end
 end
 
+function GetPlayerJob()
+    if GetResourceState('qbx_core') == 'started' then
+        local PlayerData = exports.qbx_core:GetPlayerData()
+        if PlayerData and PlayerData.job then
+            return PlayerData.job.name
+        end
+    end
+    if GetResourceState('qb-core') == 'started' then
+        local QB = exports['qb-core']:GetCoreObject()
+        if QB and QB.Functions and QB.Functions.GetPlayerData then
+            local PlayerData = QB.Functions.GetPlayerData()
+            if PlayerData and PlayerData.job then
+                return PlayerData.job.name
+            end
+        end
+    end
+    if GetResourceState('es_extended') == 'started' then
+        local ESX = exports['es_extended']:getSharedObject()
+        if ESX and ESX.GetPlayerData then
+            local PlayerData = ESX.GetPlayerData()
+            if PlayerData and PlayerData.job then
+                return PlayerData.job.name
+            end
+        end
+    end
+    return nil
+end
+
 RegisterNetEvent('map-builder:client:registerInteractiveProp', function(propData, netId)
     local hash = GetHash(propData.model)
     local model = propData.model
@@ -136,6 +164,29 @@ function TriggerInteractiveLogic(id, logic)
         TriggerServerEvent('map-builder:server:openStash', id)
 
     elseif logic.type == 'door' then
+        -- Job restriction check
+        if logic.data.job and logic.data.job ~= "" then
+            local pJob = GetPlayerJob()
+            if pJob ~= logic.data.job then
+                exports.ox_lib:notify({ type = 'error', description = 'Authorized personnel only! Required Job: ' .. logic.data.job })
+                return
+            end
+        end
+
+        -- Password gate check
+        if logic.data.password and logic.data.password ~= "" then
+            local input = exports.ox_lib:inputDialog('Gate Access Code', {
+                { type = 'input', label = 'Enter Gate Password', password = true }
+            })
+            if not input or not input[1] then
+                return
+            end
+            if input[1] ~= logic.data.password then
+                exports.ox_lib:notify({ type = 'error', description = 'Incorrect password!' })
+                return
+            end
+        end
+
         -- Lockpicking, animating or standard lock toggling
         local hasKeycard = true
         if logic.data.requireKeycard then

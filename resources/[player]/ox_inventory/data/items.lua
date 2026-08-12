@@ -699,4 +699,13 @@ return {
 			export = 'item-actions.useWrench',
 		}
 	},
+	['snakecam'] = {
+		label = 'Snake Cam',
+		weight = 500,
+		description = 'Tactical peeking probe camera',
+		client = {
+			export = 'snakecam.useSnakecam',
+			usetime = 1000
+		}
+	},
 }

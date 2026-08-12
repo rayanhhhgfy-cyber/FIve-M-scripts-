@@ -125,6 +125,16 @@ local function SetupVehicleMenu()
         end
 
         if GetVehiclePedIsIn(ped, false) ~= 0 then
+            local gloveIndex = #VehicleMenu.items + 1
+            VehicleMenu.items[gloveIndex] = {
+                id = 'vehicle-glovebox',
+                title = 'Open Glovebox',
+                icon = 'box',
+                type = 'client',
+                event = 'glovebox:client:radialOpen',
+                shouldClose = true
+            }
+
             local seatIndex = #VehicleMenu.items + 1
             VehicleMenu.items[seatIndex] = deepcopy(Config.VehicleSeats)
 

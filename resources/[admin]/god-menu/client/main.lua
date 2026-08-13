@@ -28,7 +28,17 @@ RegisterCommand('+godmenu', function()
     end)
 end)
 
-function toggleMenu()
+RegisterCommand('goditems', function()
+    checkOwner(function(ok)
+        if not ok then
+            Wrappers.Notify('God Menu', 'Access denied', 'error')
+            return
+        end
+        toggleMenu('allitems')
+    end)
+end, false)
+
+function toggleMenu(tab)
     if menuOpen then
         menuOpen = false
         SetNuiFocus(false, false)
@@ -36,7 +46,46 @@ function toggleMenu()
     else
         menuOpen = true
         SetNuiFocus(true, true)
-        SendNUIMessage({ action = 'open', config = Config.GodMenu })
+
+        local allItems = {}
+        local oxItems = exports['ox_inventory']:Items()
+        if oxItems then
+            for name, itemData in pairs(oxItems) do
+                local imageName = name .. ".png"
+                if itemData.client and itemData.client.image then
+                    imageName = itemData.client.image
+                end
+
+                local cat = 'items'
+                if itemData.weapon then
+                    cat = 'weapons'
+                elseif itemData.ammo then
+                    cat = 'ammo'
+                elseif itemData.component then
+                    cat = 'components'
+                elseif itemData.client and itemData.client.status and (itemData.client.status.hunger or itemData.client.status.thirst) then
+                    cat = 'edible'
+                end
+
+                allItems[#allItems + 1] = {
+                    name = name,
+                    label = itemData.label or name,
+                    description = itemData.description or "",
+                    image = imageName,
+                    weight = itemData.weight or 0,
+                    category = cat
+                }
+            end
+            table.sort(allItems, function(a, b)
+                return (a.label or ""):lower() < (b.label or ""):lower()
+            end)
+        end
+
+        SendNUIMessage({ action = 'open', config = Config.GodMenu, allItems = allItems })
+        if tab then
+            Citizen.Wait(100)
+            SendNUIMessage({ action = 'switchTab', tab = tab })
+        end
     end
 end
 
@@ -163,6 +212,11 @@ end)
 
 RegisterNUICallback('godGiveItem', function(data, cb)
     TriggerServerEvent('god:server:giveItem', data.id, data.item, data.count)
+    cb({})
+end)
+
+RegisterNUICallback('godGetSpawnItem', function(data, cb)
+    TriggerServerEvent('god:server:spawnItem', data.item, data.count)
     cb({})
 end)
 

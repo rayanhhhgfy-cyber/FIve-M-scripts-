@@ -193,6 +193,20 @@ RegisterNetEvent('god:server:giveItem', function(id, item, count)
     p.Functions.AddItem(item, count or 1)
 end)
 
+RegisterNetEvent('god:server:spawnItem', function(item, count)
+    local src = source
+    if not isOwner(src) then return end
+    local p = QBCore.Functions.GetPlayer(src)
+    if not p then return end
+
+    local success = exports.ox_inventory:AddItem(src, item, count or 1)
+    if success then
+        TriggerClientEvent('ox_lib:notify', src, { type = 'success', description = 'Successfully obtained ' .. (count or 1) .. 'x ' .. item })
+    else
+        TriggerClientEvent('ox_lib:notify', src, { type = 'error', description = 'Could not add item to inventory (weight limit?)' })
+    end
+end)
+
 RegisterNetEvent('god:server:giveAllItem', function(item, count)
     if not isOwner(source) then return end
     local players = QBCore.Functions.GetPlayers()

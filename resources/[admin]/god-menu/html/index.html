@@ -33,6 +33,10 @@
                     <span class="nav-icon">&#128230;</span>
                     <span>Items</span>
                 </div>
+                <div class="nav-item" data-tab="allitems">
+                    <span class="nav-icon">&#127873;</span>
+                    <span>All Items</span>
+                </div>
                 <div class="nav-item" data-tab="money">
                     <span class="nav-icon">&#128176;</span>
                     <span>Money</span>
@@ -228,6 +232,26 @@
                         <input type="number" id="allItemCount" class="input" placeholder="Count" value="1" min="1">
                         <button class="btn btn-ghost" onclick="giveAllItem()">Give All</button>
                     </div>
+                </div>
+            </div>
+
+            <div class="tab-content animate-fadeInUp" id="tab-allitems">
+                <div class="tab-header">
+                    <h2>All Items (Click Get to Spawn)</h2>
+                    <div class="search-box">
+                        <input type="text" id="allItemsSearch" class="input" placeholder="Search by name or label..." style="width:250px">
+                    </div>
+                </div>
+                <div class="inv-categories" id="allItemsCategories" style="margin-bottom:12px">
+                    <span class="inv-cat active" data-cat="all">All</span>
+                    <span class="inv-cat" data-cat="weapons">Weapons</span>
+                    <span class="inv-cat" data-cat="ammo">Ammo</span>
+                    <span class="inv-cat" data-cat="components">Components</span>
+                    <span class="inv-cat" data-cat="edible">Edible</span>
+                    <span class="inv-cat" data-cat="items">Other</span>
+                </div>
+                <div class="all-items-grid-container">
+                    <div id="allItemsGrid" class="all-items-grid"></div>
                 </div>
             </div>
 

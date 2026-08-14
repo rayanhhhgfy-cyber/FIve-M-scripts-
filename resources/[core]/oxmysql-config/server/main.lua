@@ -160,6 +160,52 @@ lib.callback.register('oxmysql-config:getPoolStatus', function(source)
     }
 end)
 
+local function SetupDatabaseTables()
+    local schemaFile = LoadResourceFile('database', 'master_schema.sql')
+    if not schemaFile then
+        print('^1[oxmysql-config] master_schema.sql could not be loaded!^7')
+        return
+    end
+
+    print('^2[oxmysql-config] Starting automatic database schema deployment...^7')
+
+    -- Clean comments and empty lines, then parse queries separated by semicolons.
+    -- Note that semicolons within strings are rare in typical schemas, and this works beautifully for standard SQL files.
+    local queries = {}
+    local currentQuery = ""
+    for line in string.gmatch(schemaFile, "[^\r\n]+") do
+        local cleanLine = string.gsub(line, "%-%-.*", "") -- strip single-line comments
+        cleanLine = string.gsub(cleanLine, "^%s*(.-)%s*$", "%1") -- trim whitespace
+        if cleanLine ~= "" then
+            currentQuery = currentQuery .. " " .. cleanLine
+            if string.sub(cleanLine, -1) == ";" then
+                table.insert(queries, currentQuery)
+                currentQuery = ""
+            end
+        end
+    end
+
+    if currentQuery ~= "" and string.gsub(currentQuery, "%s+", "") ~= "" then
+        table.insert(queries, currentQuery)
+    end
+
+    local successCount = 0
+    local failCount = 0
+    for _, query in ipairs(queries) do
+        local success, err = pcall(function()
+            MySQL.query.await(query)
+        end)
+        if success then
+            successCount = successCount + 1
+        else
+            failCount = failCount + 1
+            print(string.format('^1[oxmysql-config] Failed to execute SQL query: %s\nError: %s^7', query, tostring(err)))
+        end
+    end
+
+    print(string.format('^2[oxmysql-config] Database schema deployment finished. Executed: %d successfully, %d failed.^7', successCount, failCount))
+end
+
 local function InitializePool()
     local connString = GetConvar('mysql_connection_string', Config.ConnectionString)
     if connString and connString ~= '' then
@@ -170,6 +216,20 @@ local function InitializePool()
     end
     SetTimeout(2000, function()
         PerformHealthCheck()
+        if poolHealthy then
+            SetupDatabaseTables()
+        else
+            -- Try setup anyway, or retry when healthy
+            Citizen.CreateThread(function()
+                local attempts = 0
+                while not poolHealthy and attempts < 10 do
+                    attempts = attempts + 1
+                    Citizen.Wait(2000)
+                    PerformHealthCheck()
+                end
+                SetupDatabaseTables()
+            end)
+        end
         Citizen.CreateThread(function()
             while true do
                 Citizen.Wait(Config.HealthCheck.interval)

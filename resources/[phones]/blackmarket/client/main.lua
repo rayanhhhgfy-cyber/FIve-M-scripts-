@@ -1,4 +1,4 @@
-local QBox = exports['qbx-core']:GetCoreObject()
+local QBox = exports['qbx_core']:GetCoreObject()
 
 Citizen.CreateThread(function()
     for i, loc in ipairs(Config.BlackMarket.Locations) do

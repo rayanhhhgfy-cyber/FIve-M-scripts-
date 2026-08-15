@@ -1,4 +1,4 @@
-local QBox = exports['qbx-core']:GetCoreObject()
+local QBox = exports['qbx_core']:GetCoreObject()
 
 --- Apply a uniform preset to the player's character
 --- Called by ox_inventory item export 'police-uniforms.applyUniform'

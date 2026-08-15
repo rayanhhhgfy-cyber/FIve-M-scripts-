@@ -1,4 +1,4 @@
-local QBox = exports['qbx-core']:GetCoreObject()
+local QBox = exports['qbx_core']:GetCoreObject()
 
 --- Check if vehicle belongs to player
 QBox.Functions.CreateCallback('vehiclelock:server:checkOwnership', function(source, cb, plate)

@@ -1,4 +1,4 @@
-local QBox = exports['qbx-core']:GetCoreObject()
+local QBox = exports['qbx_core']:GetCoreObject()
 
 RegisterNetEvent('hacking:server:logAttempt', function(hackType, success)
     local src = source; local p = QBox.Functions.GetPlayer(src)

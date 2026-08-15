@@ -1,4 +1,4 @@
-local QBox = exports['qbx-core']:GetCoreObject()
+local QBox = exports['qbx_core']:GetCoreObject()
 
 GodDashboard = {}
 
@@ -256,6 +256,12 @@ end)
 RegisterNetEvent('god-dashboard:notify', function(msg, type)
     Wrappers.Notify(msg, type or 'info')
 end)
+
+RegisterCommand('+god', function()
+    TriggerEvent('god-dashboard:open')
+end, false)
+RegisterCommand('-god', function() end, false)
+RegisterKeyMapping('+god', 'Open God Admin Dashboard', 'keyboard', 'F6')
 
 QBox.Commands.Add('god', 'Open god admin dashboard', {}, false, function(source)
     TriggerClientEvent('god-dashboard:open', source)

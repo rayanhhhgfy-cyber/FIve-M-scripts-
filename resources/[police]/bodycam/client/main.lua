@@ -1,4 +1,4 @@
-local QBox = exports['qbx-core']:GetCoreObject()
+local QBox = exports['qbx_core']:GetCoreObject()
 local playerData = {}
 local isRecording = false
 local batteryLevel = Config.Bodycam.UI.BatteryMax

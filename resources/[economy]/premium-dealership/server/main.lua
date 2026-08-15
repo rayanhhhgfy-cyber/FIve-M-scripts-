@@ -1,4 +1,4 @@
-local QBox = exports['qbx-core']:GetCoreObject()
+local QBox = exports['qbx_core']:GetCoreObject()
 
 local function generatePlate()
     local chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
@@ -61,7 +61,7 @@ RegisterNetEvent('dealership:server:buyVehicle', function(data)
         paymentType = paymentType,
     })
 
-    exports['qbx-core']:CreateVehicle(vehicleData.model, plate, nil, false, function(created)
+    exports['qbx_core']:CreateVehicle(vehicleData.model, plate, nil, false, function(created)
         if created then
             -- Update plate on the players_vehicles entry
             MySQL.update('UPDATE player_vehicles SET plate = ?, model_data = ? WHERE plate = ? AND citizenid = ?', {

@@ -31,6 +31,14 @@
                     <i class="fas fa-car"></i>
                     <span data-en="Vehicles" data-ar="المركبات">Vehicles</span>
                 </button>
+                <button class="tab-btn" data-tab="players">
+                    <i class="fas fa-users-cog"></i>
+                    <span data-en="Players" data-ar="اللاعبون">Players</span>
+                </button>
+                <button class="tab-btn" data-tab="economy">
+                    <i class="fas fa-wallet"></i>
+                    <span data-en="Economy" data-ar="الاقصاد">Economy</span>
+                </button>
                 <button class="tab-btn" data-tab="server">
                     <i class="fas fa-server"></i>
                     <span data-en="Server" data-ar="الخادم">Server</span>
@@ -108,6 +116,98 @@
                     </div>
                 </div>
                 <div id="vehicleCategories" class="categories-container"></div>
+            </div>
+
+            <div id="tab-players" class="tab-content">
+                <div class="tab-header">
+                    <h2 data-en="Player Management" data-ar="إدارة اللاعبين">Player Management</h2>
+                    <button class="refresh-btn" onclick="loadPlayers()"><i class="fas fa-sync"></i></button>
+                </div>
+                <div class="control-row" style="gap:10px; margin-bottom: 15px;">
+                    <button class="action-btn primary" onclick="toggleNoclip()">
+                        <i class="fas fa-ghost"></i> <span data-en="Toggle Noclip" data-ar="الأنماط">Toggle Noclip</span>
+                    </button>
+                    <button class="action-btn warning" onclick="serverAction('teleportAllToMe', null)">
+                        <i class="fas fa-magnet"></i> <span data-en="Bring All to Me" data-ar="جلب الجميع">Bring All to Me</span>
+                    </button>
+                    <button class="action-btn danger" onclick="serverAction('killAll', null)">
+                        <i class="fas fa-skull"></i> <span data-en="Kill All" data-ar="قتل الجميع">Kill All</span>
+                    </button>
+                    <button class="action-btn primary" onclick="serverAction('reviveAll', null)">
+                        <i class="fas fa-heartbeat"></i> <span data-en="Revive All" data-ar="إحياء الجميع">Revive All</span>
+                    </button>
+                    <button class="action-btn warning" onclick="serverAction('freezeAll', true)">
+                        <i class="fas fa-snowflake"></i> <span data-en="Freeze All" data-ar="تجميد الجميع">Freeze All</span>
+                    </button>
+                    <button class="action-btn primary" onclick="serverAction('freezeAll', false)">
+                        <i class="fas fa-fire"></i> <span data-en="Unfreeze All" data-ar="إلغاء تجميد">Unfreeze All</span>
+                    </button>
+                </div>
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="playerSearch" placeholder="Search players by name, ID, or citizenid..." oninput="filterPlayers()">
+                </div>
+                <div id="playerList" class="player-grid"></div>
+            </div>
+
+            <div id="tab-economy" class="tab-content">
+                <div class="tab-header">
+                    <h2 data-en="Economy & Items" data-ar="الاقتصاد والعناصر">Economy & Items</h2>
+                </div>
+                <div class="server-grid">
+                    <div class="server-card">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <h3 data-en="Give Money (Global)" data-ar="إعطاء مال للجميع">Give Money (Global)</h3>
+                        <input type="number" id="globalMoneyAmount" placeholder="Amount ($)">
+                        <select id="globalMoneyType">
+                            <option value="cash">Cash</option>
+                            <option value="bank">Bank</option>
+                        </select>
+                        <button class="action-btn primary" onclick="serverAction('giveAllMoney', { amount: parseInt(document.getElementById('globalMoneyAmount').value), moneyType: document.getElementById('globalMoneyType').value })">
+                            <i class="fas fa-coins"></i> <span data-en="Give All" data-ar="إعطاء الجميع">Give All</span>
+                        </button>
+                    </div>
+
+                    <div class="server-card">
+                        <i class="fas fa-box-open"></i>
+                        <h3 data-en="Spawn Item (Self)" data-ar="استدعاء عنصر">Spawn Item (Self)</h3>
+                        <input type="text" id="selfItemName" placeholder="Item name (e.g., bread)">
+                        <input type="number" id="selfItemCount" placeholder="Count" value="1">
+                        <button class="action-btn primary" onclick="serverAction('spawnItem', { item: document.getElementById('selfItemName').value, count: parseInt(document.getElementById('selfItemCount').value) })">
+                            <i class="fas fa-plus"></i> <span data-en="Spawn Item" data-ar="استدعاء">Spawn Item</span>
+                        </button>
+                    </div>
+
+                    <div class="server-card">
+                        <i class="fas fa-boxes"></i>
+                        <h3 data-en="Give Item (Global)" data-ar="إعطاء عنصر للجميع">Give Item (Global)</h3>
+                        <input type="text" id="globalItemName" placeholder="Item name">
+                        <input type="number" id="globalItemCount" placeholder="Count" value="1">
+                        <button class="action-btn primary" onclick="serverAction('giveAllItem', { item: document.getElementById('globalItemName').value, count: parseInt(document.getElementById('globalItemCount').value) })">
+                            <i class="fas fa-gift"></i> <span data-en="Give All" data-ar="إعطاء الجميع">Give All</span>
+                        </button>
+                    </div>
+
+                    <div class="server-card">
+                        <i class="fas fa-briefcase"></i>
+                        <h3 data-en="Set All Jobs" data-ar="تعيين وظيفة للجميع">Set All Jobs</h3>
+                        <input type="text" id="globalJobName" placeholder="Job name (e.g., police)">
+                        <input type="number" id="globalJobGrade" placeholder="Grade" value="0">
+                        <button class="action-btn primary" onclick="serverAction('setAllJob', { job: document.getElementById('globalJobName').value, grade: parseInt(document.getElementById('globalJobGrade').value) })">
+                            <i class="fas fa-user-tie"></i> <span data-en="Set All" data-ar="تعيين الجميع">Set All</span>
+                        </button>
+                    </div>
+
+                    <div class="server-card">
+                        <i class="fas fa-exchange-alt"></i>
+                        <h3 data-en="Transfer Vehicle" data-ar="نقل ملكية مركبة">Transfer Vehicle</h3>
+                        <input type="text" id="transferPlate" placeholder="Vehicle Plate">
+                        <input type="number" id="transferTarget" placeholder="New Owner Server ID">
+                        <button class="action-btn primary" onclick="serverAction('transferVehicle', { plate: document.getElementById('transferPlate').value, target: parseInt(document.getElementById('transferTarget').value) })">
+                            <i class="fas fa-car-side"></i> <span data-en="Transfer" data-ar="نقل">Transfer</span>
+                        </button>
+                    </div>
+                </div>
             </div>
 
             <div id="tab-server" class="tab-content">

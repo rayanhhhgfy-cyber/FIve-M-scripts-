@@ -1197,3 +1197,25 @@ CREATE TABLE IF NOT EXISTS bans (
   INDEX idx_bans_id (identifier),
   INDEX idx_bans_expires (expires_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- === AMBIENT EVENTS ([immersion]/ambient-events) ===
+CREATE TABLE IF NOT EXISTS ambient_events (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  event_type VARCHAR(50) NOT NULL,
+  label VARCHAR(255) NOT NULL,
+  coords VARCHAR(255) NOT NULL,
+  status VARCHAR(20) DEFAULT 'active',
+  resolved_by VARCHAR(50) DEFAULT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- === SHOPS ([polish]/shops) ===
+CREATE TABLE IF NOT EXISTS shops (
+  shop_id VARCHAR(50) PRIMARY KEY,
+  label VARCHAR(100) NOT NULL,
+  coords VARCHAR(255) NOT NULL,
+  owner_citizenid VARCHAR(50) DEFAULT NULL,
+  price INT DEFAULT 50000,
+  profit_share_percent INT DEFAULT 15,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

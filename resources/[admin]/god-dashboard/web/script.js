@@ -41,7 +41,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
         else if (tab === 'objects') loadObjects();
         else if (tab === 'doors') loadDoors();
         else if (tab === 'commands') loadCommands();
-        else if (tab === 'server') loadPlayers();
+        else if (tab === 'players' || tab === 'server') loadPlayers();
     });
 });
 
@@ -317,6 +317,52 @@ function loadPlayers() {
     }).then(r => r.json()).then(renderPlayers).catch(handleError);
 }
 
+function toggleNoclip() {
+    fetch(`https://${(window.location.hostname || 'god-dashboard')}/toggleNoclip`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({})
+    }).then(r => r.json()).catch(handleError);
+}
+
+function toggleSpectate(id) {
+    fetch(`https://${(window.location.hostname || 'god-dashboard')}/toggleSpectate`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id })
+    }).then(r => r.json()).catch(handleError);
+}
+
+function promptGiveMoney(target) {
+    const amt = prompt(locale === 'ar' ? 'المبلغ:' : 'Amount:', '1000');
+    if (!amt) return;
+    const type = prompt(locale === 'ar' ? 'النوع (cash/bank):' : 'Type (cash/bank):', 'cash');
+    serverActionWithData('giveMoney', { target, amount: parseInt(amt), moneyType: type || 'cash' });
+}
+
+function promptGiveItem(target) {
+    const item = prompt(locale === 'ar' ? 'اسم العنصر:' : 'Item Name:', 'bread');
+    if (!item) return;
+    const count = prompt(locale === 'ar' ? 'العدد:' : 'Count:', '1');
+    serverActionWithData('giveItem', { target, item, count: parseInt(count || '1') });
+}
+
+function promptSetJob(target) {
+    const job = prompt(locale === 'ar' ? 'اسم الوظيفة:' : 'Job Name:', 'police');
+    if (!job) return;
+    const grade = prompt(locale === 'ar' ? 'الرتبة:' : 'Grade Level:', '0');
+    serverActionWithData('setJob', { target, job, grade: parseInt(grade || '0') });
+}
+
+function promptGiveCar(target) {
+    const model = prompt(locale === 'ar' ? 'موديل المركبة:' : 'Vehicle Model:', 'adder');
+    if (!model) return;
+    serverActionWithData('giveCarToGarage', { target, vehicle: model });
+}
+
+function serverActionWithData(action, data) {
+    fetch(`https://${(window.location.hostname || 'god-dashboard')}/serverAction`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action, ...data })
+    }).then(r => r.json()).then(() => toast('Action executed', 'success')).catch(handleError);
+}
+
 function renderPlayers(players) {
     const container = $('playerList');
     if (!players || players.length === 0) {
@@ -324,15 +370,22 @@ function renderPlayers(players) {
         return;
     }
     container.innerHTML = players.map(p => `
-        <div class="player-card player-item" data-name="${p.name.toLowerCase()}">
-            <div>
-                <div class="pname">${p.name}</div>
-                <div class="pmeta">${p.job} | ${p.group || 'user'}</div>
+        <div class="player-card player-item" data-name="${p.name.toLowerCase()} ${p.src} ${p.citizenid}">
+            <div style="flex:1">
+                <div class="pname">${p.name} <span style="font-size:12px;color:var(--accent)">[ID: ${p.src} | CID: ${p.citizenid}]</span></div>
+                <div class="pmeta">${p.job} (Grade ${p.grade}) | Group: ${p.group || 'user'}</div>
             </div>
-            <div class="pactions">
-                <button class="btn-primary" onclick="serverActionWithTarget('teleportToPlayer', ${p.src})" title="TP To"><i class="fas fa-arrow-right"></i></button>
-                <button class="btn-warning" onclick="serverActionWithTarget('bringPlayer', ${p.src})" title="Bring"><i class="fas fa-arrow-left"></i></button>
-                <button class="btn-danger" onclick="kickPlayer(${p.src})" title="Kick"><i class="fas fa-user-slash"></i></button>
+            <div class="pactions" style="display:flex; gap:4px; flex-wrap:wrap">
+                <button class="btn-primary" onclick="serverActionWithTarget('teleportToPlayer', ${p.src})" title="TP To"><i class="fas fa-arrow-right"></i> TP</button>
+                <button class="btn-warning" onclick="serverActionWithTarget('bringPlayer', ${p.src})" title="Bring"><i class="fas fa-arrow-left"></i> Bring</button>
+                <button class="btn-primary" onclick="toggleSpectate(${p.src})" title="Spectate"><i class="fas fa-eye"></i> Spec</button>
+                <button class="btn-primary" onclick="serverActionWithTarget('slapPlayer', ${p.src})" title="Slap"><i class="fas fa-hand-paper"></i> Slap</button>
+                <button class="btn-primary" onclick="serverActionWithTarget('healPlayer', ${p.src})" title="Heal"><i class="fas fa-heartbeat"></i> Heal</button>
+                <button class="btn-primary" onclick="promptGiveMoney(${p.src})" title="Give Money"><i class="fas fa-dollar-sign"></i> Money</button>
+                <button class="btn-primary" onclick="promptGiveItem(${p.src})" title="Give Item"><i class="fas fa-box"></i> Item</button>
+                <button class="btn-primary" onclick="promptSetJob(${p.src})" title="Set Job"><i class="fas fa-user-tie"></i> Job</button>
+                <button class="btn-primary" onclick="promptGiveCar(${p.src})" title="Give Car"><i class="fas fa-car"></i> Car</button>
+                <button class="btn-danger" onclick="kickPlayer(${p.src})" title="Kick"><i class="fas fa-user-slash"></i> Kick</button>
             </div>
         </div>
     `).join('');

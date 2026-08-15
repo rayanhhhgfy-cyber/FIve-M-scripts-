@@ -136,6 +136,19 @@ window.addEventListener('message',function(event){
         if(d.notes){notes=d.notes;}
         battery=d.battery||100; updateBattery(battery);
     }
+    if(d.action==='showNotification'){
+        const di = document.getElementById('dynamicIsland');
+        if (di) {
+            di.innerHTML = `<span style="font-size:11px;color:#fff;font-weight:600;padding:0 8px">${d.title || 'Notification'}: ${d.message || ''}</span>`;
+            di.style.width = '240px';
+            di.style.borderRadius = '16px';
+            setTimeout(() => {
+                di.style.width = '110px';
+                di.style.borderRadius = '20px';
+                di.innerHTML = '';
+            }, 4000);
+        }
+    }
     if(d.action==='close'){phone.style.display='none';showHome();cleanupCall();}
     if(d.action==='loadData'){
         contacts=d.contacts||[];messages=d.messages||[];notes=d.notes||[];photos=d.photos||[];videos=d.videos||[];
@@ -269,9 +282,161 @@ function openApp(key){
         case 'gigs':renderGigsApp();break;
         case 'emergency':renderEmergencyApp();break;
         case 'vehicles':renderVehiclesApp();break;
+        case 'jobs':renderJobsApp();break;
+        case 'voicememos':renderVoiceMemosApp();break;
         default:appContent.innerHTML='<div class="placeholder-app">Coming soon</div>';
     }
     closeNotifShade();
+}
+
+/* ==================== VOICE MEMOS APP ==================== */
+let isRecordingMemo = false;
+let recordTimer = null;
+let recordSeconds = 0;
+
+function renderVoiceMemosApp() {
+    appContent.innerHTML = `
+        <div class="app-header">
+            <button class="back-btn" onclick="showHome()"><i class="fas fa-chevron-left"></i> Home</button>
+            <h2 style="margin:0;font-size:16px;color:#fff"><i class="fas fa-microphone"></i> Voice Memos</h2>
+        </div>
+        <div style="padding:15px;display:flex;flex-direction:column;align-items:center;gap:15px">
+            <div id="memoTimer" style="font-size:28px;font-weight:300;color:#fff">00:00</div>
+            <div id="memoWaveform" style="width:100%;height:40px;background:rgba(255,255,255,0.05);border-radius:8px;display:flex;align-items:center;justify-content:center;gap:3px;padding:0 10px">
+                <span style="height:10px;width:3px;background:var(--accent-red);display:inline-block"></span>
+                <span style="height:20px;width:3px;background:var(--accent-red);display:inline-block"></span>
+                <span style="height:15px;width:3px;background:var(--accent-red);display:inline-block"></span>
+                <span style="height:30px;width:3px;background:var(--accent-red);display:inline-block"></span>
+                <span style="height:10px;width:3px;background:var(--accent-red);display:inline-block"></span>
+            </div>
+            <button id="recordMemoBtn" style="width:60px;height:60px;border-radius:50%;background:red;border:4px solid #fff;box-shadow:0 0 10px rgba(255,0,0,0.5);cursor:pointer;display:flex;align-items:center;justify-content:center" onclick="toggleMemoRecording()">
+                <div id="recordBtnInner" style="width:20px;height:20px;background:#fff;border-radius:50%"></div>
+            </button>
+            <div style="width:100%;text-align:left">
+                <h4 style="color:#fff;margin:10px 0 5px 0;font-size:14px">Saved Memos</h4>
+                <div id="savedMemosList" style="display:flex;flex-direction:column;gap:8px">
+                    <p style="color:var(--text-dim);font-size:12px">Loading saved memos...</p>
+                </div>
+            </div>
+        </div>
+    `;
+    loadSavedMemos();
+}
+
+function toggleMemoRecording() {
+    isRecordingMemo = !isRecordingMemo;
+    const btnInner = document.getElementById('recordBtnInner');
+    const timerEl = document.getElementById('memoTimer');
+
+    if (isRecordingMemo) {
+        btnInner.style.borderRadius = '3px';
+        btnInner.style.width = '16px';
+        btnInner.style.height = '16px';
+        recordSeconds = 0;
+        recordTimer = setInterval(() => {
+            recordSeconds++;
+            const mins = String(Math.floor(recordSeconds / 60)).padStart(2, '0');
+            const secs = String(recordSeconds % 60).padStart(2, '0');
+            timerEl.textContent = `${mins}:${secs}`;
+        }, 1000);
+        toast('Recording voice memo...', 'info');
+    } else {
+        btnInner.style.borderRadius = '50%';
+        btnInner.style.width = '20px';
+        btnInner.style.height = '20px';
+        clearInterval(recordTimer);
+
+        const memoTitle = prompt('Memo Title:', 'Voice Recording #' + Math.floor(Math.random() * 1000));
+        const voicesLog = 'Proximity Presence: Nearby audio activity recorded (' + recordSeconds + 's duration)';
+
+        fetch(`https://${(window.location.hostname || 'iphone')}/saveVoiceMemo`, {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ title: memoTitle || 'New Voice Memo', duration: recordSeconds, voicesLog })
+        }).then(() => {
+            timerEl.textContent = '00:00';
+            toast('Memo saved!', 'success');
+            loadSavedMemos();
+        });
+    }
+}
+
+function loadSavedMemos() {
+    fetch(`https://${(window.location.hostname || 'iphone')}/getVoiceMemos`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({})
+    }).then(r => r.json()).then(memos => {
+        const list = document.getElementById('savedMemosList');
+        if (!memos || memos.length === 0) {
+            list.innerHTML = '<p style="color:var(--text-dim);font-size:12px">No voice memos recorded.</p>';
+            return;
+        }
+        list.innerHTML = memos.map(m => `
+            <div style="background:rgba(255,255,255,0.05);padding:10px;border-radius:8px;display:flex;justify-content:space-between;align-items:center">
+                <div>
+                    <div style="color:#fff;font-size:13px;font-weight:600">${m.title}</div>
+                    <div style="color:var(--text-dim);font-size:11px">${m.timestamp} (${m.duration}s)</div>
+                </div>
+                <button style="background:var(--accent-blue);color:#fff;border:none;border-radius:5px;padding:4px 8px;font-size:11px;cursor:pointer" onclick="exportMemoEvidence(${m.id})">
+                    <i class="fas fa-file-export"></i> Evidence
+                </button>
+            </div>
+        `).join('');
+    });
+}
+
+function exportMemoEvidence(memoId) {
+    fetch(`https://${(window.location.hostname || 'iphone')}/exportMemoEvidence`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ memoId })
+    }).then(() => toast('Exported memo to evidence lab!', 'success'));
+}
+
+/* ==================== JOBS APP ==================== */
+function renderJobsApp() {
+    appContent.innerHTML = `
+        <div class="app-header">
+            <button class="back-btn" onclick="showHome()"><i class="fas fa-chevron-left"></i> Home</button>
+            <h2 style="margin:0;font-size:16px;color:#fff"><i class="fas fa-id-card"></i> Jobs Center</h2>
+        </div>
+        <div style="padding:10px;" id="jobsAppContainer">
+            <p style="color:var(--text-dim);text-align:center">Loading jobs...</p>
+        </div>
+    `;
+
+    fetch(`https://${(window.location.hostname || 'iphone')}/getJobsData`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({})
+    }).then(r => r.json()).then(data => {
+        const container = document.getElementById('jobsAppContainer');
+        if (!data || !data.jobs) {
+            container.innerHTML = '<p style="color:var(--text-dim);text-align:center">Failed to load jobs.</p>';
+            return;
+        }
+        container.innerHTML = data.jobs.map(j => {
+            const isCurrent = j.name === data.currentJob;
+            return `
+                <div style="background:rgba(255,255,255,0.05);border-radius:10px;padding:12px;margin-bottom:10px;display:flex;flex-direction:column;gap:6px">
+                    <div style="display:flex;justify-content:space-between;align-items:center">
+                        <span style="font-weight:600;color:#fff;font-size:14px">${j.label}</span>
+                        ${isCurrent ? '<span style="background:var(--accent-green);color:#000;font-size:10px;padding:2px 6px;border-radius:4px;font-weight:bold">EMPLOYED</span>' : ''}
+                    </div>
+                    <p style="font-size:12px;color:var(--text-dim);margin:0">${j.description}</p>
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px">
+                        <span style="font-size:11px;color:var(--accent-green)">Base Pay: $${j.pay}/hr</span>
+                        ${!isCurrent ? `<button style="background:var(--accent-blue);color:#fff;border:none;border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer" onclick="applyForJob('${j.name}')">Apply</button>` : ''}
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }).catch(() => {
+        document.getElementById('jobsAppContainer').innerHTML = '<p style="color:var(--text-dim);text-align:center">Failed to fetch jobs.</p>';
+    });
+}
+
+function applyForJob(jobName) {
+    fetch(`https://${(window.location.hostname || 'iphone')}/applyForJob`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ jobName })
+    }).then(() => {
+        toast('Applied & assigned job!', 'success');
+        setTimeout(renderJobsApp, 500);
+    });
 }
 
 /* ==================== PHONE APP (DIALER) ==================== */

@@ -11,9 +11,72 @@ local function isAdmin()
     return false
 end
 
+local noclipActive = false
+local spectateTarget = nil
+
 local function setupNuiCallbacks()
     RegisterNUICallback('godDashboardReady', function(_, cb)
         cb({ admin = isAdmin(), locale = GetConvar('locale', 'en') })
+    end)
+
+    RegisterNUICallback('toggleNoclip', function(_, cb)
+        if not isAdmin() then cb({ noclip = false }) return end
+        noclipActive = not noclipActive
+        local ped = PlayerPedId()
+        if noclipActive then
+            SetEntityInvincible(ped, true)
+            SetPlayerInvincible(PlayerId(), true)
+            FreezeEntityPosition(ped, true)
+            Wrappers.Notify('Noclip enabled', 'success')
+            Citizen.CreateThread(function()
+                while noclipActive do
+                    Citizen.Wait(0)
+                    local pPed = PlayerPedId()
+                    local speed = 2.0
+                    if IsControlPressed(0, 21) then speed = 6.0 end
+                    local up = IsControlPressed(0, 22)
+                    local down = IsControlPressed(0, 36)
+                    local coords = GetEntityCoords(pPed)
+                    FreezeEntityPosition(pPed, true)
+                    SetEntityVisible(pPed, false, false)
+                    local rot = GetGameplayCamRot(2)
+                    local forward = vector3(
+                        -math.sin(rot.z * math.pi / 180.0) * math.cos(rot.x * math.pi / 180.0),
+                        math.cos(rot.z * math.pi / 180.0) * math.cos(rot.x * math.pi / 180.0),
+                        math.sin(rot.x * math.pi / 180.0)
+                    )
+                    local newPos = coords + forward * speed
+                    if up then newPos = newPos + vector3(0, 0, speed) end
+                    if down then newPos = newPos - vector3(0, 0, speed) end
+                    SetEntityCoords(pPed, newPos.x, newPos.y, newPos.z, false, false, false, false)
+                end
+            end)
+        else
+            SetEntityInvincible(ped, false)
+            SetPlayerInvincible(PlayerId(), false)
+            FreezeEntityPosition(ped, false)
+            SetEntityVisible(ped, true, false)
+            Wrappers.Notify('Noclip disabled', 'info')
+        end
+        cb({ noclip = noclipActive })
+    end)
+
+    RegisterNUICallback('toggleSpectate', function(data, cb)
+        if not isAdmin() then cb({ spectating = false }) return end
+        if data.id then
+            local target = GetPlayerFromServerId(data.id)
+            if target ~= -1 then
+                spectateTarget = target
+                local targetPed = GetPlayerPed(target)
+                NetworkSetInSpectatorMode(true, targetPed)
+                Wrappers.Notify('Spectating player ' .. data.id, 'info')
+            end
+        else
+            NetworkSetInSpectatorMode(false, nil)
+            spectateTarget = nil
+            Wrappers.Notify('Spectate ended', 'info')
+        end
+        cb({ spectating = spectateTarget ~= nil })
     end)
 
     RegisterNUICallback('getBunkers', function(_, cb)
@@ -120,6 +183,46 @@ local function setupNuiCallbacks()
             TriggerServerEvent('god-dashboard:teleportToPlayer', data.target)
         elseif data.action == 'bringPlayer' then
             TriggerServerEvent('god-dashboard:bringPlayer', data.target)
+        elseif data.action == 'giveMoney' then
+            TriggerServerEvent('god-dashboard:giveMoney', data.target, data.amount, data.moneyType)
+        elseif data.action == 'giveAllMoney' then
+            TriggerServerEvent('god-dashboard:giveAllMoney', data.amount, data.moneyType)
+        elseif data.action == 'giveItem' then
+            TriggerServerEvent('god-dashboard:giveItem', data.target, data.item, data.count)
+        elseif data.action == 'spawnItem' then
+            TriggerServerEvent('god-dashboard:spawnItem', data.target, data.item, data.count)
+        elseif data.action == 'giveAllItem' then
+            TriggerServerEvent('god-dashboard:giveAllItem', data.item, data.count)
+        elseif data.action == 'removeItem' then
+            TriggerServerEvent('god-dashboard:removeItem', data.target, data.item, data.count)
+        elseif data.action == 'slapPlayer' then
+            TriggerServerEvent('god-dashboard:slapPlayer', data.target)
+        elseif data.action == 'healPlayer' then
+            TriggerServerEvent('god-dashboard:healPlayer', data.target)
+        elseif data.action == 'giveArmor' then
+            TriggerServerEvent('god-dashboard:giveArmor', data.target, data.amount)
+        elseif data.action == 'warnPlayer' then
+            TriggerServerEvent('god-dashboard:warnPlayer', data.target, data.reason)
+        elseif data.action == 'setJob' then
+            TriggerServerEvent('god-dashboard:setJob', data.target, data.job, data.grade)
+        elseif data.action == 'setGroup' then
+            TriggerServerEvent('god-dashboard:setGroup', data.target, data.group)
+        elseif data.action == 'setPlayerStat' then
+            TriggerServerEvent('god-dashboard:setPlayerStat', data.target, data.statType, data.value)
+        elseif data.action == 'setAllJob' then
+            TriggerServerEvent('god-dashboard:setAllJob', data.job, data.grade)
+        elseif data.action == 'giveCarToGarage' then
+            TriggerServerEvent('god-dashboard:giveCarToGarage', data.target, data.vehicle)
+        elseif data.action == 'transferVehicle' then
+            TriggerServerEvent('god-dashboard:transferVehicle', data.plate, data.target)
+        elseif data.action == 'killAll' then
+            TriggerServerEvent('god-dashboard:killAll')
+        elseif data.action == 'freezeAll' then
+            TriggerServerEvent('god-dashboard:freezeAll', data.state)
+        elseif data.action == 'teleportAllToMe' then
+            TriggerServerEvent('god-dashboard:teleportAllToMe')
+        elseif data.action == 'reviveAll' then
+            TriggerServerEvent('god-dashboard:reviveAll')
         end
         cb({ success = true })
     end)

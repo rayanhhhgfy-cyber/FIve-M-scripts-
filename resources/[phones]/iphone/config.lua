@@ -34,7 +34,9 @@ Config.Phone = {
         calculator = { label = 'Calculator', icon = 'fas fa-calculator' },
         calendar = { label = 'Calendar', icon = 'fas fa-calendar' },
         wallet = { label = 'Wallet', icon = 'fas fa-wallet' },
-        vehicles = { label = 'Vehicles', icon = 'fas fa-car' }
+        vehicles = { label = 'Vehicles', icon = 'fas fa-car' },
+        jobs = { label = 'Jobs Center', icon = 'fas fa-id-card' },
+        voicememos = { label = 'Voice Memos', icon = 'fas fa-microphone' }
     },
 
     Contacts = { maxContacts = 50 },

@@ -21,6 +21,14 @@ local function getMyCitizenId()
     return pData and pData.citizenid or nil
 end
 
+RegisterNetEvent('iphone:client:shopNotification', function(shopLabel, amount)
+    SendNUIMessage({
+        action = 'showNotification',
+        title = '🏦 Bank Payout',
+        message = '+$' .. amount .. ' — ' .. shopLabel .. ' profit'
+    })
+end)
+
 RegisterCommand('+phone', function()
     if not hasPhone() then Wrappers.Notify(Locale('phone.no_phone'), 'error') return end
     phoneOpen = not phoneOpen
@@ -100,6 +108,26 @@ RegisterNUICallback('sendMessage', function(data, cb)
         table.insert(messages, msg)
         SendNUIMessage({ action = 'newMessage', message = msg })
         TriggerServerEvent('phone:server:sendMessage', data.number, data.content)
+    end
+    cb('ok')
+end)
+
+RegisterNUICallback('getVoiceMemos', function(_, cb)
+    QBox.Functions.TriggerCallback('voiceMemos:server:getMemos', function(memos)
+        cb(memos or {})
+    end)
+end)
+
+RegisterNUICallback('saveVoiceMemo', function(data, cb)
+    if data then
+        TriggerServerEvent('voiceMemos:server:saveMemo', data.title, data.duration, data.voicesLog)
+    end
+    cb('ok')
+end)
+
+RegisterNUICallback('exportMemoEvidence', function(data, cb)
+    if data and data.memoId then
+        TriggerServerEvent('voiceMemos:server:exportToEvidence', data.memoId)
     end
     cb('ok')
 end)
@@ -441,6 +469,19 @@ RegisterNUICallback('phoneGarageTrackVehicle', function(data, cb)
     else
         cb(result or { success = false })
     end
+end)
+
+RegisterNUICallback('getJobsData', function(_, cb)
+    QBox.Functions.TriggerCallback('jobsApp:server:getJobs', function(data)
+        cb(data or { currentJob = 'unemployed', jobs = {} })
+    end)
+end)
+
+RegisterNUICallback('applyForJob', function(data, cb)
+    if data and data.jobName then
+        TriggerServerEvent('jobsApp:server:applyJob', data.jobName)
+    end
+    cb('ok')
 end)
 
 --- Taxi events

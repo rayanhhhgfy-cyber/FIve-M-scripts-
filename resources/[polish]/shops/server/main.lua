@@ -37,6 +37,62 @@ local function findProduct(shop, productName)
     return nil
 end
 
+local function handleShopProfit(shopName, shopLabel, totalCost)
+    local dbShop = MySQL.single.await('SELECT * FROM shops WHERE shop_id = ?', { shopName })
+    if not dbShop or not dbShop.owner_citizenid then return end
+
+    local profitShare = dbShop.profit_share_percent or 15
+    local profitAmount = math.floor(totalCost * (profitShare / 100))
+    if profitAmount <= 0 then return end
+
+    local ownerCid = dbShop.owner_citizenid
+    local ownerPlayer = QBCore.Functions.GetPlayerByCitizenId(ownerCid)
+
+    if ownerPlayer then
+        ownerPlayer.Functions.AddMoney('bank', profitAmount)
+        TriggerClientEvent('iphone:client:shopNotification', ownerPlayer.PlayerData.source, shopLabel, profitAmount)
+    else
+        MySQL.update('UPDATE players SET money = JSON_SET(money, "$.bank", JSON_EXTRACT(money, "$.bank") + ?) WHERE citizenid = ?', { profitAmount, ownerCid })
+    end
+
+    MySQL.insert('INSERT INTO bank_transactions (citizenid, target, amount, type) VALUES (?, ?, ?, ?)', {
+        ownerCid, shopLabel, profitAmount, 'shop_profit'
+    })
+end
+
+RegisterNetEvent('shop:buyOwnership', function(shopName)
+    local src = source
+    if not src or not shopName then return end
+    local player = QBCore.Functions.GetPlayer(src)
+    if not player then return end
+
+    local shop = findShop(shopName)
+    if not shop then return Notify(src, 'Invalid shop.', 'error') end
+
+    local price = shop.price or 50000
+    local existing = MySQL.single.await('SELECT owner_citizenid FROM shops WHERE shop_id = ?', { shopName })
+    if existing and existing.owner_citizenid then
+        return Notify(src, 'This shop is already owned by someone.', 'error')
+    end
+
+    if player.PlayerData.money.bank < price then
+        return Notify(src, 'Insufficient bank balance ($' .. price .. ' required).', 'error')
+    end
+
+    player.Functions.RemoveMoney('bank', price)
+    local coordsStr = json.encode({ x = shop.coords.x, y = shop.coords.y, z = shop.coords.z })
+
+    if existing then
+        MySQL.update('UPDATE shops SET owner_citizenid = ? WHERE shop_id = ?', { player.PlayerData.citizenid, shopName })
+    else
+        MySQL.insert('INSERT INTO shops (shop_id, label, coords, owner_citizenid, price, profit_share_percent) VALUES (?, ?, ?, ?, ?, ?)', {
+            shopName, shop.label, coordsStr, player.PlayerData.citizenid, price, 15
+        })
+    end
+
+    Notify(src, 'You purchased ownership of ' .. shop.label .. ' for $' .. price .. '!', 'success')
+end)
+
 RegisterNetEvent('shop:buy', function(shopName, productName, quantity)
     local src = source
     if not src or not shopName or not productName or not quantity then return end
@@ -55,12 +111,14 @@ RegisterNetEvent('shop:buy', function(shopName, productName, quantity)
         if not added then return Notify(src, Locale('shops.no_space'), 'error') end
         player.Functions.RemoveMoney('cash', totalCost)
         exports['ox_inventory']:AddItem(src, productName, quantity)
+        handleShopProfit(shopName, shop.label, totalCost)
         Notify(src, Locale('shops.bought') .. ' ' .. quantity .. 'x ' .. product.label, 'success')
     elseif player.PlayerData.money.bank >= totalCost then
         local added = exports['ox_inventory']:CanCarryItem(src, productName, quantity)
         if not added then return Notify(src, Locale('shops.no_space'), 'error') end
         player.Functions.RemoveMoney('bank', totalCost)
         exports['ox_inventory']:AddItem(src, productName, quantity)
+        handleShopProfit(shopName, shop.label, totalCost)
         Notify(src, Locale('shops.bought') .. ' ' .. quantity .. 'x ' .. product.label, 'success')
     else
         Notify(src, Locale('shops.no_money'), 'error')

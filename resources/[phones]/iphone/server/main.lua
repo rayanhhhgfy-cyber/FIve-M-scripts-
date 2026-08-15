@@ -91,6 +91,89 @@ RegisterNetEvent('phone:server:addContact', function(name, number)
 end)
 
 --- Notes
+QBox.Functions.CreateCallback('jobsApp:server:getJobs', function(source, cb)
+    local src = source
+    local p = QBox.Functions.GetPlayer(src)
+    local currentJob = p and p.PlayerData.job.name or 'unemployed'
+    local jobsList = {
+        { name = 'unemployed', label = 'Unemployed', description = 'No fixed employment.', pay = 0 },
+        { name = 'police', label = 'Police Department', description = 'Protect and serve San Andreas.', pay = 500 },
+        { name = 'ambulance', label = 'Emergency Medical Services', description = 'Provide trauma and emergency medical response.', pay = 450 },
+        { name = 'mechanic', label = 'LS Mechanics', description = 'Repair, customize, and tow vehicles across Los Santos.', pay = 400 },
+        { name = 'tow', label = 'Tow Truck Operator', description = 'Impound abandoned and illegally parked vehicles.', pay = 350 },
+        { name = 'taxi', label = 'Downtown Cab Co.', description = 'Drive passengers and run ride-share dispatch.', pay = 300 },
+        { name = 'delivery', label = 'Parcel Courier', description = 'Deliver package parcels to business locations.', pay = 250 },
+        { name = 'garbage', label = 'Sanitation Worker', description = 'Collect city trash and maintain cleanliness.', pay = 250 },
+        { name = 'bus', label = 'Transit Bus Driver', description = 'Transport citizens along designated bus routes.', pay = 220 },
+        { name = 'electrician', label = 'Power Grid Repair', description = 'Fix electrical transformers and power junctions.', pay = 280 },
+        { name = 'reporter', label = 'Weazel News Reporter', description = 'Broadcast breaking news and record media interviews.', pay = 300 },
+    }
+    cb({ currentJob = currentJob, jobs = jobsList })
+end)
+
+RegisterNetEvent('jobsApp:server:applyJob', function(jobName)
+    local src = source
+    local p = QBox.Functions.GetPlayer(src)
+    if p then
+        p.Functions.SetJob(jobName, 0)
+        TriggerClientEvent('ox_lib:notify', src, { type = 'success', description = 'Job updated to ' .. jobName })
+    end
+end)
+
+-- Voice Memos & Evidence Integration
+local savedVoiceMemos = {}
+
+QBox.Functions.CreateCallback('voiceMemos:server:getMemos', function(source, cb)
+    local src = source
+    local p = QBox.Functions.GetPlayer(src)
+    local cid = p and p.PlayerData.citizenid or 'unknown'
+    cb(savedVoiceMemos[cid] or {})
+end)
+
+RegisterNetEvent('voiceMemos:server:saveMemo', function(title, duration, voicesLog)
+    local src = source
+    local p = QBox.Functions.GetPlayer(src)
+    if not p then return end
+    local cid = p.PlayerData.citizenid
+    savedVoiceMemos[cid] = savedVoiceMemos[cid] or {}
+
+    local memo = {
+        id = #savedVoiceMemos[cid] + 1,
+        title = title or ('Memo #' .. (#savedVoiceMemos[cid] + 1)),
+        duration = duration or 5,
+        voicesLog = voicesLog or 'No nearby voices detected',
+        timestamp = os.date('%Y-%m-%d %H:%M:%S'),
+        citizenid = cid,
+        officerName = p.PlayerData.charinfo.firstname .. ' ' .. p.PlayerData.charinfo.lastname
+    }
+
+    table.insert(savedVoiceMemos[cid], memo)
+    TriggerClientEvent('ox_lib:notify', src, { type = 'success', description = 'Voice memo saved.' })
+end)
+
+RegisterNetEvent('voiceMemos:server:exportToEvidence', function(memoId)
+    local src = source
+    local p = QBox.Functions.GetPlayer(src)
+    if not p then return end
+    local cid = p.PlayerData.citizenid
+    local userMemos = savedVoiceMemos[cid] or {}
+    local memo = nil
+    for _, m in ipairs(userMemos) do
+        if m.id == memoId then memo = m; break end
+    end
+
+    if not memo then
+        return TriggerClientEvent('ox_lib:notify', src, { type = 'error', description = 'Voice memo not found.' })
+    end
+
+    local detail = string.format('Voice Recording [%s]: %s (Duration: %ds)', memo.title, memo.voicesLog, memo.duration)
+    MySQL.insert('INSERT INTO evidence_analysis (citizenid, type, result, timestamp) VALUES (?, ?, ?, ?)', {
+        cid, 'Voice Memo Audio Recording', detail, os.time()
+    })
+
+    TriggerClientEvent('ox_lib:notify', src, { type = 'success', description = 'Voice memo exported to Evidence Lab & Interrogation database.' })
+end)
+
 RegisterNetEvent('phone:server:saveNote', function(content)
     local src = source; local p = QBox.Functions.GetPlayer(src)
     if not p or not content then return end

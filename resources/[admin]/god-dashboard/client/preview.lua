@@ -5,7 +5,7 @@ preview.type = nil
 preview.callback = nil
 preview.offset = 3.0
 preview.rotation = 0.0
-local QBox = exports['qbx-core']:GetCoreObject()
+local QBox = exports['qbx_core']:GetCoreObject()
 
 function preview.startObject(model, onConfirm)
     preview.cleanup()

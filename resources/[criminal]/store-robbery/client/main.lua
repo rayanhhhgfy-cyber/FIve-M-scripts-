@@ -1,4 +1,4 @@
-local QBox = exports['qbx-core']:GetCoreObject()
+local QBox = exports['qbx_core']:GetCoreObject()
 local isRobbing = false
 local robbedRegisters = {}
 local lastRobbery = 0

@@ -1,4 +1,4 @@
-local QBox = exports['qbx-core']:GetCoreObject()
+local QBox = exports['qbx_core']:GetCoreObject()
 local currentHeat = 0
 local heatVisible = false
 local raidWarningActive = false

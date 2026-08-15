@@ -1,4 +1,4 @@
-local QBox = exports['qbx-core']:GetCoreObject()
+local QBox = exports['qbx_core']:GetCoreObject()
 
 --- Get player's primary bank account
 local function getPrimaryAccount(citizenid)

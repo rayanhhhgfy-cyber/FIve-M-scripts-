@@ -1,7 +1,7 @@
 local fuelJobTimers = {}
 local playerCooldowns = {}
 local RATE_LIMITS = {}
-local QBox = exports['qbx-core']:GetCoreObject()
+local QBox = exports['qbx_core']:GetCoreObject()
 
 Citizen.CreateThread(function()
     MySQL.ready(function()

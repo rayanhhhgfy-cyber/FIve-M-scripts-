@@ -5,7 +5,7 @@ name 'mechanics'
 description 'Vehicle repair and mechanics job'
 author 'QBox Framework'
 version '1.0.0'
-shared_scripts { '@ox_lib/init.lua', '@qbx-core/shared/locale.lua', 'config.lua' }
+shared_scripts { '@ox_lib/init.lua', '@qbx_core/shared/locale.lua', 'config.lua' }
 server_scripts { '@oxmysql/lib/MySQL.lua', 'server/main.lua' }
 client_script 'client/main.lua'
-dependencies { 'ox_lib', 'qbx-core', 'oxmysql', 'ox_target' }
+dependencies { 'ox_lib', 'qbx_core', 'oxmysql', 'ox_target' }

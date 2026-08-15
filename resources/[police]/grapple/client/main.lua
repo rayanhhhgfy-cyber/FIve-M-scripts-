@@ -1,4 +1,4 @@
-local QBox = exports['qbx-core']:GetCoreObject()
+local QBox = exports['qbx_core']:GetCoreObject()
 local isGrappling = false
 local ropeHandle = nil
 local grappleTarget = nil

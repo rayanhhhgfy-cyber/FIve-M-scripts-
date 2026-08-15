@@ -1,4 +1,4 @@
-local QBox = exports['qbx-core']:GetCoreObject()
+local QBox = exports['qbx_core']:GetCoreObject()
 local phoneOpen = false
 local batteryLevel = Config.Phone.BatteryMax
 local phoneEnabled = true
@@ -488,4 +488,14 @@ end)
 
 AddEventHandler('onResourceStop', function(r)
     if GetCurrentResourceName() == r and phoneOpen then SetNuiFocus(false, false) end
+end)
+
+
+RegisterNetEvent('iphone:client:sendNotification', function(data)
+    SendNUIMessage({
+        action = 'showNotification',
+        title = data and data.title or 'Notification',
+        message = data and data.message or '',
+        type = data and data.type or 'info'
+    })
 end)

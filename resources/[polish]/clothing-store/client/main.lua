@@ -1,4 +1,4 @@
-local QBox = exports['qbx-core']:GetCoreObject()
+local QBox = exports['qbx_core']:GetCoreObject()
 
 CreateThread(function()
     for _, loc in ipairs(Config.Clothing.locations) do

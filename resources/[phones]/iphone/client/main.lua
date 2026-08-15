@@ -1,4 +1,4 @@
-local QBox = exports['qbx-core']:GetCoreObject()
+local QBox = exports['qbx_core']:GetCoreObject()
 local phoneOpen = false
 local batteryLevel = Config.Phone.BatteryMax
 local phoneEnabled = true

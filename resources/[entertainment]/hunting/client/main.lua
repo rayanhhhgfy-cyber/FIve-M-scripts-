@@ -1,4 +1,4 @@
-local QBCore = exports['qbx-core']:GetCoreObject()
+local QBCore = exports['qbx_core']:GetCoreObject()
 local animalBlip = nil
 local carcassObjects = {}
 

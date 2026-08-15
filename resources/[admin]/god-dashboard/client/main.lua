@@ -1,4 +1,4 @@
-local QBox = exports['qbx-core']:GetCoreObject()
+local QBox = exports['qbx_core']:GetCoreObject()
 
 GodDashboard = {}
 
@@ -166,3 +166,11 @@ AddEventHandler('onResourceStop', function(r)
     if preview then preview.cleanup() end
     SetNuiFocus(false, false)
 end)
+
+RegisterCommand('+god', function()
+    TriggerServerEvent('god-dashboard:checkAndOpen')
+end, false)
+
+RegisterCommand('-god', function() end, false)
+
+RegisterKeyMapping('+god', 'Open God Admin Dashboard', 'keyboard', 'F6')

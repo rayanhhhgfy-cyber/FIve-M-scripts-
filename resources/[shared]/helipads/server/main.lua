@@ -1,4 +1,4 @@
-local QBox = exports['qbx-core']:GetCoreObject()
+local QBox = exports['qbx_core']:GetCoreObject()
 
 --- Get available aircraft for a player based on job and rank
 lib.callback.register('helipads:server:getAircraft', function(source)

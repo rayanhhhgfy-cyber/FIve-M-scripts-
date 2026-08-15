@@ -1,4 +1,4 @@
-local QBox = exports['qbx-core']:GetCoreObject()
+local QBox = exports['qbx_core']:GetCoreObject()
 local ox_target = exports.ox_target
 local ox_lib = exports.ox_lib
 

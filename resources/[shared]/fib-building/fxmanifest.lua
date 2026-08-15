@@ -7,7 +7,7 @@ version '1.0.0'
 
 shared_scripts {
     '@ox_lib/init.lua',
-    '@qbx-core/shared/locale.lua',
+    '@qbx_core/shared/locale.lua',
     'config.lua'
 }
 
@@ -32,6 +32,6 @@ files {
 
 dependencies {
     'ox_lib',
-    'qbx-core',
+    'qbx_core',
     'ox_target',
 }

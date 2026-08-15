@@ -1,4 +1,4 @@
-local QBox = exports['qbx-core']:GetCoreObject()
+local QBox = exports['qbx_core']:GetCoreObject()
 
 RegisterNetEvent('flatbed:server:loaded', function(plate)
     local src = source; local p = QBox.Functions.GetPlayer(src)

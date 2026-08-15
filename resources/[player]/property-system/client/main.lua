@@ -1,4 +1,4 @@
-local QBox = exports['qbx-core']:GetCoreObject()
+local QBox = exports['qbx_core']:GetCoreObject()
 
 RegisterNetEvent('property:client:openMenu', function()
     QBox.Functions.TriggerCallback('property:server:list', function(properties)

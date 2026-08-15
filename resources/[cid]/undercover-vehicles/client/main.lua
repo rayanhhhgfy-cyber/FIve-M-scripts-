@@ -1,4 +1,4 @@
-local QBox = exports['qbx-core']:GetCoreObject()
+local QBox = exports['qbx_core']:GetCoreObject()
 local playerJob = nil
 local currentUCVehicle = nil
 local currentIdentityIndex = 1
@@ -66,7 +66,7 @@ local function applyVehicleIdentity(vehicle, identityIndex)
     vehicleIdentities[idStr] = identityIndex
     currentIdentityIndex = identityIndex
 
-    local QBox = exports['qbx-core']:GetCoreObject()
+    local QBox = exports['qbx_core']:GetCoreObject()
     QBox.Functions.Notify('Identity swapped: ' .. identity.label, 'success')
 end
 

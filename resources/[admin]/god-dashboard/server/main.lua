@@ -1,18 +1,45 @@
+RegisterNetEvent('god-dashboard:checkAndOpen', function()
+    local src = source
+    if isAdmin(src) then
+        TriggerClientEvent('god-dashboard:open', src)
+    else
+        TriggerClientEvent('ox_lib:notify', src, { type = 'error', description = 'Unauthorized' })
+    end
+end)
 local QBox = exports['qbx_core']:GetCoreObject()
+
+local function isOwner(identifier)
+    if not identifier then return false end
+    local res = MySQL.scalar.await('SELECT id FROM server_owners WHERE identifier = ? LIMIT 1', { identifier })
+    return res ~= nil
+end
 
 local function isAdmin(src)
     local player = QBox.Functions.GetPlayer(src)
     if not player then return false end
-    for _, g in ipairs(Config.GodDashboard.adminGroups) do
+
+    if isOwner(player.PlayerData.license) or isOwner(player.PlayerData.citizenid) then
+        return true
+    end
+
+    for _, g in ipairs(Config.GodDashboard.adminGroups or { 'admin', 'superadmin', 'god' }) do
         if player.PlayerData.group == g then return true end
     end
     return false
 end
 
+local function logAdminAction(src, action, target)
+    local player = QBox.Functions.GetPlayer(src)
+    local cid = player and (player.PlayerData.citizenid or player.PlayerData.license) or "console"
+    MySQL.insert('INSERT INTO admin_logs (admin_cid, action, target) VALUES (?, ?, ?)', {
+        cid, action, tostring(target or '')
+    })
+end
+
 --- Bunkers
 QBox.Functions.CreateCallback('god-dashboard:getBunkers', function(source, cb)
     if not isAdmin(source) then cb({}) return end
-    local bunkers = exports['bunker-builder']:GetAllBunkers() or {}
+    local bunkers = (GetResourceState('bunker-builder') == 'started' and exports['bunker-builder']:GetAllBunkers() or {}) or {}
     local list = {}
     for id, b in pairs(bunkers) do
         table.insert(list, {
@@ -33,7 +60,7 @@ end)
 
 QBox.Functions.CreateCallback('god-dashboard:getBunkerCoords', function(source, cb, id)
     if not isAdmin(source) then cb(nil) return end
-    local bunker = exports['bunker-builder']:GetBunker(id)
+    local bunker = (GetResourceState('bunker-builder') == 'started' and exports['bunker-builder']:GetBunker(id) or nil)
     if bunker and bunker.entrance then
         cb({ x = bunker.entrance.coords.x, y = bunker.entrance.coords.y, z = bunker.entrance.coords.z })
     else
@@ -275,4 +302,32 @@ RegisterNetEvent('god-dashboard:bringPlayer', function(target)
     local ped = GetPlayerPed(src)
     local coords = GetEntityCoords(ped)
     TriggerClientEvent('admin:teleportTo', target, coords)
+end)
+
+AddEventHandler('playerConnecting', function(name, setKickReason, deferrals)
+    local src = source
+    local identifiers = GetPlayerIdentifiers(src)
+    local license = nil
+    for _, id in ipairs(identifiers) do
+        if string.sub(id, 1, 8) == "license:" then
+            license = id
+            break
+        end
+    end
+    if not license then return end
+
+    deferrals.defer()
+    Wait(0)
+    deferrals.update("Checking ban status...")
+
+    local res = MySQL.single.await('SELECT reason, expires_at FROM bans WHERE identifier = ? AND (expires_at IS NULL OR expires_at > NOW()) ORDER BY id DESC LIMIT 1', { license })
+    if res then
+        local reason = res.reason or "No reason specified."
+        local expireStr = res.expires_at and tostring(res.expires_at) or "Permanent"
+        deferrals.done(string.format([=[You are banned from this server.
+Reason: %s
+Expires: %s]=], reason, expireStr))
+    else
+        deferrals.done()
+    end
 end)

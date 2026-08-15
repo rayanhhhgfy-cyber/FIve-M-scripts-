@@ -1,4 +1,4 @@
-local QBox = exports['qbx-core']:GetCoreObject()
+local QBox = exports['qbx_core']:GetCoreObject()
 
 --- Open target player's inventory for search
 RegisterNetEvent('personsearch:server:openInventory', function(targetSrc)

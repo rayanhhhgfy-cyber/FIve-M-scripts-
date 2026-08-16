@@ -1739,3 +1739,20 @@ CREATE TABLE IF NOT EXISTS player_tattoos (
   tattoos JSON DEFAULT NULL,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- === SUPPORT TICKETS ([admin]/ticket-system) ===
+CREATE TABLE IF NOT EXISTS support_tickets (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  sender_source INT DEFAULT NULL,
+  sender_citizenid VARCHAR(50) DEFAULT NULL,
+  sender_name VARCHAR(100) NOT NULL,
+  subject VARCHAR(150) NOT NULL,
+  description TEXT NOT NULL,
+  status VARCHAR(20) DEFAULT 'open',
+  resolver_source INT DEFAULT NULL,
+  resolver_name VARCHAR(100) DEFAULT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  resolved_at TIMESTAMP NULL DEFAULT NULL,
+  INDEX idx_tickets_status (status),
+  INDEX idx_tickets_sender (sender_citizenid)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

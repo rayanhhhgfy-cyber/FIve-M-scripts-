@@ -42,6 +42,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
         else if (tab === 'doors') loadDoors();
         else if (tab === 'commands') loadCommands();
         else if (tab === 'players' || tab === 'server') loadPlayers();
+        else if (tab === 'server') loadPlayers();
     });
 });
 
@@ -363,6 +364,7 @@ function serverActionWithData(action, data) {
     }).then(r => r.json()).then(() => toast('Action executed', 'success')).catch(handleError);
 }
 
+>>>>>>> origin/Audited-w
 function renderPlayers(players) {
     const container = $('playerList');
     if (!players || players.length === 0) {
@@ -370,6 +372,7 @@ function renderPlayers(players) {
         return;
     }
     container.innerHTML = players.map(p => `
+<<<<<<< HEAD
         <div class="player-card player-item" data-name="${p.name.toLowerCase()} ${p.src} ${p.citizenid}">
             <div style="flex:1">
                 <div class="pname">${p.name} <span style="font-size:12px;color:var(--accent)">[ID: ${p.src} | CID: ${p.citizenid}]</span></div>
@@ -386,6 +389,16 @@ function renderPlayers(players) {
                 <button class="btn-primary" onclick="promptSetJob(${p.src})" title="Set Job"><i class="fas fa-user-tie"></i> Job</button>
                 <button class="btn-primary" onclick="promptGiveCar(${p.src})" title="Give Car"><i class="fas fa-car"></i> Car</button>
                 <button class="btn-danger" onclick="kickPlayer(${p.src})" title="Kick"><i class="fas fa-user-slash"></i> Kick</button>
+=======
+        <div class="player-card player-item" data-name="${p.name.toLowerCase()}">
+            <div>
+                <div class="pname">${p.name}</div>
+                <div class="pmeta">${p.job} | ${p.group || 'user'}</div>
+            </div>
+            <div class="pactions">
+                <button class="btn-primary" onclick="serverActionWithTarget('teleportToPlayer', ${p.src})" title="TP To"><i class="fas fa-arrow-right"></i></button>
+                <button class="btn-warning" onclick="serverActionWithTarget('bringPlayer', ${p.src})" title="Bring"><i class="fas fa-arrow-left"></i></button>
+                <button class="btn-danger" onclick="kickPlayer(${p.src})" title="Kick"><i class="fas fa-user-slash"></i></button>
             </div>
         </div>
     `).join('');

@@ -149,6 +149,7 @@ window.addEventListener('message',function(event){
             }, 4000);
         }
     }
+>>>>>>> origin/Audited-w
     if(d.action==='close'){phone.style.display='none';showHome();cleanupCall();}
     if(d.action==='loadData'){
         contacts=d.contacts||[];messages=d.messages||[];notes=d.notes||[];photos=d.photos||[];videos=d.videos||[];
@@ -282,13 +283,16 @@ function openApp(key){
         case 'gigs':renderGigsApp();break;
         case 'emergency':renderEmergencyApp();break;
         case 'vehicles':renderVehiclesApp();break;
+<<<<<<< HEAD
         case 'jobs':renderJobsApp();break;
         case 'voicememos':renderVoiceMemosApp();break;
+=======
         default:appContent.innerHTML='<div class="placeholder-app">Coming soon</div>';
     }
     closeNotifShade();
 }
 
+<<<<<<< HEAD
 /* ==================== VOICE MEMOS APP ==================== */
 let isRecordingMemo = false;
 let recordTimer = null;
@@ -439,6 +443,8 @@ function applyForJob(jobName) {
     });
 }
 
+=======
+>>>>>>> origin/Audited-w
 /* ==================== PHONE APP (DIALER) ==================== */
 let dialerTab='keypad';
 function renderPhoneApp(){

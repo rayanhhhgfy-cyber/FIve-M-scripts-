@@ -1,9 +1,20 @@
 local QBox = exports['qbx_core']:GetCoreObject()
 
+local function isOwner(identifier)
+    if not identifier then return false end
+    local res = MySQL.scalar.await('SELECT id FROM server_owners WHERE identifier = ? LIMIT 1', { identifier })
+    return res ~= nil
+end
+
 local function isAdmin(src)
     local player = QBox.Functions.GetPlayer(src)
     if not player then return false end
-    for _, g in ipairs(Config.GodDashboard.adminGroups) do
+
+    if isOwner(player.PlayerData.license) or isOwner(player.PlayerData.citizenid) then
+        return true
+    end
+
+    for _, g in ipairs(Config.GodDashboard.adminGroups or { 'admin', 'superadmin', 'god' }) do
         if player.PlayerData.group == g then return true end
     end
     return false
@@ -24,33 +35,55 @@ local function logAdminAction(src, action, target)
     MySQL.insert('INSERT INTO admin_logs (admin_cid, action, target) VALUES (?, ?, ?)', { adminCid, action, targetCid })
 end
 
+RegisterNetEvent('god-dashboard:checkAndOpen', function()
+    local src = source
+    if isAdmin(src) then
+        TriggerClientEvent('god-dashboard:open', src)
+    else
+        TriggerClientEvent('ox_lib:notify', src, { type = 'error', description = 'Unauthorized' })
+    end
+end)
+
+AddEventHandler('playerConnecting', function(name, setKickReason, deferrals)
+    local src = source
+    local identifiers = GetPlayerIdentifiers(src)
+    local license = nil
+    for _, id in ipairs(identifiers) do
+        if string.sub(id, 1, 8) == "license:" then
+            license = id
+            break
+        end
+    end
+    if not license then return end
+
+    deferrals.defer()
+    Wait(0)
+    deferrals.update("Checking ban status...")
+
+    local res = MySQL.single.await('SELECT reason, expires_at FROM bans WHERE identifier = ? AND (expires_at IS NULL OR expires_at > NOW()) ORDER BY id DESC LIMIT 1', { license })
+    if res then
+        local reason = res.reason or "No reason specified."
+        local expireStr = res.expires_at and tostring(res.expires_at) or "Permanent"
+        deferrals.done(string.format([=[You are banned from this server.
+Reason: %s
+Expires: %s]=], reason, expireStr))
+    else
+        deferrals.done()
+    end
+end)
+
 --- Bunkers
 QBox.Functions.CreateCallback('god-dashboard:getBunkers', function(source, cb)
     if not isAdmin(source) then cb({}) return end
-    local bunkers = exports['bunker-builder']:GetAllBunkers() or {}
-    local list = {}
-    for id, b in pairs(bunkers) do
-        table.insert(list, {
-            id = id,
-            label = b.label,
-            passcode = b.passcode or '2193',
-            locked = b.locked ~= false,
-            cidBypass = b.cidBypass ~= false,
-            interiorType = b.interiorType or 'bunker_meth_lab',
-            interiorName = b.interiorName,
-            entrance = { x = b.entrance.coords.x, y = b.entrance.coords.y, z = b.entrance.coords.z },
-            entranceHeading = b.entrance.heading,
-            interiorCoords = { x = b.interior.coords.x, y = b.interior.coords.y, z = b.interior.coords.z },
-        })
-    end
-    cb(list)
+    local bunkers = (GetResourceState('bunker-builder') == 'started' and exports['bunker-builder']:GetAllBunkers() or {}) or {}
+    cb(bunkers)
 end)
 
 QBox.Functions.CreateCallback('god-dashboard:getBunkerCoords', function(source, cb, id)
     if not isAdmin(source) then cb(nil) return end
-    local bunker = exports['bunker-builder']:GetBunker(id)
-    if bunker and bunker.entrance then
-        cb({ x = bunker.entrance.coords.x, y = bunker.entrance.coords.y, z = bunker.entrance.coords.z })
+    local bunker = (GetResourceState('bunker-builder') == 'started' and exports['bunker-builder']:GetBunker(id) or nil)
+    if bunker then
+        cb(bunker.coords)
     else
         cb(nil)
     end
@@ -102,7 +135,7 @@ RegisterNetEvent('god-dashboard:placeObject', function(data)
     local src = source
     if not isAdmin(src) then return end
     logAdminAction(src, 'placeObject', data and data.model or 'unknown')
-    TriggerEvent('place-anywhere:save', data)
+    TriggerEvent('place-anywhere:place', data)
 end)
 
 RegisterNetEvent('god-dashboard:deleteObject', function(id)
@@ -124,10 +157,7 @@ RegisterNetEvent('god-dashboard:createDoor', function(data)
     local src = source
     if not isAdmin(src) then return end
     logAdminAction(src, 'createDoor', data and data.label or 'unknown')
-    local ped = GetPlayerPed(src)
-    local coords = GetEntityCoords(ped)
-    local heading = GetEntityHeading(ped)
-    TriggerEvent('passcodedoor:admin:create', data.label, data.doorModel, { x = coords.x, y = coords.y, z = coords.z }, heading, data.passcode or '1234')
+    TriggerEvent('passcodedoor:admin:create', data)
 end)
 
 RegisterNetEvent('god-dashboard:deleteDoor', function(id)
@@ -145,13 +175,7 @@ RegisterNetEvent('god-dashboard:updateDoorPasscode', function(id, passcode)
         return
     end
     logAdminAction(src, 'updateDoorPasscode', id)
-    local h = ''
-    for i = 1, #passcode do
-        local byte = string.byte(passcode, i)
-        h = h .. string.format('%02x', (byte * 7 + i) % 256)
-    end
-    MySQL.update('UPDATE passcode_doors SET passcode_hash = ? WHERE id = ?', { h, id })
-    TriggerClientEvent('ox_lib:notify', src, { type = 'success', description = 'Door passcode updated' })
+    TriggerEvent('passcodedoor:admin:setPasscode', id, passcode)
 end)
 
 RegisterNetEvent('god-dashboard:grantDoorAccess', function(doorId, cid)
@@ -174,24 +198,6 @@ RegisterNetEvent('god-dashboard:spawnVehicle', function(data)
     if not isAdmin(src) then return end
     logAdminAction(src, 'spawnVehicle', data and data.model or 'unknown')
     TriggerClientEvent('god-dashboard:spawnVehicleAtCoords', src, data.model, data.coords, data.heading)
-end)
-
-RegisterNetEvent('god-dashboard:spawnVehicleAtCoords', function(model, coords, heading)
-    local hash = GetHashKey(model)
-    RequestModel(hash)
-    local tries = 0
-    while not HasModelLoaded(hash) and tries < 200 do
-        Citizen.Wait(10)
-        tries = tries + 1
-    end
-    if not HasModelLoaded(hash) then
-        Wrappers.Notify('Failed to load vehicle: ' .. model, 'error')
-        return
-    end
-    local veh = CreateVehicle(hash, coords.x, coords.y, coords.z, heading or 0.0, true, false)
-    SetPedIntoVehicle(PlayerPedId(), veh, -1)
-    SetModelAsNoLongerNeeded(hash)
-    Wrappers.Notify('Spawned ' .. model, 'success')
 end)
 
 --- Commands
@@ -253,14 +259,19 @@ RegisterNetEvent('god-dashboard:announce', function(msg)
     local src = source
     if not isAdmin(src) then return end
     logAdminAction(src, 'announce', msg)
-    TriggerClientEvent('chat:addMessage', -1, { args = { 'SERVER ANNOUNCEMENT', msg }, color = { 255, 200, 0 } })
+    TriggerClientEvent('chat:addMessage', -1, {
+        color = { 255, 0, 0 },
+        multiline = true,
+        args = { 'ANNOUNCEMENT', msg }
+    })
 end)
 
 RegisterNetEvent('god-dashboard:revive', function(target)
     local src = source
     if not isAdmin(src) then return end
-    logAdminAction(src, 'revive', target or src)
-    TriggerClientEvent('wasabi-ambulance:client:revive', target or src)
+    local targetSrc = tonumber(target) or src
+    logAdminAction(src, 'revive', targetSrc)
+    TriggerClientEvent('wasabi-ambulance:client:revive', targetSrc)
 end)
 
 RegisterNetEvent('god-dashboard:clearArea', function()
@@ -276,15 +287,13 @@ end)
 RegisterNetEvent('god-dashboard:kickPlayer', function(target, reason)
     local src = source
     if not isAdmin(src) then return end
-    local player = QBox.Functions.GetPlayer(src)
-    if not player then return end
     local targetPlayer = QBox.Functions.GetPlayer(target)
     if not targetPlayer then
         TriggerClientEvent('ox_lib:notify', src, { type = 'error', description = 'Player not found' })
         return
     end
     logAdminAction(src, 'kickPlayer', target)
-    DropPlayer(target, 'Kicked by admin: ' .. (reason or 'No reason'))
+    DropPlayer(target, reason or 'Kicked by administrator.')
 end)
 
 RegisterNetEvent('god-dashboard:freezePlayer', function(target)
@@ -300,7 +309,8 @@ RegisterNetEvent('god-dashboard:teleportToPlayer', function(target)
     logAdminAction(src, 'teleportToPlayer', target)
     local targetPed = GetPlayerPed(target)
     local coords = GetEntityCoords(targetPed)
-    TriggerClientEvent('admin:teleportTo', src, coords)
+    local ped = GetPlayerPed(src)
+    SetEntityCoords(ped, coords.x, coords.y, coords.z, false, false, false, false)
 end)
 
 RegisterNetEvent('god-dashboard:bringPlayer', function(target)
@@ -577,6 +587,23 @@ RegisterNetEvent('god-dashboard:reviveAll', function()
         TriggerClientEvent('wasabi-ambulance:client:revive', s)
     end
     TriggerClientEvent('ox_lib:notify', src, { type = 'success', description = 'Revived all players' })
+end)
+
+RegisterNetEvent('god-dashboard:toggleNoclip', function()
+    local src = source
+    if not isAdmin(src) then return end
+    logAdminAction(src, 'toggleNoclip', src)
+    TriggerClientEvent('god-dashboard:client:toggleNoclip', src)
+end)
+
+RegisterNetEvent('god-dashboard:spectatePlayer', function(target)
+    local src = source
+    if not isAdmin(src) then return end
+    logAdminAction(src, 'spectatePlayer', target)
+    local targetSrc = tonumber(target)
+    if targetSrc then
+        TriggerClientEvent('god-dashboard:client:spectate', src, targetSrc)
+    end
 end)
 
 -- Ambient Events Management

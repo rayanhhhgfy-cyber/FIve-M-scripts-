@@ -6,9 +6,9 @@ description 'Shows on-duty officers as map blips for other LEOs'
 version '1.0.0'
 shared_scripts {
     '@ox_lib/init.lua',
-    '@qbx-core/shared/locale.lua',
+    '@qbx_core/shared/locale.lua',
     'config.lua'
 }
 server_scripts { 'server/main.lua' }
 client_scripts { 'client/main.lua' }
-dependencies { 'ox_lib', 'qbx-core', 'pma-voice' }
+dependencies { 'ox_lib', 'qbx_core', 'pma-voice' }

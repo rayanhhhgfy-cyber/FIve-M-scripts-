@@ -45,6 +45,7 @@ RegisterNetEvent('davis:server:removeWeapon', function(weaponModel)
     for _, weapon in ipairs(Config.DavisStation.Zones.Armory.weapons) do
         if weapon.model == weaponModel and rank >= weapon.rank then
             local serial = GenerateSerial()
+            local serial = GenerateSerial()
             MySQL.insert('INSERT INTO weapon_serials (citizenid, serial, weapon_model, issued_by) VALUES (?, ?, ?, ?)',
                 { player.PlayerData.citizenid, serial, weaponModel, player.PlayerData.citizenid })
             player.Functions.AddItem(weaponModel, 1, nil, serial)

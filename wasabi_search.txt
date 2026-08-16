@@ -1,0 +1,57 @@
+=== resources/[ems]/wasabi-ambulance/fxmanifest.lua
+=== resources/[ems]/wasabi-ambulance/config.lua
+reviveTime = 10000,
+allowRevive = true,
+allowBedHeal = true,
+emsCountForAutoRevive = 1,
+autoReviveTime = 120000
+=== resources/[ems]/wasabi-ambulance/server/main.lua
+TriggerClientEvent('wasabi-ambulance:client:setDownState', source, state)
+TriggerClientEvent('wasabi-ambulance:client:setBleeding', source, level)
+TriggerClientEvent('wasabi-ambulance:client:setDamageState', source, bodyPart, state)
+TriggerClientEvent('wasabi-ambulance:client:down', source, reason)
+function RevivePlayer(source, reviveType)
+local reviveConfig = Config.RevivalMethods[reviveType]
+if not reviveConfig then return false end
+if math.random() > reviveConfig.successRate then
+TriggerClientEvent('wasabi-ambulance:client:revive', source)
+TriggerClientEvent('wasabi-ambulance:client:respawn', source, loc)
+function HealPlayer(source)
+TriggerClientEvent('wasabi-ambulance:client:heal', source)
+lib.callback.register('wasabi-ambulance:server:getDownState', function(source)
+lib.callback.register('wasabi-ambulance:server:getBleeding', function(source)
+lib.callback.register('wasabi-ambulance:server:getDamageState', function(source)
+lib.callback.register('wasabi-ambulance:server:downPlayer', function(source, reason)
+lib.callback.register('wasabi-ambulance:server:revivePlayer', function(source, target, reviveType)
+local success = RevivePlayer(target, reviveType)
+lib.callback.register('wasabi-ambulance:server:healPlayer', function(source, target)
+HealPlayer(target)
+lib.callback.register('wasabi-ambulance:server:respawnPlayer', function(source)
+lib.callback.register('wasabi-ambulance:server:applyBandage', function(source)
+lib.callback.register('wasabi-ambulance:server:getEmsCount', function(source)
+RegisterNetEvent('wasabi-ambulance:server:playerDied', function(reason)
+RegisterNetEvent('wasabi-ambulance:server:requestRevive', function(target)
+TriggerClientEvent('wasabi-ambulance:client:reviveRequest', target, source)
+local health = GetEntityHealth(ped)
+SetEntityHealth(ped, health - damagePerTick)
+AddEventHandler('onResourceStart', function(resName)
+exports('RevivePlayer', RevivePlayer)
+exports('HealPlayer', HealPlayer)
+=== resources/[ems]/wasabi-ambulance/client/main.lua
+RegisterNetEvent('wasabi-ambulance:client:setDownState', function(state)
+RegisterNetEvent('wasabi-ambulance:client:setBleeding', function(level)
+RegisterNetEvent('wasabi-ambulance:client:setDamageState', function(bodyPart, state)
+RegisterNetEvent('wasabi-ambulance:client:down', function(reason)
+if Config.Ambulance.emsCountForAutoRevive > 0 then
+if emsCount < Config.Ambulance.emsCountForAutoRevive then
+SetTimeout(Config.Ambulance.autoReviveTime, function()
+TriggerServerEvent('wasabi-ambulance:server:respawnPlayer')
+RegisterNetEvent('wasabi-ambulance:client:revive', function()
+SetEntityHealth(PlayerPedId(), GetEntityMaxHealth(PlayerPedId()))
+RegisterNetEvent('wasabi-ambulance:client:respawn', function(location)
+SetEntityHealth(PlayerPedId(), 150)
+RegisterNetEvent('wasabi-ambulance:client:heal', function()
+SetEntityHealth(PlayerPedId(), GetEntityMaxHealth(PlayerPedId()))
+RegisterNetEvent('wasabi-ambulance:client:reviveRequest', function(target)
+TriggerServerEvent('wasabi-ambulance:server:revivePlayer', target, 'defibrillator')
+AddEventHandler('onResourceStart', function(resName)

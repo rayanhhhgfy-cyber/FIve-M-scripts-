@@ -16,6 +16,17 @@ const load = Vue.createApp({
 
       DownloadTitle: 'Downloading QBCore Server',
       DownloadDesc: "Hold tight while we begin downloading all the resources/assets required to play on QBCore Server. \n\nAfter download has been finished successfully, you'll be placed into the server and this screen will disappear. Please don't leave or turn off your PC. ",
+      CarouselText1: 'Customize your character appearance, outfits, and gear from any wardrobe/clothing store.',
+      CarouselSubText1: 'High-quality MLOs and custom layouts integrated throughout the city.',
+      CarouselText2: 'Centralized QBox configuration allows seamless interaction across all gameplay mechanics.',
+      CarouselSubText2: ' Centralized database stores persistent assets, housing, vehicles, and progression.',
+      CarouselText3: 'Access interactive features like vehicle doors, windows, keys, and seats via F1 Radial Menu.',
+      CarouselSubText3: ' Centralized configurations allow for full server-wide synchronization.',
+      CarouselText4: 'For server updates, rules, commands, and keybinds, use the /rules command in game.',
+      CarouselSubText4: 'Designed to offer the ultimate custom roleplay experience.',
+
+      DownloadTitle: 'Loading QBox Roleplay Server',
+      DownloadDesc: "Hold tight while we download and synchronize all the custom resources and assets required to play on the server. \n\nOnce the load is complete, you'll spawn into the world seamlessly. Please do not close your game or turn off your PC.",
 
       SettingsTitle: 'Settings',
       AudioTrackDesc1: 'When disabled the current audio-track playing will be stopped.',

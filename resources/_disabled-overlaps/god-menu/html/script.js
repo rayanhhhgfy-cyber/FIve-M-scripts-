@@ -11,6 +11,10 @@ let teleportPresets = [];
 let players = [];
 let noclipOn = false;
 let spectateOn = false;
+=======
+let allItems = [];
+let currentAllItemsCategory = 'all';
+>>>>>>> origin/Audited-w
 
 window.addEventListener('message', function(e) {
     const data = e.data;
@@ -33,9 +37,24 @@ window.addEventListener('message', function(e) {
             renderWeather(weatherList);
             populateItemSelects(itemList);
         }
+<<<<<<< HEAD
         refreshPlayers();
     } else if (data.action === 'close') {
         document.body.style.display = 'none';
+        if (data.allItems) {
+            allItems = data.allItems;
+            renderAllItemsGrid();
+        }
+        refreshPlayers();
+    } else if (data.action === 'close') {
+        document.body.style.display = 'none';
+    } else if (data.action === 'switchTab') {
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        const tabEl = document.querySelector(`.nav-item[data-tab="${data.tab}"]`);
+        if (tabEl) tabEl.classList.add('active');
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        const contentEl = document.getElementById('tab-' + data.tab);
+        if (contentEl) contentEl.classList.add('active');
     }
 });
 
@@ -1478,3 +1497,72 @@ document.querySelectorAll('.nav-item[data-tab="reports"]').forEach(el => {
         refreshReports();
     });
 });
+<<<<<<< HEAD
+=======
+
+// ==================== ALL ITEMS SPAWNER ====================
+document.getElementById('allItemsSearch')?.addEventListener('input', function() {
+    renderAllItemsGrid();
+});
+
+document.querySelectorAll('#allItemsCategories .inv-cat').forEach(el => {
+    el.addEventListener('click', function() {
+        document.querySelectorAll('#allItemsCategories .inv-cat').forEach(c => c.classList.remove('active'));
+        this.classList.add('active');
+        currentAllItemsCategory = this.dataset.cat;
+        renderAllItemsGrid();
+    });
+});
+
+function renderAllItemsGrid() {
+    const container = document.getElementById('allItemsGrid');
+    if (!container) return;
+
+    const searchVal = (document.getElementById('allItemsSearch')?.value || '').toLowerCase();
+    let filtered = allItems;
+
+    if (currentAllItemsCategory !== 'all') {
+        filtered = filtered.filter(item => item.category === currentAllItemsCategory);
+    }
+
+    if (searchVal) {
+        filtered = filtered.filter(item =>
+            item.name.toLowerCase().includes(searchVal) ||
+            item.label.toLowerCase().includes(searchVal)
+        );
+    }
+
+    if (filtered.length === 0) {
+        container.innerHTML = '<div class="inv-empty">No items found matching the filters.</div>';
+        return;
+    }
+
+    container.innerHTML = filtered.map(item => {
+        const weightKg = (item.weight / 1000).toFixed(2);
+        const weightLabel = weightKg > 0 ? `${weightKg} kg` : '';
+        const desc = item.description || 'No description available';
+
+        return `
+            <div class="all-items-card">
+                <div class="all-items-card-weight">${weightLabel}</div>
+                <div class="all-items-card-image-box">
+                    <img class="all-items-card-image" src="nui://ox_inventory/web/images/${item.image}" onerror="this.src='nui://ox_inventory/web/images/default.png';">
+                </div>
+                <div class="all-items-card-label" title="${escapeHtml(item.label)}">${escapeHtml(item.label)}</div>
+                <div class="all-items-card-name" title="${escapeHtml(item.name)}">${escapeHtml(item.name)}</div>
+                <div class="all-items-card-desc" title="${escapeHtml(desc)}">${escapeHtml(desc)}</div>
+                <div class="all-items-card-actions">
+                    <input type="number" id="qty-${item.name}" class="all-items-card-qty" value="1" min="1" max="1000">
+                    <button class="all-items-card-btn" onclick="spawnItemDirect('${item.name}')">Get</button>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+function spawnItemDirect(itemName) {
+    const qtyInput = document.getElementById(`qty-${itemName}`);
+    const count = qtyInput ? parseInt(qtyInput.value) || 1 : 1;
+    fetchNui('godGetSpawnItem', { item: itemName, count: count });
+}
+>>>>>>> origin/Audited-w

@@ -57,15 +57,12 @@ RegisterNetEvent('mrpd:server:removeWeapon', function(weaponModel)
     local rank = player.PlayerData.job.grade.level or 0
     for _, weapon in ipairs(Config.MRPD.Zones.Armory.weapons) do
         if weapon.model == weaponModel and rank >= weapon.rank then
-            local weaponInfo = {
-                model = weaponModel,
-                serial = GenerateSerial()
-            }
+            local serial = GenerateSerial()
             MySQL.insert('INSERT INTO weapon_serials (citizenid, serial, weapon_model, issued_by) VALUES (?, ?, ?, ?)',
-                { player.PlayerData.citizenid, weaponInfo.serial, weaponModel, player.PlayerData.citizenid })
-            player.Functions.AddItem(weaponModel, 1, nil, weaponInfo.serial)
+                { player.PlayerData.citizenid, serial, weaponModel, player.PlayerData.citizenid })
+            player.Functions.AddItem(weaponModel, 1, nil, serial)
             Wrappers.Notify(src, Locale('police.weapon_issued', weapon.label), 'success')
-            exports['discord-logs']:LogCustom(src, 'Armory Issue', 'Issued ' .. weapon.label .. ' serial: ' .. weaponInfo.serial)
+            exports['discord-logs']:LogCustom(src, 'Armory Issue', 'Issued ' .. weapon.label .. ' serial: ' .. serial)
             return
         end
     end

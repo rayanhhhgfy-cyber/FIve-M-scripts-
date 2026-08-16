@@ -875,3 +875,44 @@ end)
 
 exports('getCallChannel', function(src) return callChannels[src] end)
 exports('isInCall', function(src) return activeCalls[src] ~= nil end)
+
+
+--- Jobs App ---
+QBox.Functions.CreateCallback('iphone:server:getJobsList', function(source, cb)
+    local jobs = {
+        { name = 'unemployed', label = 'Unemployed', description = 'Civilian looking for work' },
+        { name = 'police', label = 'Police Department', description = 'Law enforcement officer' },
+        { name = 'ambulance', label = 'Emergency Medical Services', description = 'EMS & Medical staff' },
+        { name = 'mechanic', label = 'Los Santos Customs', description = 'Vehicle repair & tuning' },
+        { name = 'taxi', label = 'Downtown Cab Co', description = 'Passenger transportation' },
+        { name = 'garbage', label = 'Waste Management', description = 'City garbage collection' },
+        { name = 'bus', label = 'Los Santos Transit', description = 'Bus driver' }
+    }
+    cb(jobs)
+end)
+
+RegisterNetEvent('iphone:server:applyForJob', function(jobName)
+    local src = source
+    local player = QBox.Functions.GetPlayer(src)
+    if player and jobName then
+        player.Functions.SetJob(jobName, 0)
+        TriggerClientEvent('ox_lib:notify', src, { type = 'success', description = 'Applied and hired for ' .. jobName })
+    end
+end)
+
+
+--- Voice Memos App & Evidence Integration ---
+RegisterNetEvent('iphone:server:saveVoiceMemo', function(title, duration, voicesCount)
+    local src = source
+    local player = QBox.Functions.GetPlayer(src)
+    if not player then return end
+
+    MySQL.insert('INSERT INTO voice_memos (citizenid, title, duration, voices_count) VALUES (?, ?, ?, ?)', {
+        player.PlayerData.citizenid, title or 'Voice Memo', duration or 0, voicesCount or 0
+    })
+    TriggerClientEvent('ox_lib:notify', src, { type = 'success', description = 'Saved Voice Memo' })
+end)
+
+exports('GetVoiceMemosForEvidence', function(citizenid)
+    return MySQL.query.await('SELECT * FROM voice_memos WHERE citizenid = ?', { citizenid })
+end)

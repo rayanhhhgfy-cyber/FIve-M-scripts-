@@ -49,6 +49,21 @@ CreateThread(function()
             rotation = 0,
             debug = false,
             options = targetOptions,
+            options = {
+                {
+                    name = 'shop_menu_' .. shop.name,
+                    label = shop.label,
+                    icon = 'fas fa-store',
+                    onSelect = function()
+                        Wrappers.ContextMenu({
+                            id = 'shop_menu_' .. shop.name,
+                            title = shop.label,
+                            options = options,
+                        })
+                        Wrappers.ShowContextMenu('shop_menu_' .. shop.name)
+                    end,
+                },
+            },
         })
     end
 end)

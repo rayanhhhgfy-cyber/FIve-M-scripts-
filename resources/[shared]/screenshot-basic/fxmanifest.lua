@@ -1,13 +1,8 @@
 fx_version 'cerulean'
 game 'gta5'
 
-description 'screenshot-basic — Standalone FiveM screen capture utility'
-version '1.0.0'
+name 'screenshot-basic'
+description 'Standalone screenshot utility'
 
-client_scripts {
-    'client/main.lua'
-}
-
-server_scripts {
-    'server/main.lua'
-}
+client_script 'client.lua'
+export 'RequestScreenshot'

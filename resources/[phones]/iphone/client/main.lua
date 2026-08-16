@@ -530,3 +530,13 @@ end)
 AddEventHandler('onResourceStop', function(r)
     if GetCurrentResourceName() == r and phoneOpen then SetNuiFocus(false, false) end
 end)
+
+
+RegisterNetEvent('iphone:client:sendNotification', function(data)
+    SendNUIMessage({
+        action = 'showNotification',
+        title = data and data.title or 'Notification',
+        message = data and data.message or '',
+        type = data and data.type or 'info'
+    })
+end)

@@ -68,10 +68,56 @@
     border-radius: 55px;
     padding: 12px;
     box-shadow: 0 0 80px rgba(0,0,0,0.5), 0 0 0 2px #333;
+    background: #111111;
+    border-radius: 60px;
+    padding: 6px; /* Ultra-thin Pro Max borders! */
+    box-shadow: 0 0 100px rgba(0,0,0,0.65), 0 0 0 3px #1d1d1f, inset 0 0 4px rgba(255,255,255,0.25);
     position: relative;
     overflow: hidden;
     display: none;
 }
+=======
+
+/* Premium iPhone 17 Pro Max Side Buttons */
+.phone::before {
+    content: '';
+    position: absolute;
+    top: 140px; left: 0;
+    width: 3px; height: 35px;
+    background: #1d1d1f;
+    border-radius: 0 3px 3px 0;
+    z-index: 210;
+}
+.phone::after {
+    content: '';
+    position: absolute;
+    top: 200px; left: 0;
+    width: 3px; height: 60px;
+    background: #1d1d1f;
+    border-radius: 0 3px 3px 0;
+    z-index: 210;
+    box-shadow: 0 70px 0 #1d1d1f; /* Volume Up and Volume Down */
+}
+.phone-power-button {
+    position: absolute;
+    top: 200px; right: 0;
+    width: 3px; height: 60px;
+    background: #1d1d1f;
+    border-radius: 3px 0 0 3px;
+    z-index: 210;
+}
+.phone-camera-control {
+    position: absolute;
+    top: 360px; right: 0;
+    width: 3px; height: 45px;
+    background: #19191b;
+    border: 1px solid #1d1d1f;
+    border-radius: 3px 0 0 3px;
+    z-index: 210;
+    box-shadow: inset 0 0 2px rgba(0,0,0,0.5);
+}
+
+>>>>>>> origin/Audited-w
 .phone-frame-glow {
     position: absolute;
     inset: 0;
@@ -88,7 +134,9 @@
 
 .screen {
     width: 100%; height: 100%;
+<<<<<<< HEAD
     border-radius: 44px;
+    border-radius: 54px; /* Perfectly fits the premium frame! */
     background: var(--primary-900);
     position: relative;
     overflow: hidden;
@@ -99,6 +147,7 @@
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
     background: linear-gradient(180deg, #0d0d2b 0%, #1a1a3e 40%, #0f0f23 100%);
+    background: linear-gradient(180deg, #13131a 0%, #201e2e 50%, #0e0d16 100%); /* High-end iOS gradient! */
     z-index: 0;
     transition: background 1s ease;
 }
@@ -111,6 +160,8 @@
     transform: translateX(-50%);
     width: 126px;
     height: 36px;
+    width: 110px; /* Thinner pill just like iPhone 17! */
+    height: 28px;
     background: #000;
     border-radius: 20px;
     z-index: 100;
@@ -121,6 +172,16 @@
     font-size: 12px;
     font-weight: 600;
     color: #fff;
+    padding: 0 12px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #fff;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Elastic Dynamic Island effect! */
+}
+.dynamic-island:hover {
+    width: 220px;
+    height: 40px;
+    border-radius: 20px;
 }
 .time { font-variant-numeric: tabular-nums; }
 .battery { display: flex; align-items: center; gap: 4px; color: rgba(255,255,255,0.7); }

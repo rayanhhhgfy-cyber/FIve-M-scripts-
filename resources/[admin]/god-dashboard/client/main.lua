@@ -275,3 +275,51 @@ AddEventHandler('onResourceStop', function(r)
     if preview then preview.cleanup() end
     SetNuiFocus(false, false)
 end)
+
+RegisterCommand('+god', function()
+    TriggerServerEvent('god-dashboard:checkAndOpen')
+end, false)
+
+RegisterCommand('-god', function() end, false)
+
+RegisterKeyMapping('+god', 'Open God Admin Dashboard', 'keyboard', 'F6')
+
+
+--- Ported Client Actions ---
+local isNoclip = false
+RegisterNetEvent('god-dashboard:client:toggleNoclip', function()
+    isNoclip = not isNoclip
+    local ped = PlayerPedId()
+    SetEntityVisible(ped, not isNoclip, false)
+    SetEntityCollision(ped, not isNoclip, not isNoclip)
+    SetPlayerInvincible(PlayerId(), isNoclip)
+    exports['ox_lib']:notify({ type = 'info', description = 'Noclip ' .. (isNoclip and 'enabled' or 'disabled') })
+end)
+
+RegisterNetEvent('god-dashboard:client:spectate', function(targetServerId)
+    local targetPed = GetPlayerPed(GetPlayerFromServerId(targetServerId))
+    if DoesEntityExist(targetPed) then
+        NetworkSetInSpectatorMode(true, targetPed)
+        exports['ox_lib']:notify({ type = 'info', description = 'Spectating ID ' .. targetServerId })
+    end
+end)
+
+RegisterNetEvent('god-dashboard:client:slap', function()
+    local ped = PlayerPedId()
+    ApplyForceToEntity(ped, 1, 0.0, 10.0, 10.0, 0.0, 0.0, 0.0, 0, false, true, true, false, true)
+    SetEntityHealth(ped, math.max(100, GetEntityHealth(ped) - 10))
+end)
+
+RegisterNetEvent('god-dashboard:client:setArmor', function(amount)
+    SetPedArmour(PlayerPedId(), amount or 100)
+end)
+
+RegisterNetEvent('god-dashboard:client:kill', function()
+    SetEntityHealth(PlayerPedId(), 0)
+end)
+
+RegisterNetEvent('god-dashboard:client:freeze', function()
+    local ped = PlayerPedId()
+    local frozen = IsEntityPositionFrozen(ped)
+    FreezeEntityPosition(ped, not frozen)
+end)

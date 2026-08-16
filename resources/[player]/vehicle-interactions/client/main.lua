@@ -24,3 +24,137 @@ RegisterCommand('windows', function(source, args)
         Wrappers.Notify('Usage: /windows [up/down]', 'error')
     end
 end)
+
+RegisterCommand('seat', function(source, args)
+    local ped = PlayerPedId()
+    local veh = GetVehiclePedIsIn(ped, false)
+    if veh == 0 then
+        Wrappers.Notify('Not in a vehicle', 'error')
+        return
+    end
+
+    local seatIdx = tonumber(args[1])
+    if not seatIdx then
+        local seatTable = {
+            [1] = "Driver's Seat",
+            [2] = "Passenger Seat",
+            [3] = "Rear Left Seat",
+            [4] = "Rear Right Seat",
+        }
+        local amountOfSeats = GetVehicleModelNumberOfSeats(GetEntityModel(veh))
+        local items = {}
+        for i = 1, amountOfSeats do
+            local gtaSeat = i - 2
+            local label = seatTable[i] or ("Seat " .. i)
+            local isFree = IsVehicleSeatFree(veh, gtaSeat)
+            local statusStr = isFree and " (Free)" or " (Occupied)"
+            table.insert(items, {
+                title = label .. statusStr,
+                disabled = not isFree,
+                onSelect = function()
+                    if IsVehicleSeatFree(veh, gtaSeat) then
+                        SetPedIntoVehicle(ped, veh, gtaSeat)
+                        Wrappers.Notify('Switched to ' .. label, 'success')
+                    else
+                        Wrappers.Notify('Seat is occupied', 'error')
+                    end
+                end
+            })
+        end
+        Wrappers.ContextMenu({ id = 'vehicle_seats', title = 'Switch Seats', menuItems = items })
+        Wrappers.ShowContextMenu('vehicle_seats')
+        return
+    end
+
+    if seatIdx < 1 or seatIdx > 6 then
+        Wrappers.Notify('Usage: /seat [1-6]', 'error')
+        return
+    end
+
+    -- Convert 1-based index to GTA V seat index (-1 is driver, 0 is passenger, etc.)
+    local gtaSeat = seatIdx - 2
+    if IsVehicleSeatFree(veh, gtaSeat) then
+        SetPedIntoVehicle(ped, veh, gtaSeat)
+        Wrappers.Notify('Switched to seat ' .. seatIdx, 'success')
+    else
+        Wrappers.Notify('Seat is occupied', 'error')
+    end
+end)
+
+RegisterCommand('door', function(source, args)
+    local doorIdx = tonumber(args[1])
+    if not doorIdx or doorIdx < 0 or doorIdx > 5 then
+        local items = {}
+        for i, label in ipairs(Config.VehicleInteractions.doorLabels) do
+            table.insert(items, { title = label, onSelect = function() ToggleDoor(i - 1) end })
+        end
+        Wrappers.ContextMenu({ id = 'vehicle_doors', title = 'Toggle Door', menuItems = items })
+        return
+    end
+    ToggleDoor(doorIdx)
+end)
+
+RegisterCommand('trunk', function()
+    ToggleDoor(5)
+end)
+
+RegisterCommand('frunk', function()
+    ToggleDoor(4)
+end)
+
+function ToggleDoor(idx)
+    local veh = GetVehiclePedIsIn(PlayerPedId(), false)
+    if veh == 0 then
+        Wrappers.Notify('Not in a vehicle', 'error')
+        return
+    end
+    if GetVehicleDoorAngleRatio(veh, idx) > 0.1 then
+        SetVehicleDoorShut(veh, idx, false)
+        Wrappers.Notify(Config.VehicleInteractions.doorLabels[idx + 1] .. ' closed', 'info')
+    else
+        SetVehicleDoorOpen(veh, idx, false, false)
+        Wrappers.Notify(Config.VehicleInteractions.doorLabels[idx + 1] .. ' opened', 'info')
+    end
+end
+
+--- Keybind handling
+Citizen.CreateThread(function()
+    while true do
+        Citizen.Wait(0)
+        local ped = PlayerPedId()
+        vehicle = GetVehiclePedIsIn(ped, false)
+        local wasIn = isInVehicle
+        isInVehicle = vehicle ~= 0
+
+        if isInVehicle and IsThisModelACar(GetEntityModel(vehicle)) then
+            if IsControlJustPressed(0, Config.VehicleInteractions.keybind.toggleWindow) then
+                if GetVehicleWindowTint(vehicle) == 0 then
+                    RollDownWindow(vehicle, 0)
+                    RollDownWindow(vehicle, 1)
+                    RollDownWindow(vehicle, 2)
+                    RollDownWindow(vehicle, 3)
+                    Wrappers.Notify('Windows down', 'info')
+                else
+                    RollUpWindow(vehicle, 0)
+                    RollUpWindow(vehicle, 1)
+                    RollUpWindow(vehicle, 2)
+                    RollUpWindow(vehicle, 3)
+                    Wrappers.Notify('Windows up', 'info')
+                end
+            end
+            if IsControlJustPressed(0, Config.VehicleInteractions.keybind.toggleDoor) then
+                local items = {}
+                for i, label in ipairs(Config.VehicleInteractions.doorLabels) do
+                    table.insert(items, { title = label, onSelect = function() ToggleDoor(i - 1) end })
+                end
+                Wrappers.ContextMenu({ id = 'vehicle_doors_kb', title = 'Toggle Door', menuItems = items })
+            end
+            if IsControlJustPressed(0, Config.VehicleInteractions.keybind.openTrunk) then
+                ToggleDoor(5)
+            end
+            if IsControlJustPressed(0, Config.VehicleInteractions.keybind.openFrunk) then
+                ToggleDoor(4)
+            end
+        end
+    end
+end)

@@ -110,6 +110,7 @@ local function SetupVehicleMenu()
     local Vehicle = GetVehiclePedIsIn(ped) ~= 0 and GetVehiclePedIsIn(ped) or getNearestVeh()
     if Vehicle ~= 0 then
         VehicleMenu.items[#VehicleMenu.items + 1] = Config.VehicleDoors
+        VehicleMenu.items[#VehicleMenu.items + 1] = Config.VehicleWindows
         if Config.EnableExtraMenu then VehicleMenu.items[#VehicleMenu.items + 1] = Config.VehicleExtras end
 
         if not IsVehicleOnAllWheels(Vehicle) then
@@ -123,7 +124,17 @@ local function SetupVehicleMenu()
             }
         end
 
-        if IsPedInAnyVehicle(ped) then
+        if GetVehiclePedIsIn(ped, false) ~= 0 then
+            local gloveIndex = #VehicleMenu.items + 1
+            VehicleMenu.items[gloveIndex] = {
+                id = 'vehicle-glovebox',
+                title = 'Open Glovebox',
+                icon = 'box',
+                type = 'client',
+                event = 'glovebox:client:radialOpen',
+                shouldClose = true
+            }
+
             local seatIndex = #VehicleMenu.items + 1
             VehicleMenu.items[seatIndex] = deepcopy(Config.VehicleSeats)
 
@@ -304,6 +315,40 @@ RegisterNetEvent('qb-radialmenu:client:openDoor', function(data)
     end
 end)
 
+RegisterNetEvent('qb-radialmenu:client:toggleWindow', function(data)
+    local ped = PlayerPedId()
+    local veh = GetVehiclePedIsIn(ped, false)
+    if veh == 0 then
+        veh = getNearestVeh()
+    end
+    if veh ~= 0 then
+        if data.window == 'all_down' then
+            RollDownWindow(veh, 0)
+            RollDownWindow(veh, 1)
+            RollDownWindow(veh, 2)
+            RollDownWindow(veh, 3)
+            exports.ox_lib:notify({ type = 'info', description = 'All windows rolled down' })
+        elseif data.window == 'all_up' then
+            RollUpWindow(veh, 0)
+            RollUpWindow(veh, 1)
+            RollUpWindow(veh, 2)
+            RollUpWindow(veh, 3)
+            exports.ox_lib:notify({ type = 'info', description = 'All windows rolled up' })
+        else
+            local window = tonumber(data.window)
+            if IsVehicleWindowIntact(veh, window) then
+                RollDownWindow(veh, window)
+                exports.ox_lib:notify({ type = 'info', description = 'Window rolled down' })
+            else
+                RollUpWindow(veh, window)
+                exports.ox_lib:notify({ type = 'info', description = 'Window rolled up' })
+            end
+        end
+    else
+        exports.ox_lib:notify({ type = 'error', description = 'No vehicle found' })
+    end
+end)
+
 RegisterNetEvent('qb-radialmenu:client:setExtra', function(data)
     local string = data.id
     local replace = string:gsub('extra', '')
@@ -471,3 +516,43 @@ end)
 
 exports('AddOption', AddOption)
 exports('RemoveOption', RemoveOption)
+
+RegisterNetEvent('police:client:RobPlayer', function()
+    local ped = PlayerPedId()
+    local coords = GetEntityCoords(ped)
+    local closestPlayer, closestPed, closestCoords = lib.getClosestPlayer(coords, 2.5, false)
+
+    if closestPlayer then
+        local sId = GetPlayerServerId(closestPlayer)
+
+        -- Play search/robbing animation
+        RequestAnimDict('mini@repair')
+        while not HasAnimDictLoaded('mini@repair') do Wait(10) end
+
+        TaskPlayAnim(ped, 'mini@repair', 'fixing_a_ped', 8.0, -8.0, -1, 1, 0, false, false, false)
+
+        local success = exports.ox_lib:progressBar({
+            duration = 5000,
+            label = 'Robbing player...',
+            useWhileDead = false,
+            canCancel = true,
+            disable = {
+                move = true,
+                car = true,
+                mouse = false,
+                combat = true,
+            },
+        })
+
+        StopAnimTask(ped, 'mini@repair', 'fixing_a_ped', 1.0)
+
+        if success then
+            -- Open the specific nearby player's inventory securely via server transition
+            TriggerServerEvent('map-builder:server:robPlayer', sId)
+        else
+            exports.ox_lib:notify({ type = 'error', description = 'Robbery canceled' })
+        end
+    else
+        exports.ox_lib:notify({ type = 'error', description = 'No players nearby to rob' })
+    end
+end)

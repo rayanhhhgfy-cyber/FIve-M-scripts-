@@ -64,10 +64,6 @@
 /* ── Phone Frame ── */
 .phone {
     width: 393px; height: 852px;
-    background: #000;
-    border-radius: 55px;
-    padding: 12px;
-    box-shadow: 0 0 80px rgba(0,0,0,0.5), 0 0 0 2px #333;
     background: #111111;
     border-radius: 60px;
     padding: 6px; /* Ultra-thin Pro Max borders! */
@@ -76,7 +72,6 @@
     overflow: hidden;
     display: none;
 }
-=======
 
 /* Premium iPhone 17 Pro Max Side Buttons */
 .phone::before {
@@ -117,7 +112,6 @@
     box-shadow: inset 0 0 2px rgba(0,0,0,0.5);
 }
 
->>>>>>> origin/Audited-w
 .phone-frame-glow {
     position: absolute;
     inset: 0;
@@ -134,8 +128,6 @@
 
 .screen {
     width: 100%; height: 100%;
-<<<<<<< HEAD
-    border-radius: 44px;
     border-radius: 54px; /* Perfectly fits the premium frame! */
     background: var(--primary-900);
     position: relative;
@@ -146,7 +138,6 @@
 .wallpaper {
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: linear-gradient(180deg, #0d0d2b 0%, #1a1a3e 40%, #0f0f23 100%);
     background: linear-gradient(180deg, #13131a 0%, #201e2e 50%, #0e0d16 100%); /* High-end iOS gradient! */
     z-index: 0;
     transition: background 1s ease;
@@ -158,8 +149,6 @@
     top: 10px;
     left: 50%;
     transform: translateX(-50%);
-    width: 126px;
-    height: 36px;
     width: 110px; /* Thinner pill just like iPhone 17! */
     height: 28px;
     background: #000;
@@ -168,10 +157,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 16px;
-    font-size: 12px;
-    font-weight: 600;
-    color: #fff;
     padding: 0 12px;
     font-size: 11px;
     font-weight: 600;

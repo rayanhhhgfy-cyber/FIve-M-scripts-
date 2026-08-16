@@ -1,3 +1,11 @@
+RegisterNetEvent('god-dashboard:checkAndOpen', function()
+    local src = source
+    if isAdmin(src) then
+        TriggerClientEvent('god-dashboard:open', src)
+    else
+        TriggerClientEvent('ox_lib:notify', src, { type = 'error', description = 'Unauthorized' })
+    end
+end)
 local QBox = exports['qbx_core']:GetCoreObject()
 
 local function isOwner(identifier)
@@ -35,15 +43,6 @@ local function logAdminAction(src, action, target)
     MySQL.insert('INSERT INTO admin_logs (admin_cid, action, target) VALUES (?, ?, ?)', { adminCid, action, targetCid })
 end
 
-RegisterNetEvent('god-dashboard:checkAndOpen', function()
-    local src = source
-    if isAdmin(src) then
-        TriggerClientEvent('god-dashboard:open', src)
-    else
-        TriggerClientEvent('ox_lib:notify', src, { type = 'error', description = 'Unauthorized' })
-    end
-end)
-
 AddEventHandler('playerConnecting', function(name, setKickReason, deferrals)
     local src = source
     local identifiers = GetPlayerIdentifiers(src)
@@ -76,14 +75,29 @@ end)
 QBox.Functions.CreateCallback('god-dashboard:getBunkers', function(source, cb)
     if not isAdmin(source) then cb({}) return end
     local bunkers = (GetResourceState('bunker-builder') == 'started' and exports['bunker-builder']:GetAllBunkers() or {}) or {}
-    cb(bunkers)
+    local list = {}
+    for id, b in pairs(bunkers) do
+        table.insert(list, {
+            id = id,
+            label = b.label,
+            passcode = b.passcode or '2193',
+            locked = b.locked ~= false,
+            cidBypass = b.cidBypass ~= false,
+            interiorType = b.interiorType or 'bunker_meth_lab',
+            interiorName = b.interiorName,
+            entrance = { x = b.entrance.coords.x, y = b.entrance.coords.y, z = b.entrance.coords.z },
+            entranceHeading = b.entrance.heading,
+            interiorCoords = { x = b.interior.coords.x, y = b.interior.coords.y, z = b.interior.coords.z },
+        })
+    end
+    cb(list)
 end)
 
 QBox.Functions.CreateCallback('god-dashboard:getBunkerCoords', function(source, cb, id)
     if not isAdmin(source) then cb(nil) return end
     local bunker = (GetResourceState('bunker-builder') == 'started' and exports['bunker-builder']:GetBunker(id) or nil)
-    if bunker then
-        cb(bunker.coords)
+    if bunker and bunker.entrance then
+        cb({ x = bunker.entrance.coords.x, y = bunker.entrance.coords.y, z = bunker.entrance.coords.z })
     else
         cb(nil)
     end
@@ -392,33 +406,30 @@ RegisterNetEvent('god-dashboard:slapPlayer', function(target)
     local src = source
     if not isAdmin(src) then return end
     logAdminAction(src, 'slapPlayer', target)
-    local ped = GetPlayerPed(target)
-    if not ped or ped == 0 then return end
-    local coords = GetEntityCoords(ped)
-    local rng = math.random(-20, 20) / 10
-    SetEntityCoords(ped, coords.x + rng, coords.y + rng, coords.z + 3.0, false, false, false, false)
-    SetEntityVelocity(ped, rng, rng, 5.0)
-    TriggerClientEvent('ox_lib:notify', target, { type = 'error', description = 'You got slapped by an admin!' })
-    TriggerClientEvent('ox_lib:notify', src, { type = 'success', description = 'Slapped player ' .. target })
+    local targetSrc = tonumber(target)
+    if targetSrc then
+        TriggerClientEvent('god-dashboard:client:slap', targetSrc)
+        TriggerClientEvent('ox_lib:notify', src, { type = 'success', description = 'Slapped player ID ' .. targetSrc })
+    end
 end)
 
 RegisterNetEvent('god-dashboard:healPlayer', function(target)
     local src = source
     if not isAdmin(src) then return end
-    logAdminAction(src, 'healPlayer', target or src)
-    TriggerClientEvent('wasabi-ambulance:client:revive', target or src)
-    TriggerClientEvent('ox_lib:notify', src, { type = 'success', description = 'Healed player ' .. (target or src) })
+    logAdminAction(src, 'healPlayer', target)
+    local targetSrc = tonumber(target) or src
+    TriggerClientEvent('wasabi-ambulance:client:heal', targetSrc)
+    TriggerClientEvent('ox_lib:notify', src, { type = 'success', description = 'Healed player ID ' .. targetSrc })
 end)
 
 RegisterNetEvent('god-dashboard:giveArmor', function(target, amount)
     local src = source
     if not isAdmin(src) then return end
-    logAdminAction(src, 'giveArmor', tostring(target or src) .. ' (' .. tostring(amount) .. ')')
-    local ped = GetPlayerPed(target or src)
-    if ped and ped ~= 0 then
-        SetPedArmour(ped, amount or 100)
-    end
-    TriggerClientEvent('ox_lib:notify', src, { type = 'success', description = 'Set armor to ' .. (amount or 100) .. ' for ID ' .. (target or src) })
+    logAdminAction(src, 'giveArmor', tostring(target) .. ':' .. tostring(amount))
+    local targetSrc = tonumber(target) or src
+    local armor = tonumber(amount) or 100
+    TriggerClientEvent('god-dashboard:client:setArmor', targetSrc, armor)
+    TriggerClientEvent('ox_lib:notify', src, { type = 'success', description = 'Gave armor to ID ' .. targetSrc })
 end)
 
 RegisterNetEvent('god-dashboard:warnPlayer', function(target, reason)
@@ -542,25 +553,20 @@ RegisterNetEvent('god-dashboard:killAll', function()
     local src = source
     if not isAdmin(src) then return end
     logAdminAction(src, 'killAll', 'all')
-    local players = QBox.Functions.GetPlayers()
-    for _, s in ipairs(players) do
-        local ped = GetPlayerPed(s)
-        if ped and ped ~= 0 then
-            SetEntityHealth(ped, 0)
-        end
+    for _, pSrc in ipairs(GetPlayers()) do
+        TriggerClientEvent('god-dashboard:client:kill', tonumber(pSrc))
     end
     TriggerClientEvent('ox_lib:notify', src, { type = 'success', description = 'Killed all players' })
 end)
 
-RegisterNetEvent('god-dashboard:freezeAll', function(state)
+RegisterNetEvent('god-dashboard:freezeAll', function()
     local src = source
     if not isAdmin(src) then return end
-    logAdminAction(src, 'freezeAll', tostring(state))
-    local players = QBox.Functions.GetPlayers()
-    for _, s in ipairs(players) do
-        TriggerClientEvent('admin:toggleFreeze', s, state)
+    logAdminAction(src, 'freezeAll', 'all')
+    for _, pSrc in ipairs(GetPlayers()) do
+        TriggerClientEvent('god-dashboard:client:freeze', tonumber(pSrc))
     end
-    TriggerClientEvent('ox_lib:notify', src, { type = 'success', description = (state and 'Frozen' or 'Unfrozen') .. ' all players' })
+    TriggerClientEvent('ox_lib:notify', src, { type = 'success', description = 'Toggled freeze for all players' })
 end)
 
 RegisterNetEvent('god-dashboard:teleportAllToMe', function()

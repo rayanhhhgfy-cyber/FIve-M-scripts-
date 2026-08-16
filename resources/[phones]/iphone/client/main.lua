@@ -239,7 +239,7 @@ end)
 
 --- Camera / Video
 RegisterNUICallback('takePhoto', function(_, cb)
-    exports['screenshot']:RequestScreenshot(function(data)
+    exports['screenshot-basic']:RequestScreenshot(function(data)
         if data then
             TriggerServerEvent('phone:server:savePhoto', data)
             Wrappers.Notify('Photo captured', 'success')
@@ -249,7 +249,7 @@ RegisterNUICallback('takePhoto', function(_, cb)
 end)
 
 RegisterNUICallback('captureFrame', function(_, cb)
-    exports['screenshot']:RequestScreenshot(function(data)
+    exports['screenshot-basic']:RequestScreenshot(function(data)
         cb({ data = data or '' })
     end, { encoding = 'png' })
 end)

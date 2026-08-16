@@ -1,3 +1,13 @@
+local function GenerateSerial()
+    local chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+    local serial = ''
+    for i = 1, 8 do
+        local rand = math.random(1, #chars)
+        serial = serial .. string.sub(chars, rand, rand)
+    end
+    return serial
+end
+
 local QBox = exports['qbx_core']:GetCoreObject()
 local evidenceItems = {}
 local cellOccupants = {}
@@ -34,7 +44,7 @@ RegisterNetEvent('davis:server:removeWeapon', function(weaponModel)
     local rank = player.PlayerData.job.grade.level or 0
     for _, weapon in ipairs(Config.DavisStation.Zones.Armory.weapons) do
         if weapon.model == weaponModel and rank >= weapon.rank then
-            local serial = exports['resources']:GenerateSerial()
+            local serial = GenerateSerial()
             MySQL.insert('INSERT INTO weapon_serials (citizenid, serial, weapon_model, issued_by) VALUES (?, ?, ?, ?)',
                 { player.PlayerData.citizenid, serial, weaponModel, player.PlayerData.citizenid })
             player.Functions.AddItem(weaponModel, 1, nil, serial)

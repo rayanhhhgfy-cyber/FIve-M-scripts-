@@ -1,514 +1,573 @@
-This project is a fully custom-built FiveM Roleplay server developed as one integrated ecosystem rather than a collection of unrelated resources. Every system has been organized to work together through a centralized configuration, shared libraries, and a unified database structure.
-
-The project includes all source code, custom resources, MLOs, vehicle packs, UI systems, documentation, and database files required to deploy and operate the server.
-
-What the Project Includes
-Core Framework
-
-The server is built around a customized QBox/QBX framework with numerous custom systems integrated throughout the project.
-
-Core functionality includes:
-
-Character & identity management
-Multi-character support
-Player spawning
-Voice integration
-Inventory
-Banking
-Vehicle ownership
-Housing
-Job framework
-Permissions
-Queue system
-Weather synchronization
-Server optimization
-Shared utility libraries
-
-All resources communicate through shared interfaces, making the server consistent and modular.
-
-Server Configuration
-
-The server starts from:
-
-resources/server.cfg
-
-This file controls the entire startup process and loads every resource in the correct order, including:
-
-Core framework
-Database
-Shared libraries
-Player systems
-Economy
-Police
-CID
-Criminal gameplay
-EMS
-Business systems
-Housing
-Prison
-Logistics
-Phone system
-MLOs
-Vehicle packs
-Custom UI
-
-It also contains server settings, license placeholders, Steam API configuration, and resource dependency management.
-
-Database
-
-The project includes a complete master SQL database.
-
-resources/[shared]/database/master_schema.sql
-
-The schema contains approximately 80+ interconnected database tables used to persist nearly every gameplay system.
-
-Examples include:
-
-Player Data
-Characters
-Identity
-Jobs
-Vehicles
-Inventory
-Housing
-Businesses
-Phone System
-Contacts
-Messages
-Photos
-Videos
-Wallet
-Calendar
-Notes
-Social media
-Voice mail
-Settings
-Apps
-Police & CID
-BOLOs
-Warrants
-Criminal records
-Evidence
-DNA
-Fingerprints
-Cases
-Surveillance
-License Plate Reader hits
-Panic alerts
-Emergency calls
-Economy
-Banking
-Credit scores
-Loans
-Investments
-Payroll
-Taxes
-Businesses
-Fleets
-Criminal Systems
-Heists
-Drug labs
-Smuggling
-Underground operations
-Black market
-Housing
-Furniture
-Garages
-Guests
-Alarm systems
-Administration
-Bans
-Owner permissions
-Door locks
-Logs
-Admin zones
-
-Everything players do is stored persistently within the database.
-
-Documentation
-
-The repository includes extensive documentation.
-
-README-SETUP.md
-
-A complete setup guide covering:
-
-Server installation
-Resource configuration
-SQL import
-Inventory configuration
-Admin ownership
-Commands
-Troubleshooting
-SYSTEM_REFERENCE.md
-
-A 1,100+ line technical reference explaining:
-
-Server architecture
-Custom systems
-Events
-Callbacks
-Resource interactions
-Configuration
-Database structure
-Internal workflows
-
-This documentation allows another developer or server owner to understand and maintain the project.
-
-Resource Categories
-
-The server is organized into dedicated resource groups.
-
-Core
-
-Player framework, spawning, identity, voice, inventory, settings, optimization.
-
-Player
-
-HUD, radial menu, emotes, radio, appearance, key system, garages, vehicle interaction.
-
-Admin
-
-God Menu, owner management, inventory viewer, zone creator, object placement, dashboard, bunker builder.
-
-Police
-
-Traffic stops, MDT, bodycam, radar gun, K9, DNA, BOLOs, panic button, spike strips, tasers, road deployables, lockers, police garages.
-
-CID (Criminal Investigation Division)
-
-A complete detective system including:
-
-Case management
-Evidence processing
-Surveillance
-Wiretaps
-Crypto tracking
-Forensics
-Undercover vehicles
-CID terminal
-Drone surveillance
-Investigation tools
-Criminal
-
-Large-scale criminal gameplay including:
-
-Bank robberies
-Yacht heists
-Bobcat
-Vangelico
-Art gallery
-Drug manufacturing
-Meth lab empire
-Weapon manufacturing
-Money laundering
-Gang systems
-Turf wars
-Chop shops
-Underground networks
-Civilian
-
-Civilian jobs and businesses including:
-
-News
-Taxi
-Delivery
-Mining
-Lumberjack
-Winery
-Bus driver
-Garbage collection
-Electrician
-Vehicle dealership
-Court system
-EMS
-
-Medical gameplay including:
-
-Trauma
-Triage
-Defibrillators
-Stretchers
-X-Ray system
-Ambulance framework
-Morgue
-Pharmacy
-Economy & Business
-
-Advanced financial systems including:
-
-Banking
-Loans
-Credit scores
-Investments
-Payroll
-Vehicle dealerships
-Fleet management
-Housing
-
-Complete property ownership with:
-
-Furniture placement
-Garages
-Guests
-Alarm systems
-Prison
-Sentencing
-Prison jobs
-Contraband
-Escape mechanics
-Phones
-
-A fully custom smartphone featuring:
-
-Calls
-Messages
-Contacts
-Camera
-Wallet
-Calendar
-Notes
-Social media
-Black market
-Vehicle management
-GPS
-Hacking
-Delivery services
-Custom MLOs
-
-The server includes multiple custom interiors, including:
-
-Mission Row Police Department (MRPD)
-Pillbox Hospital
-Sandy Medical Center
-FIB Headquarters
-Luxury Autos Dealership
-Underground Bunker
-Gang Tunnel
-Border Checkpoints
-YouTool Store
-
-All required map assets are included.
-
-Vehicle Content
-
-The project includes custom vehicle packs such as:
-
-Police motorcycles
-Luxury vehicles
-Bevo G-Wagon
-PITD vehicle pack (50+ custom vehicles)
-Additional addon vehicles ready for installation
-UI & NUI
-
-The server contains numerous custom web-based interfaces, including:
-
-Modern HUD
-Phone UI
-Admin panels
-Radial menu
-Loading screen
-Lockpick minigames
-Banking interface
-Inventory
-Vehicle management
-Reports
-Garage UI
-Rules menu
-
-Most interfaces are built using modern web technologies (Vue, Quasar, HTML, CSS, and JavaScript).
-
-Additional Assets
-
-The repository also includes:
-
-Additional MLO packs ready for installation
-Additional vehicle packs
-Original QBCore resources used during framework porting
-Disabled legacy resources retained for compatibility/reference
-Lua syntax validation tools
-Development configuration files
-What the Customer Receives
-Complete FiveM server source code
-All custom resources
-Full server configuration
-Complete SQL database
-All MLOs
-All vehicle packs
-Phone system
-Economy system
-Police & CID systems
-Criminal gameplay
-Housing
-Prison
-EMS
-Admin tools
-UI/NUI assets
-Documentation
-Setup guides
-Development utilities  if the customer asks for more info give him this ادا العميل طلب معلومات كمان اعطيه هاد النص ROOT-LEVEL FILES
-At the root of the project folder there is a .luarc.json file which configures the Lua language server for VS Code so it understands FiveM-specific functions. There is a check-syntax.js script that uses Node.js to scan all Lua files for syntax errors using a package called luaparse. The package.json and package-lock.json are just for that Node dependency. There is a README-SETUP.md file that is a 295-line guide for setting up the entire server from scratch with all commands, configurations, and troubleshooting. There is also an empty folder called -p which is just a placeholder.
-Inside the docs folder there are two files. server-ideas.md contains 20 ideas for future features like dynamic weather, advanced housing, drug manufacturing, a court system, fishing, hunting, gang turf wars, scuba diving, food trucks, a casino, and more. SYSTEM_REFERENCE.md is a massive 1,135-line technical document that covers the entire server architecture, every server event and callback, the full database schema, configuration options, and troubleshooting guides.
-The node_modules folder only contains the luaparse package which is the Lua parser used by the syntax checker.
-THE MAIN RESOURCES FOLDER
-The heart of the project is the resources folder. It contains the server.cfg file which is the main FiveM server configuration. It defines every single resource that should start when the server boots up, in the correct order starting with core systems, then shared systems, player systems, economy, police, admin, criminal, MLOs, vehicles, CID, phones, immersion, emergency, EMS, business, entertainment, housing, jobs, logistics, prison, and polish resources. It also sets the server to allow up to 64 players, defines the hostname, and has placeholder spots for a Steam API key and a license key. It targets game build 2802.
-ADMIN RESOURCES - 6 Total
-The admin-commander resource gives admins quick commands like /addowner, /removeowner, /listowners, /giveitem, and /givecar. Its configuration file defines which groups are admin, stores owner identifiers using Steam Hex codes, has a quick list of commonly given items and vehicles including custom models like the Bevo G-Wagon and the 1200RT police bike, and has teleport preset locations.
-The admin-zones resource allows creating interactive zones in the world that can serve as armories, shops, storage areas, wardrobes, duty zones, or garages. The configuration lets you set the default radius for zones, define different zone types with their own icons, configure armor and uniforms, and set default police vehicles.
-The bunker-builder resource is a custom tool that lets admins place bunker entrances in the world. You can choose between small, medium, or large rock presets for the entrance, select from seven different interior types including planning rooms, bunkers, and hangar interiors, set a passcode for access, and configure vehicle and helicopter spawn points. Each admin can create up to ten bunkers.
-The god-dashboard resource is the consolidated single active admin panel for the server. It features a modern NUI interface with tabs for Bunkers (teleport, duplicate, delete), Objects (place-anywhere preview & placement), Doors (passcode door creation & management), Vehicles (spawner with 8 categories & preview), Players (noclip flight, spectate, slap, heal, give money, give item, set job, give car to garage, kick, freeze, bring, teleport), Economy (global money/item distribution, spawn item via ox_inventory, job assignment, vehicle transfer), Server (weather, time, announcement, revive, clear area), and Commands (command browser). Full state-changing action auditing is logged directly to the admin_logs table.
-Note: The original god-menu code is preserved in a disabled state at resources/_disabled-overlaps/god-menu for reference and is not loaded by the server.
-The place-anywhere resource lets admins place any object or model in the game world with full control over position and rotation. Everything placed is saved to the database so it persists across server restarts.
-
-### Audit & Fix Pass (Audit Branch Pass Updates)
-- **Phase 1-4 Admin Panel Consolidation:** Resolved revive event to `wasabi-ambulance:client:revive`. Ported all `god-menu` features into `god-dashboard` with `exports.ox_inventory` calls and added Players & Economy tabs. Wired `logAdminAction` across all 41 state-changing server handlers. Disabled legacy `god-menu` into `resources/_disabled-overlaps/god-menu`.
-- **Phase 5 Overlap Resolution:**
-  - *Housing (superseded — see Real Merge entry below):* An earlier pass kept `advanced-housing` and `ps-realtor`. This was reversed during the final master merge — see the entry below for the actual final decision.
-  - *Mechanics:* Kept `advanced-mechanics` and `mechanic-laptop`. Moved duplicate `mechanics` to `resources/_disabled-overlaps/`.
-  - *Taxi:* Kept `taxi-system`. Moved duplicate `civilian/taxi` to `resources/_disabled-overlaps/`.
-  - *Admin:* Kept `god-dashboard` and `admin-commander`. Moved `admin-menu` to `resources/_disabled-overlaps/`.
-  - *Loading Screen:* Kept `loading-screen-new`. Moved duplicate `loading-screen` to `resources/_disabled-overlaps/`.
-- **Phase 6 Ambient World Events System:** Added `resources/[immersion]/ambient-events` with unscripted random incidents (armed robbery, crashed truck, gas leak, prison transport), `dispatch-system` alerts, money payouts, database logging (`ambient_events`), and god-dashboard controls.
-- **Phase 7 Player-Owned Shops:** Extended `resources/[polish]/shops` with `shops` schema table in `master_schema.sql`, interactive `ox_target` ownership purchasing, automated bank profit payouts, `bank_transactions` logging, and iPhone Dynamic Island notifications (`iphone:client:shopNotification`).
-- **Phase 8 Job Audit:** Verified all civilian, job, entertainment, and logistics jobs for real payouts, objective loops, zero stubs, framework integration, and progression.
-- **Phase 9 iPhone Jobs App:** Added "Jobs Center" app to `resources/[phones]/iphone` enabling real-time employment status checks and direct job applications.
-- **Phase 10 iPhone Voice Memos App:** Added "Voice Memos" app to `resources/[phones]/iphone` with iOS waveform UI, `pma-voice` proximity fallback, and direct evidence export to `evidence-lab` & `interrogation-room`.
-The place-anywhere resource lets admins place any object or model in the game world with full control over position and rotation. Everything placed is saved to the database so it persists across server restarts.
-CID RESOURCES - 19 Total
-CID stands for Criminal Investigation Division and this is a complete detective system. The anonymity-bridge resource provides tools for anonymous communication. The camera-drone resource gives detectives a drone for aerial surveillance. The cid-garage is where CID vehicles are stored. The cid-hq is the headquarters location for CID operations. The cid-laptop is a portable computer for CID officers. The cid-terminal is a computer system with case management, warrant applications, and BOLO postings. The cid-weapons resource controls weapon authorization for CID personnel. The covert-entry resource provides lockpicking and alarm bypass tools for covert operations. The crypto-tracking resource lets detectives track cryptocurrency transactions. The evidence-lab is where evidence is analyzed. The forensic-kit resource provides tools for collecting evidence at crime scenes. The interrogation-room resource manages interrogation sessions with suspects. The notebook resource gives detectives an in-game notebook for taking notes. The operations-center is a mission management hub for CID. The plate-scanner resource provides automatic license plate reading technology. The strobes resource adds emergency strobe lights to vehicles. The surveillance-bugs resource lets officers place audio and video bugs that can be tracked. The undercover-vehicles resource gives CID unmarked vehicles where they can swap their identity with the J and K keys and access the trunk with the H key. The wiretaps resource allows legal phone tapping.
-CIVILIAN RESOURCES - 16 Total
-The bus resource is a bus driver job where players drive routes and pick up NPCs. The city-hall resource handles interactions at city hall like getting IDs or marriage licenses. The court-system is a full legal court system for trials. The delivery resource has various delivery driver jobs. The economy-core handles core economy functions. The electrician is a job where players do electrical work. The fuel resource handles the gas station fueling system. The garbage resource is a sanitation worker job. The hotdog-stand resource lets players run a hotdog vending business. The legal-system is for lawyer players to practice law. The lumberjack job lets players cut down trees and process wood. The mining job lets players mine for materials. The news resource lets players work as news reporters. The taxi resource is a taxi driving job. The vehicle-shop is where players can buy cars. The winery resource lets players run a winemaking business.
-CORE RESOURCES - 26 Total
-The afk-kicker automatically kicks idle players after a set time. The alert-system sends server-wide alerts for important events. The character-system handles character creation and management. The chat-commands handles various chat commands. The discord-logs sends logs to Discord via webhooks. The emote-menu provides access to all game emotes. The entity-cleaner cleans up abandoned vehicles and objects to keep the server running smoothly. The identity-core handles player identity data. The multi-character system lets players have multiple characters on one account. The oxlib-init initializes the ox_lib framework. The oxmysql-config sets up the database connection. The oxtarget-init sets up the ox_target interaction system. The ped-blacklist blocks specific ped models from being used to prevent crashes or exploits. The phone-app is the core framework for the phone system. The pma-voice-cfg configures the voice communication system. The polyzone-init initializes the PolyZone system for area detection. The queue-system manages a queue when the server is full. The report-system lets players report issues to staff. The resource-optimizer improves server performance by optimizing resource usage. The settings-menu gives players an in-game settings menu. The spawn-selector lets players choose where to spawn when they join, which was ported from the qb-spawn resource. The txadmin-hooks integrates with the TXAdmin server management tool. The voice-communications sets up voice chat. The weathersync synchronizes weather across all players. The welcome-system shows welcome messages to new players. The whitelist-system manages a whitelist for server access.
-CRIMINAL RESOURCES - 23 Total
-The art-heist is a heist at the art gallery where players steal paintings. The atm-robbery lets players rob ATMs for cash. The bank-heist is a full bank robbery with multiple phases. The bobcat-heist is a heist at Bobcat Security. The card-robbery is a card cloning and robbery system. The chop-shop is where stolen vehicles can be dismantled for parts. The drug-dealing is a street-level drug dealing system. The drug-manufacturing is a drug production operation. The gang-laptop is a laptop for gang operations and communication. The gangs resource is the main gang system with gang creation and management. The graffiti resource lets players tag gang graffiti around the city. The house-robbery lets players break into and rob houses. The jewelry-fence is where stolen jewelry can be sold. The meth-lab-empire is a large-scale methamphetamine production operation. The money-laundry lets criminals clean their dirty money. The multi-heists resource is a system that supports multiple different heist types. The store-robbery lets players rob convenience stores. The train-heist is a robbery of a moving train. The turfs resource handles gang territory wars and control. The underground-network is a secret criminal network system. The vangelico-heist is a robbery of the Vangelico jewelry store. The weapon-manufacturing lets players manufacture illegal weapons. The yacht-heist is a robbery of a luxury yacht.
-ECONOMY RESOURCES - 5 Total
-The atm-card resource adds ATM cards that players can use at bank machines. The banking-plus resource was an advanced banking system with credit scores, loans, and investments, but duplicated Renewed-Banking and is now disabled (moved to resources/_disabled-overlaps/) — Renewed-Banking is the active banking system. The payroll resource handles automatic paychecks for jobs. The premium-dealership is a high-end vehicle dealership but it is currently disabled and only used for admin car grants. The vehicle-dealership is the standard car dealership which is also currently disabled.
-EMERGENCY RESOURCES - 2 Total
-The advanced-alerts resource sends emergency alerts to players like weather warnings and AMBER alerts. The dispatch-system is a dispatch center for handling emergency calls.
-EMS RESOURCES - 12 Total
-EMS stands for Emergency Medical Services. The advanced-trauma resource handles serious injuries that require advanced treatment. The advanced-triage resource helps EMS workers prioritize patients in mass casualty events. The ems-defibrillator resource adds a defibrillator item that can restart a stopped heart. The morgue-extension adds morgue functionality and autopsy capabilities. The pharmacy-npc adds a pharmacy NPC where players can buy medical supplies. The pillbox-mlo integrates the Pillbox hospital map into the server. The qb-medicalbag adds a medical bag item with supplies. The rcore-medical is a medical treatment framework. The stretcher-system lets EMS deploy and use stretchers to carry patients. The wasabi-ambulance adds ambulance vehicles and ambulance gameplay. The wasabi-crutches adds crutches for injured players. The xray-system lets doctors take and view x-rays of patients.
-ENTERTAINMENT RESOURCES - 12 Total
-The arcade resource adds playable arcade machines. The bowling resource adds a bowling alley mini-game. The casino resource adds a full casino with blackjack, poker, roulette, and slot machines. The coffee-shop resource lets players work at a coffee shop. The diving resource lets players go scuba diving. The fishing resource lets players fish at various spots. The hunting resource lets players hunt animals. The mini-games resource has various small games to play. The movie-theater resource adds a cinema where players can watch videos. The pizza-this resource is a pizza delivery job. The racing resource is a street racing system with races and competitions. The restaurant-jobs resource lets players work at restaurants.
-HOUSING RESOURCES - 0 Total (category folder empty after overlap resolution)
-The advanced-housing resource was a complete housing system (buy properties, furniture, guest lists, alarms, garage storage) but duplicated ps-housing's functionality and is now disabled (moved to resources/_disabled-overlaps/). The active housing system is ps-housing + ps-realtor under [player] — see the Player Resources section below.
-IMMERSION RESOURCES - 10 Total
-The dp-emotes resource gives players access to hundreds of animations and emotes. The gym-system lets players work out at gyms to improve their character's fitness. The InteractSound resource adds interactive 3D sound effects. The player-status resource tracks hunger, thirst, and stress levels. The ragdoll-system lets players ragdoll and be affected by physics. The rcore-radiocar adds an in-car radio system. The seatbelt-system adds seatbelt mechanics where you can be ejected from a vehicle in a crash if not wearing one. The stress-engine adds a stress mechanic that affects gameplay. The vehicle-physics resource enhances the default vehicle physics for more realism. The wasabi-boombox adds a portable boombox that players can carry around and play music from.
-JOBS RESOURCES - 2 Total
-The civilian-jobs resource has various miscellaneous civilian jobs. The taxi-system is a dedicated taxi system with customer ratings and fare management.
-LOGISTICS RESOURCES - 6 Total
-The advanced-tow resource is a towing system for towing vehicles. The barricades resource lets players place deployable barricades. The flatbed resource adds a flatbed truck for transporting vehicles. The fleet-management resource helps manage fleets of vehicles for businesses or the city. The impound resource is a vehicle impound system where towed or abandoned vehicles are stored. The tow-job resource is a dedicated tow truck driver job.
-MLO RESOURCES - 9 Total
-MLO stands for Map Loadable Object which is a custom interior or building. The borders MLO adds border checkpoint buildings at the edges of the map with grant files and stream files for the model and occlusion data. The bunker MLO adds an underground bunker with addon props, the building model, and occlusion data. The gang-tunnel MLO adds an underground gang hideout tunnel system. The gigz-youtool MLO adds a YouTool hardware store building. The luxury-autos MLO adds a luxury car dealership showroom with audio occlusion, spawn vehicle locations, and stream files including custom ytyp definitions. The mrpd MLO is the Mission Row Police Department and is split into two parts. The mrpd-mapdata part adds lighting and map data files like ymap and ymt files. The mrpd-replacement part replaces the default MRPD building with a custom version and includes a 2D logo folder, data files, and a massive stream folder with LOC files for lighting and occlusion data in ycd and ydr format, plus an UN folder that contains GTA data files and dozens of ybn, ydr, ymap, ynd, ynv, ytd, and ytyp files for the full replacement building. The mt3d-fib MLO adds the FIB building with a stream folder. The pillbox-hospital MLO adds the Pillbox Hill hospital with audio occlusion and stream files. The sandy-medical MLO adds a medical clinic in Sandy Shores with stream files.
-PHONES RESOURCES - 6 Total
-The blackmarket resource adds a black market app on the phone. The criminal-laptop resource gives criminals a laptop for illegal activities. The hacking resource adds hacking mini-games for various criminal activities. The iphone resource is the main phone system and is a full iPhone clone with a web-based interface. It includes contacts, messages, a camera, TikTok, Twitter, a wallet, a calendar, notes, call history, voicemail, settings, a restaurant and delivery ordering system, a gigs app, and a vehicles app. The locator resource adds a phone locator app for finding other players. The vpn resource adds a VPN system for anonymous communication.
-PLAYER RESOURCES - 23 Total
-The anim-menu resource gives players an animation menu with seven categories. There are six dances, ten gestures, eight idle animations, six expressions, five greetings, twelve actions, and twenty walk styles. Everything is integrated with the radial menu.
-The custom-pause resource replaces the default GTA pause menu with a custom one.
-The drag-system resource lets police drag cuffed players and EMS drag downed players. You can also force players into and out of vehicles.
-The hud resource is a modern heads-up display that was ported from the qb-hud resource. It uses Vue3 and Quasar for the user interface. It displays circular progress bars for health, armor, hunger, thirst, stress, and oxygen levels. It also has a speedometer, a compass, street name display, a minimap toggle button, stress visual effects, and a cinematic mode that hides the HUD. The files include the HTML web interface, locale files for different languages, stream files for the minimap graphics, and GitHub workflow files.
-The illenium-appearance resource is a character appearance system where players can customize their look.
-The item-actions resource handles using various items like handcuffs, the bodycam, a police ram, and binoculars.
-The notepad resource gives players an in-game notepad for taking notes during roleplay, useful for detectives.
-The outfit-manager resource lets players save and load outfits.
-The ox-context resource integrates the ox_lib context menu system.
-The ox-inventory-cfg resource contains the configuration for the inventory system.
-The ox_inventory resource is the full inventory system. It has data files for item definitions, over thirty locale files for different languages, modules for bridging with different frameworks like ESX, ND, and QBox, modules for crafting, hooks, the interface, inventory management, item behavior, MySQL queries, the PEFCL economy system, shops, utility functions, and weapon handling. It also has a setup folder and a web build with compiled assets and images.
-The property-system resource handled property ownership for players but duplicated ps-housing and is now disabled (moved to resources/_disabled-overlaps/).
-The ps-housing resource is the active player housing system (kept over advanced-housing and property-system during overlap resolution).
-The ps-realtor resource is the active real estate front-end where players can buy and sell properties through ps-housing.
-The radialmenu resource is an SVG-based radial menu that was ported from the qb-radialmenu. It gives players access to vehicle controls like doors, extra vehicle components, seat position, engine toggle, and trunk access. It also has clothing options for hat, glasses, mask, top, pants, and shoes. It supports a trunk system for storing items in vehicle trunks, a stretcher deployment system for EMS, and job-specific interactions. The files include the HTML interface with CSS and JavaScript, client and server Lua scripts, stream files, and GitHub configuration files.
-The radio resource is a radio communication system that was ported from the qb-radio. It has a channel input where players type the channel number, volume controls, channel cycling buttons, job-restricted channels for police and EMS, integration with the pma-voice system, and a handheld radio animation. The files include the HTML interface with CSS styling, images, and JavaScript, locale files, and GitHub workflows.
-The Renewed-Banking resource is a full banking system where players can manage their money.
-The Renewed-Garages resource is a vehicle garage system where players can store and retrieve their vehicles.
-The repair-kit resource adds a vehicle repair kit item that players can use to fix their cars.
-The tuning-garage resource lets players customize and tune their vehicles with performance parts and visual modifications.
-The vehicle-interactions resource adds interaction menus for vehicles.
-The vehicle-keys resource is a complete vehicle key system. It has a lockpick mini-game with a rotating needle and a sweet spot that you need to hit. Players can lock and unlock vehicles, transfer keys between players, use the /givekey command, and access everything through the radial menu. The files include the HTML interface for the lockpick game.
-The vehicle-lock resource handles the basic vehicle locking mechanics.
-POLICE RESOURCES - 31 Total
-The bodycam resource is a body camera system for police officers. It automatically starts recording when an officer goes on duty. The L key toggles the recording on and off. It has a battery that drains over time, a HUD overlay showing recording status, timestamps on recordings, Discord logging for when recordings start and stop, and database storage for footage.
-The bolo-system resource lets officers post BOLO alerts which stands for Be On LookOut. These are alerts about wanted persons or vehicles.
-The breathalyzer resource lets officers administer breathalyzer tests to check for alcohol impairment.
-The crosshair-toggle resource lets players toggle their crosshair on and off.
-The cuff-system resource handles handcuffing and uncuffing suspects.
-The davis-station resource adds the Davis police station location.
-The dna resource lets officers collect DNA samples at crime scenes.
-The duty-blips resource shows all on-duty police and CID officers on the map with colored blips. Police show as blue and CID shows as purple. The blips update every five seconds and are only visible to other law enforcement.
-The field-sobriety resource lets officers administer field sobriety tests to check for drug impairment.
-The fines resource lets officers issue fines and tickets to players.
-The grapple resource adds a grappling hook for rappelling and climbing.
-The jail-cutscene resource plays a booking cutscene when a player is processed into jail.
-The k9-unit resource adds a police dog unit for tracking suspects and searching for contraband.
-The lspd-laptop resource adds a laptop computer for LSPD officers.
-The mdt resource is a Mobile Data Terminal for law enforcement vehicles, providing access to records and databases.
-The mrpd-mlo resource integrates the MRPD building with police functionality.
-The officer-lockers resource gives officers personal lockers at the station for storing gear.
-The p-list resource is the personnel list. Officers can open it with F6 or by typing /plist. It shows all on-duty officers with their name, job title, rank, and radio channel. It has a glassmorphism UI style and updates live every three seconds.
-The panic-button resource lets officers trigger a panic alert by pressing the P key, which notifies all other officers of their location and that they need backup.
-The person-search resource lets officers search people for contraband.
-The police-garage resource is where police vehicles are stored and can be accessed by officers.
-The police-uniforms resource lets officers manage and change their uniforms.
-The prison resource is a police-operated prison where arrested players are held.
-The radar-gun resource is a handheld speed radar gun that officers can use to check vehicle speeds.
-The road-deployables resource lets officers place traffic cones and barriers to control traffic.
-The shields resource adds riot shields that officers can use for crowd control.
-The spike-strips resource adds deployable spike strips for stopping fleeing vehicles.
-The spotlight resource adds a vehicle-mounted spotlight that officers can control.
-The tackle resource lets officers tackle and take down fleeing suspects.
-The taser resource adds a taser weapon for non-lethal incapacitation.
-The traffic-stop resource provides a complete traffic stop procedure system.
-POLISH RESOURCES - 28 Total
-The admin-menu resource is an old admin menu that is currently disabled.
-The advanced-mechanics resource is the active mechanic job system, offering a two-stage field & workshop vehicle repair system. It is paired with the mechanic-laptop for business management.
-The anticheat resource is a server-side anti-cheat system. It detects health cheating, armor cheating, teleport hacking, and speed hacking. It has a weapon blacklist for restricted weapons. It uses a three-strike system where after three detected violations the player is automatically banned. It sends alerts to Discord.
-The cinematic-camera resource adds a cinematic camera mode for screenshots and videos.
-The client-optimizer resource helps improve client performance by reducing unnecessary rendering.
-The clothing-store resource lets players buy clothes at clothing stores.
-The death-screen resource adds a custom death screen when players die.
-The doorlock resource is a general door locking system for various doors in the city.
-The forensics resource is a crime scene investigation system. Officers can collect fingerprints, shell casings, and DNA at crime scenes. There is an analysis terminal at CID HQ where evidence can be processed.
-The fuel-ui resource adds a user interface for the gas station fueling system.
-The gun-recoil resource adds enhanced recoil patterns to weapons for more realistic gunplay.
-The headbag resource adds a headbag item that can be placed on hostages or restrained players.
-The id-card resource gives players an ID card that they can show to others.
-The immersion-polish resource adds various small immersion improvements.
-The loading-screen resource is the older version loading screen with a simple HTML interface, logo image, and basic styling.
-The loading-screen-new resource is the newer version that was ported from qb-loading. It uses Vue3 and Quasar for the interface and has a carousel of images. It has asset files including background music in MP3 format, a QBCore branding SVG, several images for the background, SVG keybind icons for many keys including B, F1, G, HOME, I, L, LALT, M, NUM, TAB, Tilde, X, Y, and Z, and a background video in MP4 format. The HTML interface has its own JavaScript and CSS files.
-The mechanic-laptop resource gives mechanics a laptop for managing repair jobs.
-The mechanics resource is an older mechanic job system that duplicated advanced-mechanics and is currently disabled (moved to resources/_disabled-overlaps/).
-The no-wanted resource completely disables the GTA wanted level system so police are handled entirely by the server scripts.
-The passcode-doors resource lets players set up doors with numeric passcodes for access.
-The radio resource is an older radio system that is currently disabled.
-The security-cam resource adds security cameras that can be viewed remotely.
-The server-guide resource adds an in-game command /rules that opens a NUI modal window with three tabs: Server Rules, Key Binds, and Staff Contacts.
-The shops resource handles various NPC-run shops around the city.
-The speed-camera resource adds automated speed cameras around the city that issue fines to speeding drivers.
-The tattoo-shop resource lets players get tattoos at tattoo parlors.
-The trash-cans resource lets players search through trash cans for items.
-The vending-machine resource lets players interact with vending machines to buy drinks and snacks.
-PRISON RESOURCES - 1 Total
-The prison-system resource manages the prison facility. It handles inmate processing, sentence tracking, prison jobs for inmates, contraband smuggling, and prison breakout attempts.
-SHARED RESOURCES - 8 Total
-The building-interiors resource defines the interiors of various buildings that players can enter.
-The database resource contains the master SQL schema file which is 1,199 lines long and defines approximately 80 database tables covering every system in the server. This includes tables for players, characters, phone messages, phone tweets, phone contacts, phone photos, phone wallet, phone notes, phone calendar, phone call history, phone voicemails, phone settings, phone groups, phone gigs, black market chat, police BOLOs, police vehicle logs, panic alerts, license plate reader hits, K9 units, K9 logs, emergency calls, CID trackers, CID surveillance bugs, CID operations, CID grade configuration, CID armory items, CID cases, CID warrants, CID BOLOs, CID person notes, vehicle spawn logs, CID audit logs, server owners, admin managed doors, admin logs, bans, admin zones, admin zone items, bank credit scores, bank loans, bank investments, bank transactions, payroll configuration, player payrolls, tax configuration, criminal records, ballistic records, smuggling events, mobile labs, front businesses, surveillance cameras, ATM skimmers, gang renown, black market listings, prison escape progress, autopsy reports, addiction trackers, blood bank, field medical kits, player properties, player houses, house furniture, house guests, house alarms, house vehicles, court cases, court evidence, court appeals, bail bonds, business licenses, seized auctions, food trucks, food truck menus, food truck inventory, food truck orders, player vehicles, impounded vehicles, vehicle listings, vehicle component trackers, fleet garage logs, Instashot social media profiles and posts, racing events, parcel deliveries, passcode doors and access logs, the whitelist, report logs, job rosters and logs, gang rosters, mechanic data, custom bunkers, placed objects, and player notes.
-The fib-building resource adds the FIB building to the map. It has an entrance system, an elevator with floor selection showing Lobby, Offices, Armory, Interrogation, Server Room, and Roof. On the roof there is a computer terminal with commands including help, clear, date, status, bolos, and exit. The building has door locks and job-based access control.
-The helipads resource defines helipad locations on buildings.
-The libs resource contains shared Lua library files like globals.lua that are used across multiple resources.
-The locales resource contains localization files for Arabic and English.
-The nui-theme resource provides a shared NUI theme system with a glassmorphism design style that is used across multiple web interfaces.
-The secret-bunkers resource defines secret bunker locations around the map that players can discover.
-VEHICLE RESOURCES - 4 Total
-The bevo resource adds a Mercedes G-Wagon nicknamed Bevo. It has its own fxmanifest file and data folder with carcols, carvariations, handling, and vehicles meta files. The stream folder contains the main vehicle model file and texture file plus 32 different customization part files for bumpers, grilles, side skirts, spoilers, fenders, light bars, wheel covers, side boxes, logos, and more.
-The dicy resource adds a Dicy 21 S580M luxury vehicle. It has a fxmanifest and a dlc.rpf file that needs to be extracted with OpenIV.
-The pitd-cars resource is a massive vehicle pack called PITD Unbranded TOL Car Pack A with over 50 custom vehicle models. It has a fxmanifest, vehicle names list, and meta files for car colors, car variations, handling, vehicle layouts, and vehicle definitions. Each vehicle has its own stream folder with the model file, high-detail model file, texture files, and various customization parts. The vehicle models include tol22m5, tol240sx, tol3j50, tol675ltsp, tol700, tola6, tolap2, tolaudidy, tolbt62r, tolc63, tolc7, tolcharger2, tolcurus, toldemon, toldurus, tole36prb, tole36v, tole6314, tolevo9, tolexor, tolf360, tolf8spider, tolfxxk, and tolgatm21.
-The police-bikes resource adds five police motorcycle models. It has a fxmanifest and vehicle names list. The data folder has separate handling, carcols, carvariations, and vehicles meta files for each of the five models which are the BMW 1200RT, the BMW RP, the HP Bikes, the Police Bike, and the Kawasaki Ninja. The stream folder has all the model files and texture files for each bike.
-DISABLED OVERLAPS - 16 Total
-The disabled-overlaps folder contains resources that have been replaced by newer or better versions to prevent conflicts, preserved intact (not deleted) for reference. admin-menu is replaced by god-dashboard. advanced-housing and property-system are replaced by ps-housing + ps-realtor under [player]. banking-plus is replaced by Renewed-Banking under [player]. cdn-hud is replaced by the newer hud in the player folder. garage-system is replaced by Renewed-Garages. god-menu is replaced by god-dashboard. linden-outfitbag and linden-outfits are replaced by the outfit-manager. loading-screen is replaced by loading-screen-new. mechanics is replaced by advanced-mechanics. qbox-spawn is replaced by the spawn-selector in the core folder. radio-polish and radio-system are replaced by the radio in the player folder. taxi and taxi-civilian are replaced by taxi-system. Each of these still has all their files including configs, fxmanifests, client and server scripts, HTML interfaces, and any other assets.
-NEW MLOS AND VEHICLES FOLDER - 14 Asset Packs Ready to Install
-This folder contains additional asset packs that are not yet active in the server but are ready to be installed. The bevo folder has another copy of the G-Wagon vehicle. The borders folder has the border checkpoint MLO with both the main building and audio occlusion files. The bunker folder has the bunker MLO with stream files. The dicy21s580m folder has the Dicy S580M vehicle. The DLDebadgedPoliceBikes folder has the police bikes with all five models. The energy_luxuryautos folder has the luxury auto dealership MLO with audio, spawn vehicles, and stream files. The fiv3devs_pillbox folder has the Pillbox hospital MLO with audio and stream. The LuxBunker folder has a luxury bunker MLO. The mt3d_fib folder has the FIB building MLO with stream files and is also available as a zip file. The nteammrpdupdate folder has an MRPD update with both the map data and the main building replacement. The pitd_unbranded_tol_car_pack_A folder has the full vehicle pack in both extracted and zipped formats. The under ground bunker folder has the gang tunnel MLO with a fxmanifest, a game data file, and stream files for collision, model, map placement, and occlusion. The YouTools_Stores_MLO folder has the YouTool store MLO with all the stream files for the building, props, and lighting. The unclejsustsandymedicalv2 folder has the Sandy Shores medical MLO version 2 with a full set of medical building files.
-NEW SCRIPTS FOLDER - 5 QBCore Script Sources for Porting
-This folder contains the original QBCore versions of scripts that were ported to work with the QBox framework. The qb-hud-main folder has the original QBCore HUD with client and server scripts, configuration, 18 locale files for different languages, HTML web interface files, and stream graphics. The qb-loading-main folder has the original QBCore loading screen with assets including audio, branding, images, keybind icons, and video, plus the HTML interface. The qb-radialmenu-main folder has the original QBCore radial menu with client scripts for clothing, the main menu, stretchers, and trunks, the HTML interface with CSS and JavaScript, 12 locale files, server scripts, and stream files. The qb-spawn-main folder has the original QBCore spawn selector with client and server scripts, configuration, 10 locale files, and an HTML interface with Vue.js.
+# Custom FiveM Roleplay Server - Complete System & Script Encyclopedia
+
+Welcome to the definitive system reference and documentation manual for this fully integrated custom FiveM Roleplay server, built on top of the QBox (QBX) framework.
+
+Unlike generic servers built from disconnected scripts, this ecosystem is organized centrally. It communicates through standardized exports, a centralized database (`master_schema.sql` with 80+ interconnected tables), and unified UI interfaces using modern frontend styling (such as glassmorphism, Vue3, and Quasar).
+
+---
+
+## 📖 Table of Contents
+
+1. [Core Framework & Initialization](#1-core-framework--initialization)
+2. [Admin Resources (`[admin]`)](#2-admin-resources-admin)
+3. [Criminal Investigation Division (`[cid]`)](#3-criminal-investigation-division-cid)
+4. [Civilian Jobs & Activities (`[civilian]`)](#4-civilian-jobs--activities-civilian)
+5. [Core Utilities & Frameworks (`[core]`)](#5-core-utilities--frameworks-core)
+6. [Criminal Gameplay & Heists (`[criminal]`)](#6-criminal-gameplay--heists-criminal)
+7. [Economy & Business Systems (`[economy]`)](#7-economy--business-systems-economy)
+8. [Emergency Alerts & Dispatch (`[emergency]`)](#8-emergency-alerts--dispatch-emergency)
+9. [Emergency Medical Services (`[ems]`)](#9-emergency-medical-services-ems)
+10. [Entertainment & Leisure (`[entertainment]`)](#10-entertainment--leisure-entertainment)
+11. [Housing (`[housing]`)](#11-housing-housing)
+12. [Immersion Systems (`[immersion]`)](#12-immersion-systems-immersion)
+13. [Jobs (`[jobs]`)](#13-jobs-jobs)
+14. [Logistics & Towing (`[logistics]`)](#14-logistics--towing-logistics)
+15. [Map Loadable Objects / MLOs (`[mlo]`)](#15-map-loadable-objects--mlos-mlo)
+16. [Smartphones & Tech (`[phones]`)](#16-smartphones--tech-phones)
+17. [Player Systems (`[player]`)](#17-player-systems-player)
+18. [Police Department (`[police]`)](#18-police-department-police)
+19. [Polish & Quality of Life (`[polish]`)](#19-polish--quality-of-life-polish)
+20. [Prison System (`[prison]`)](#20-prison-system-prison)
+21. [Shared Resources (`[shared]`)](#21-shared-resources-shared)
+22. [Vehicle Packs (`[vehicles]`)](#22-vehicle-packs-vehicles)
+23. [Unused/Legacy Overlaps (`_disabled-overlaps`)](#23-unusedlegacy-overlaps-_disabled-overlaps)
+24. [Extra Assets & Sources for Porting](#24-extra-assets--sources-for-porting)
+25. [Database Schema Quick Guide](#25-database-schema-quick-guide)
+26. [Technical Reference & Internal Workflows](#26-technical-reference--internal-workflows)
+
+---
+
+## 1. Core Framework & Initialization
+
+The server utilizes `resources/server.cfg` to orchestrate resource startups sequentially. It maintains server-wide parameters, slots (up to 64 players), txAdmin integrations, database queries, and loads dependencies correctly to prevent race conditions during startup.
+
+---
+
+## 2. Admin Resources (`[admin]`)
+
+Admin resources provide robust world-building, moderation, and player tracking tools for server owners and administrators.
+
+| Resource Name | Path | Description | Activation & How to Trigger |
+|---|---|---|---|
+| **admin-commander** | `resources/[admin]/admin-commander/` | Fast command-based utility for granting items, vehicles, and configuring ownership privileges. Kept alongside god-dashboard as a lighter, command-driven complement rather than a competing full panel. | **Commands:** `/addowner [playerID]`, `/removeowner [identifier]`, `/listowners`, `/giveitem [playerID] [item] [amount]`, `/givecar [playerID] [model]`. |
+| **admin-zones** | `resources/[admin]/admin-zones/` | Allows creation of interactive zones (wardrobes, duty areas, shops, storages, armories, and garages). | Configured in `config.lua` or triggered dynamically. **Commands:** `/zoneadmin` |
+| **bunker-builder** | `resources/[admin]/bunker-builder/` | Allows admins to build and place custom bunkers with customizable entrance models (small, medium, large rocks), passcode restrictions, interiors (7 presets), and vehicle spawners. Includes built-in HTML creator UI. | **UI-Enabled:** Automatically triggers NUI builder panel when using corresponding admin menu options or specific admin events. |
+| **god-dashboard** | `resources/[admin]/god-dashboard/` | **The server's sole active admin control panel** (god-menu was consolidated into this and disabled). NUI tabs: Bunkers, Objects (place-anywhere preview & placement), Doors (passcode door management), Vehicles (spawner, 8 categories, preview), Players (noclip, spectate, slap, heal, give money/item, set job, give car to garage, kick, freeze, bring, teleport), Economy (global item/money distribution via `exports.ox_inventory`), Server (weather, time, announce, revive, clear area), Ambient Events (view/force-spawn/resolve), and Commands. Authorization checks the `server_owners` DB table or `admin`/`superadmin`/`god` groups. Every state-changing action is logged to `admin_logs`. | **Keybind:** `F6` (matches `+god` command exactly)<br>**Command:** `/god`<br>**NUI Interface:** Full web panel. |
+| **god-menu** *(disabled)* | `resources/_disabled-overlaps/god-menu/` | The original standalone admin panel this project shipped with. Every unique feature it had was ported into god-dashboard; the code is preserved here for reference only and is not loaded by the server. | Not active — moved out of `resources/` load path. |
+| **place-anywhere** | `resources/[admin]/place-anywhere/` | Allows persistent placement, movement, and rotation of objects/props directly in the game world, saved persistently to the database across restarts. | Accessible through the god-dashboard Objects tab or admin commands. |
+| **ticket-system** | `resources/[admin]/ticket-system/` | Player-facing support ticket system with an admin dashboard (active tickets, 2-month history, teleport-to-sender, mark solved). Uses the same `server_owners`/group-based authorization as god-dashboard. | **Command:** `/tickets` (admin) opens the dashboard; players submit via the in-game ticket UI, which fires `ticket-system:server:openTicket`. |
+
+---
+
+## 3. Criminal Investigation Division (`[cid]`)
+
+An ultra-sophisticated surveillance and crime-solving suite designed for detective roles.
+
+| Resource Name | Path | Description | Activation & How to Trigger |
+|---|---|---|---|
+| **anonymity-bridge** | `resources/[cid]/anonymity-bridge/` | Secure communication system enabling anonymous tip-offs and encrypted messages between informants and detectives. | Automatically triggered via specified phone/laptop interactions. |
+| **camera-drone** | `resources/[cid]/camera-drone/` | Remote-controlled surveillance drone equipped with aerial cameras for tracking targets and spying on suspect meetings. | Triggered by using the `drone` item from the inventory. |
+| **cid-garage** | `resources/[cid]/cid-garage/` | Spawning and storage system for unmarked or specialized CID detective cruisers. | Target-based interactions at the CID Headquarters. |
+| **cid-hq** | `resources/[cid]/cid-hq/` | Core map and marker coordinate handler for CID operations. | Physical location interactions. |
+| **cid-laptop** | `resources/[cid]/cid-laptop/` | Portable laptop for detectives to access cases, plate logs, and criminal dossiers on the field. | **Command/Keybind:** `+cidLaptop` (registers key map) or using the `cid_laptop` inventory item. |
+| **cid-terminal** | `resources/[cid]/cid-terminal/` | Terminal station located within MRPD / CID HQ for filing investigative warrants and monitoring trackers. | Interaction at physical terminal screens. |
+| **cid-weapons** | `resources/[cid]/cid-weapons/` | Access armory system restricted specifically to CID detective clearance levels. | Target-interaction inside CID Headquarters. |
+| **covert-entry** | `resources/[cid]/covert-entry/` | Lockpicking and alarm-bypassing module specifically optimized for detective infiltration missions. | **Command:** `/leavenotrace` (clears evidence footprint). |
+| **crypto-tracking** | `resources/[cid]/crypto-tracking/` | Traces darknet financial transactions, locating black market dealer nodes. | Accessed from CID laptops/terminals. |
+| **evidence-lab** | `resources/[cid]/evidence-lab/` | Processing stations where gathered forensics evidence can be stored and cataloged. | Interacting with processing points in MRPD/CID labs. |
+| **forensic-kit** | `resources/[cid]/forensic-kit/` | Mobile kit for taking DNA swabs, fingerprint lifts, and ballistic casing prints at active crime scenes. | **Command/Keybind:** `forensic` or using `forensic_kit` item. |
+| **interrogation-room** | `resources/[cid]/interrogation-room/` | Manages active interrogation rooms, including camera controls and recording functions. | Targeted interaction on interrogation room control units. |
+| **notebook** | `resources/[cid]/notebook/` | A portable notepad item that allows CID officers to write and store crime notes persistently. | **Command/Keybind:** `+notebook` or using the `notebook` usable item. |
+| **operations-center** | `resources/[cid]/operations-center/` | Tactical war-room interface mapping live tracking bugs and camera feeds on a main grid. | **UI-Enabled:** Access from CID Headquarters terminals. |
+| **plate-scanner** | `resources/[cid]/plate-scanner/` | Automatically reads license plates of passing vehicles, checking them against active warrants and BOLOs. | **Command/Keybind:** `+platescan` or automatic in patrol cruisers. |
+| **strobes** | `resources/[cid]/strobes/` | Custom emergency flashing strobe lights for unmarked CID tactical vehicles. | Keybind mapped in undercover vehicles. |
+| **surveillance-bugs** | `resources/[cid]/surveillance-bugs/` | Allows detectives to plant listening/tracking devices inside rooms or on suspect vehicles. | **Command/Keybind:** `+surveillanceConsole` or using the `surveillance_bug` item. **UI-Enabled.** |
+| **undercover-vehicles** | `resources/[cid]/undercover-vehicles/` | Adds unmarked undercover cruisers with identity swappers and custom storage trunks. | **Commands/Keybinds:** `+ucLights`, `+ucScanner`, `+ucSilent`, `+ucSiren` inside unmarked vehicles. |
+| **wiretaps** | `resources/[cid]/wiretaps/` | Authorized monitoring of phone lines, messaging logs, and live audio intercept streams of suspect players. | Initiated from CID Terminals via proper warrant procedures. |
+
+---
+
+## 4. Civilian Jobs & Activities (`[civilian]`)
+
+Legitimate economic pursuits designed to keep players integrated into the server's passive economy.
+
+| Resource Name | Path | Description | Activation & How to Trigger |
+|---|---|---|---|
+| **bus** | `resources/[civilian]/bus/` | Bus driving routes where players drive public buses and pick up NPC passengers. | Start route at the Bus Depot using the radial menu or `/busstart` command from the civilian jobs script. |
+| **city-hall** | `resources/[civilian]/city-hall/` | Municipal building where civilians acquire driver's licenses, weapon permits, ID cards, and register marriage licenses. | Ped/target-based interactions inside the City Hall building. |
+| **court-system** | `resources/[civilian]/court-system/` | Legal arbitration system with full judicial controls, cases, files, sentencing, and jury mechanics. | **Commands:** `/starttrial`, `/juryvote`, `/filecase`, `/sentence`, `/cases`. |
+| **delivery** | `resources/[civilian]/delivery/` | Parcel and commercial logistics shipping routes. | Started at delivery warehouses via target interaction or `/mailstart`. |
+| **economy-core** | `resources/[civilian]/economy-core/` | Base math algorithms for calculating taxes, default interest rates, and commodity market values. | Automated server-side. |
+| **electrician** | `resources/[civilian]/electrician/` | Grid repairs and powerline maintenance jobs across Los Santos. | Start work at the Power Utility building. |
+| **fuel** | `resources/[civilian]/fuel/` | Underpins the physical fuel stations, allowing players to refuel at pumps. | Target interaction on gas pumps. |
+| **garbage** | `resources/[civilian]/garbage/` | Sanitation worker job where players drive trash trucks and gather waste piles. | Job started at the Garbage Depot (or `/garbagestart`). |
+| **hotdog-stand** | `resources/[civilian]/hotdog-stand/` | Player-run street vending stand with cooking mechanics and customer service. | Buy/rent a Hotdog vendor cart and initiate selling. |
+| **legal-system** | `resources/[civilian]/legal-system/` | Lawyer bar association logs, allowing licensed attorneys to register clients and view jail records. | Accessed at Courthouse terminals. |
+| **lumberjack** | `resources/[civilian]/lumberjack/` | Wood harvesting, tree chopping, and processing logs into sellable paper or wood sheets. | Located at Paleto Forest lumber mills. Target interactions. |
+| **mining** | `resources/[civilian]/mining/` | Ore mining, smelting, and mineral refining for crafting raw metals. | Located at the Senora Desert mine shaft. Target interactions. |
+| **news** | `resources/[civilian]/news/` | Weazel News reporter career. Grants access to heavy video cameras and news microphones. | Target interactions inside Weazel News HQ. |
+| **taxi** | `resources/[civilian]/taxi/` | Standard taxi transport jobs servicing NPC or player taxi requests. | Triggered by visiting Downtown Cab Co or using `/taxiui`. |
+| **vehicle-shop** | `resources/[civilian]/vehicle-shop/` | Retail dealerships selling standard civilian vehicles. | Interactive markers inside dealerships. |
+| **winery** | `resources/[civilian]/winery/` | Vineyard tending, grape gathering, processing wine barrels, and selling to local stores. | Target interactions at Marlowe Vineyards. |
+
+---
+
+## 5. Core Utilities & Frameworks (`[core]`)
+
+The central nervous system of the server. These scripts manage identities, targets, database connection bridges, voice configurations, performance, and key setups.
+
+| Resource Name | Path | Description | Activation & How to Trigger |
+|---|---|---|---|
+| **afk-kicker** | `resources/[core]/afk-kicker/` | Automatic kicker to prevent idle players from wasting server slots. | Automatic server-side monitoring. |
+| **alert-system** | `resources/[core]/alert-system/` | Framework for routing server-wide announcements, police dispatch pings, and emergency notices. | Automatic. |
+| **character-system** | `resources/[core]/character-system/` | Custom UI system managing player character creation, customization, and spawning. | **UI-Enabled:** Runs on first login. |
+| **chat-commands** | `resources/[core]/chat-commands/` | Essential roleplay-oriented chat commands. | **Commands:** `/me`, `/do`, `/try`, `/ooc`, `/b`, `/sit`, `/laydown`, `/wave`. |
+| **discord-logs** | `resources/[core]/discord-logs/` | Forwards in-game activities (heists, arrests, admin actions) directly to Discord Webhooks. | Server-side automated. |
+| **emote-menu** | `resources/[core]/emote-menu/` | Main animation overlay library. Handles client-side triggers, animations, walks, and facial expressions. | **Keybind:** `F5` / `F1` radial or command `+emotemenu` / `/e [emotename]` / `/cancel`. **UI-Enabled.** |
+| **entity-cleaner** | `resources/[core]/entity-cleaner/` | Runs garbage collection to delete abandoned vehicles, peds, and loose objects to prevent server lag. | Automatic. |
+| **identity-core** | `resources/[core]/identity-core/` | Internal mapper linking player Steam/Discord identifiers with character IDs (citizenid) persistently. | Server-side background hook. |
+| **multi-character** | `resources/[core]/multi-character/` | Sleek selection screen allowing up to five character profiles per player. | Activates automatically when a player connects. |
+| **oxlib-init** | `resources/[core]/oxlib-init/` | Initializes standard configurations for `ox_lib` library wrapper modules, notifications, progress bars, and context menus. | Handled dynamically during server initialization. |
+| **oxmysql-config** | `resources/[core]/oxmysql-config/` | Configures active parameters for server database connections and pools. | Automatic during startup. |
+| **oxtarget-init** | `resources/[core]/oxtarget-init/` | Triggers framework registrations for the central eye-target interaction system (`ox_target`). | Holding down `LEFT ALT` in-game. |
+| **ped-blacklist** | `resources/[core]/ped-blacklist/` | Restricts toxic or game-crashing models from spawning. | **Command:** `/checkmodel` for debugging blacklisted assets. |
+| **phone-app** | `resources/[core]/phone-app/` | Direct underlying system interface for smartphone functions. | **Command/Keybind:** `+phone` or `/phone`. **UI-Enabled.** |
+| **pma-voice-cfg** | `resources/[core]/pma-voice-cfg/` | Standardized audio ranges, megaphone multipliers, call encryptions, and radio frequencies. | **Commands:** `/radio`, `/voicerange`. **Keybind:** `H` (cycles voice ranges). |
+| **polyzone-init** | `resources/[core]/polyzone-init/` | Core boundary-checking library used for identifying zones (e.g., banks, safezones, drug labs). | Automated backend library. |
+| **queue-system** | `resources/[core]/queue-system/` | Prioritizes and sequences player connections when server slots are full. | Automated when connecting. |
+| **report-system** | `resources/[core]/report-system/` | Lets players submit in-game help tickets or exploit notices directly to on-duty administrators. | **Command:** `/report` |
+| **resource-optimizer** | `resources/[core]/resource-optimizer/` | Dynamic garbage collector ensuring optimal client frame rates (FPS). | **Command:** `/fpsboost` (swaps render distance profiles). |
+| **settings-menu** | `resources/[core]/settings-menu/` | In-game configuration UI enabling custom binds for windows, vehicle doors, HUD styles, and UI sizing. | **Command/Keybind:** `settings`, `+door_menu`, `+frunk_toggle`, `+trunk_toggle`, `+windows_down`, `+windows_up`. |
+| **spawn-selector** | `resources/[core]/spawn-selector/` | Visual map allowing players to select their spawning locations (Airports, Garages, last saved position). | **UI-Enabled:** Automatically triggers on load/respawn. |
+| **txadmin-hooks** | `resources/[core]/txadmin-hooks/` | Hooks into txAdmin for handling server schedules, bans, restarts, and automatic restarts. | Background automation. |
+| **voice-communications** | `resources/[core]/voice-communications/` | Live WebRTC / pma-voice frequency listeners and grid trackers. | Background automation. |
+| **weathersync** | `resources/[core]/weathersync/` | Synchronizes server time and weather globally across all players. | **Commands (Admins only):** `/weather [type]`, `/time [hour] [minute]`, `/blackout`. |
+| **welcome-system** | `resources/[core]/welcome-system/` | Showcases rules, greetings, and intro cinematics for new players. | Triggered on character creation/spawn. |
+| **whitelist-system** | `resources/[core]/whitelist-system/` | Restricts access to players registered on the server database or Discord roster. | Triggers on player connection. |
+
+---
+
+## 6. Criminal Gameplay & Heists (`[criminal]`)
+
+The crime syndicate core. Features progressive multi-phase heists, drug refining empires, money laundering, and turf wars.
+
+| Resource Name | Path | Description | Activation & How to Trigger |
+|---|---|---|---|
+| **art-heist** | `resources/[criminal]/art-heist/` | Stealing highly valued paintings from the Los Santos Art Gallery. Requires cutting security wires and quiet lockpicking. | Initiated at the Gallery. Requires specific items (`glass_cutter`, etc.). |
+| **atm-robbery** | `resources/[criminal]/atm-robbery/` | Ripping open ATM cash slots using high-power drill tools. | Interacting with an ATM with an active `drill` or `atm_card` skimming apparatus. |
+| **bank-heist** | `resources/[criminal]/bank-heist/` | Multi-phase robbery system for standard bank institutions. | Interact with vault doors. Requires `hack_usb`, `drill`, and `c4_charge`. |
+| **bobcat-heist** | `resources/[criminal]/bobcat-heist/` | Break-in at the Bobcat security armory depot. Involves firefights, C4 breaching, and heavy crates. | Target-based interactions inside the Bobcat building. |
+| **card-robbery** | `resources/[criminal]/card-robbery/` | Skimming financial cards, duplicating swipe tracks, and stealing money. | Using skimming items at checkout registers or ATMs. |
+| **chop-shop** | `resources/[criminal]/chop-shop/` | Deliver hot vehicles to a scrap yard to chop them down for high-value crafting materials. | Triggered at the Chop Shop depot. |
+| **drug-dealing** | `resources/[criminal]/drug-dealing/` | Sell street drugs to passing NPCs. Underpins street reputation, corner turf, and quick cash. | Use drug items inside criminal neighborhoods to corner deal. |
+| **drug-manufacturing** | `resources/[criminal]/drug-manufacturing/` | Refining base ingredients into retail chemical packages (Cocaine, Heroin). | Inside hidden manufacturing warehouses. Target-based interactions. |
+| **gang-laptop** | `resources/[criminal]/gang-laptop/` | Portable gang laptop offering turf maps, reputation tracking, and illegal weapon ordering. | **Command/Keybind:** `+gangLaptop` or using the `gang_laptop` inventory item. |
+| **gangs** | `resources/[criminal]/gangs/` | Roster systems, custom ranks, gang storage safes, and vehicle garage options for official crews. | Set up in the database or via admin commands. |
+| **graffiti** | `resources/[criminal]/graffiti/` | Spray-paint customized gang tags on urban walls. Generates gang reputation and controls territory. | Using a `spray_can` item near valid city walls. |
+| **house-robbery** | `resources/[criminal]/house-robbery/` | Breaking into civilian properties to loot drawers, electronics, and safes. | Lockpicking residential door handles during night hours. |
+| **jewelry-fence** | `resources/[criminal]/jewelry-fence/` | Pawn shop where criminals sell dirty jewelry, clocks, and paintings. | Targeted interaction with the Fence NPC. |
+| **meth-lab-empire** | `resources/[criminal]/meth-lab-empire/` | Large-scale methamphetamine cooking operations inside custom mobile RVs or chemical labs. | Interaction with cooking stations. Requires base chemicals. |
+| **money-laundry** | `resources/[criminal]/money-laundry/` | Clean black-market marked bills at a loss to make the money legal. | Interacting with washers inside launderette businesses. |
+| **multi-heists** | `resources/[criminal]/multi-heists/` | High-fidelity heists (Fleeca, Jewelry, Bank Truck, Paleto Bay) utilizing custom phased sequences. | **UI-Enabled:** Simon Says hacking game. Approaches markers at specified banks. Requires minimum active police. |
+| **store-robbery** | `resources/[criminal]/store-robbery/` | Hold up convenience store cashiers or drill back-room safes. | Aiming a firearm at a shop cashier or drilling the back safe. |
+| **train-heist** | `resources/[criminal]/train-heist/` | Raid a cargo transport train moving through Blaine County. | Initiated at dispatch trackers or railway intercepts. |
+| **turfs** | `resources/[criminal]/turfs/` | Dynamic turf wars where different crews compete for drug margins and local area control. | Accessed through Gang Laptop or map menus. |
+| **underground-network** | `resources/[criminal]/underground-network/` | Hidden black market networks for purchasing restricted arms and components. | Target search inside gang tunnels and alleyways. |
+| **vangelico-heist** | `resources/[criminal]/vangelico-heist/` | Smash-and-grab heist at the luxury jewelry store. | Smash display cases using heavy weapons. |
+| **weapon-manufacturing** | `resources/[criminal]/weapon-manufacturing/` | Craft customized firearms using harvested metals. | Inside secret bunkers. Interaction with workbench props. |
+| **yacht-heist** | `resources/[criminal]/yacht-heist/` | Specialized heist targeting a luxurious offshore yacht. | Approaches offshore coordinates via boat. Requires cutting vaults. |
+
+---
+
+## 7. Economy & Business Systems (`[economy]`)
+
+Advanced financial layers representing investments, personal credit scores, and commercial loans.
+
+| Resource Name | Path | Description | Activation & How to Trigger |
+|---|---|---|---|
+| **atm-card** | `resources/[economy]/atm-card/` | Adds Physical ATM Cards to player inventories. Allows interactive PIN screens and transaction limits. | **UI-Enabled:** Interacting with an ATM with an `atm_card` in inventory. |
+| **banking-plus** *(disabled)* | `resources/_disabled-overlaps/banking-plus/` | Banking engine tracking transactions, wire transfers, loans, credit ratings, and corporate investment structures — duplicated `[player]/Renewed-Banking`, which is depended on by other resources (civilian-jobs, mechanic-laptop, food-truck, cid-laptop), so this one was disabled instead. | Not active. |
+| **payroll** | `resources/[economy]/payroll/` | Automatic payment handler delivering payroll taxes and salaries to on-duty players. | Background timer. |
+| **premium-dealership** *(admin-only)* | `resources/[economy]/premium-dealership/` | Luxury auto showroom catalog system with full 3D rotating display. Not ensured for general play — only used for admin `/givecar` grants. | Not started by default. |
+| **vehicle-dealership** *(admin-only)* | `resources/[economy]/vehicle-dealership/` | Standard dealership UI for purchasing economy automobiles. Not ensured for general play — only used for admin `/givecar` grants. | Not started by default. |
+
+---
+
+## 8. Emergency Alerts & Dispatch (`[emergency]`)
+
+| Resource Name | Path | Description | Activation & How to Trigger |
+|---|---|---|---|
+| **advanced-alerts** | `resources/[emergency]/advanced-alerts/` | Sends AMBER alerts, weather warnings, and critical city news updates. | Triggered by admins or auto-events. |
+| **dispatch-system** | `resources/[emergency]/dispatch-system/` | Main dispatch board routing 911/311 emergency calls to police, CID, and EMS. | **UI-Enabled:** Automatic overlay on police HUD. Triggered by emergency notifications. |
+
+---
+
+## 9. Emergency Medical Services (`[ems]`)
+
+Advanced healthcare simulation including triage priorities, organ damage, stretchers, and trauma medicine.
+
+| Resource Name | Path | Description | Activation & How to Trigger |
+|---|---|---|---|
+| **advanced-trauma** | `resources/[ems]/advanced-trauma/` | Tracks anatomical damage (broken bones, internal bleeding). | Automatic upon receiving heavy damage. |
+| **advanced-triage** | `resources/[ems]/advanced-triage/` | EMS prioritization of patient health indices in mass casualty situations. | Interacting with patients using triage cards. |
+| **ems-defibrillator** | `resources/[ems]/ems-defibrillator/` | Useable cardiac arrest pads to resuscitate deceased players. | Using the usable item `defibrillator` on downed players. |
+| **morgue-extension** | `resources/[ems]/morgue-extension/` | Autopsies, cold slabs, toe tags, and corpse persistence. | Inside Pillbox morgue drawers. Target interactions. |
+| **pharmacy-npc** | `resources/[ems]/pharmacy-npc/` | Automated medical dispensary supplying EMS components. | Interacting with the Hospital Pharmacy NPC. |
+| **pillbox-mlo** | `resources/[ems]/pillbox-mlo/` | Optimizes Pillbox Hospital layout assets. | Map asset. |
+| **qb-medicalbag** | `resources/[ems]/qb-medicalbag/` | Deployable trauma kits for quick field surgeries. | Using the `medicalbag` inventory item. |
+| **rcore-medical** | `resources/[ems]/rcore-medical/` | Underlying core medical framework. | Backend hooks. |
+| **stretcher-system** | `resources/[ems]/stretcher-system/` | Mobile stretchers that can be deployed from ambulances to transport patients. | Radial menu interaction near ambulance rear. |
+| **wasabi-ambulance** | `resources/[ems]/wasabi-ambulance/` | Ambulance vehicle configuration, sirens, medical beds, and check-in procedures. | Targeted interactions inside Pillbox Hospital. |
+| **wasabi-crutches** | `resources/[ems]/wasabi-crutches/` | Wearable crutches slowing down movement speed of players with leg injuries. | Automatically equipped when diagnosed with leg trauma. |
+| **xray-system** | `resources/[ems]/xray-system/` | Detailed visual medical diagnosis scans for bone fractures. | Triggers at the radiology scanner inside the hospital. |
+
+---
+
+## 10. Entertainment & Leisure (`[entertainment]`)
+
+Leisure activities for roleplayers to unwind between shifts.
+
+| Resource Name | Path | Description | Activation & How to Trigger |
+|---|---|---|---|
+| **arcade** | `resources/[entertainment]/arcade/` | Playable cabinet minigames inside arcade shops. | Interact with arcade screens. |
+| **bowling** | `resources/[entertainment]/bowling/` | Playable bowling lanes with scoreboards. | Located at the bowling alley. Targeted lane interactions. |
+| **casino** | `resources/[entertainment]/casino/` | Spin lucky wheels, play blackjack, slots, and roulette games. | Inside Diamond Casino. Uses custom casino chips. |
+| **coffee-shop** | `resources/[entertainment]/coffee-shop/` | Player-run coffee house with brewing mechanics. | Located at the Coffee Shop. Target interactions. |
+| **diving** | `resources/[entertainment]/diving/` | Scuba gear rentals, underwater salvage, and rare coral gathering. | Approaching diving boat rental points. |
+| **fishing** | `resources/[entertainment]/fishing/` | Rod casting and fish weighing mechanics at sea docks. | Use a `fishing_rod` near bodies of water. |
+| **hunting** | `resources/[entertainment]/hunting/` | Tracking and hunting wild game, skinning carcasses, and selling meat. | Using hunting rifles in designated woods. |
+| **mini-games** | `resources/[entertainment]/mini-games/` | Simon Says, lockpicking, thermite grid, and keypad bypasses. | Executed dynamically via hacking/robbery events. |
+| **movie-theater** | `resources/[entertainment]/movie-theater/` | Visual cinema screens playing streaming video streams. | Entering cinema properties. Target seats. |
+| **pizza-this** | `resources/[entertainment]/pizza-this/` | Complete pizza kitchen, cooking, and delivery jobs. | Located at Pizza This restaurant. |
+| **racing** | `resources/[entertainment]/racing/` | Design custom racing lines, host lobbies, and track lap times. | Opened via racing app or racing laptop nodes. |
+| **restaurant-jobs** | `resources/[entertainment]/restaurant-jobs/` | Universal cooking, food assembly, and billing tools for dynamic restaurants. | Target-based interactions inside commercial kitchens. |
+
+---
+
+## 11. Housing (`[housing]`)
+
+This category folder is currently empty. `advanced-housing` was the original resource here but was found to duplicate `ps-housing`'s functionality during overlap resolution; it lost the comparison (747 vs 644 lines, and `ps-housing` had a real front-end resource — `ps-realtor` — referencing it, while `advanced-housing` had zero cross-references) and was moved to `resources/_disabled-overlaps/advanced-housing/`. **The active housing system is `ps-housing` + `ps-realtor`, both under `[player]`** — see section 17 below.
+
+---
+
+## 12. Immersion Systems (`[immersion]`)
+
+Enhancements that bridge the gap between arcade and realistic survival gameplay.
+
+| Resource Name | Path | Description | Activation & How to Trigger |
+|---|---|---|---|
+| **InteractSound** | `resources/[immersion]/InteractSound/` | Triggers 3D directional audio sound effects (car locking chirps, seatbelts click). | Triggered dynamically via client events. |
+| **ambient-events** | `resources/[immersion]/ambient-events/` | Spawns unscripted incidents (armed robberies, crashed cargo trucks, gas leaks, prison transports) at random intervals so police/EMS/CID have work to respond to without a player triggering anything. Dispatches through `dispatch-system`'s real `dispatch:server:call911` event, pays out on resolution, and logs every event to `ambient_events`. Admins can view history and force-spawn/force-clear from god-dashboard's Ambient Events tab. | Automatic background spawner, configurable interval/cooldowns in `config.lua`. |
+| **dp-emotes** | `resources/[immersion]/dp-emotes/` | Alternative animation library. | Background references. |
+| **gym-system** | `resources/[immersion]/gym-system/` | Workout at gyms to gain physical strength and endurance. | **Command:** `/gymrest` or interacting with gym machinery. |
+| **player-status** | `resources/[immersion]/player-status/` | Constant drainage and replenishment formulas for starvation, dehydration, and stress. | Core background simulation. |
+| **ragdoll-system** | `resources/[immersion]/ragdoll-system/` | Fall unconscious, trip over large obstacles, or get knocked down. | Automatically triggers on heavy impact or physics triggers. |
+| **rcore-radiocar** | `resources/[immersion]/rcore-radiocar/` | High-fidelity car radio systems allowing surrounding players to hear vehicle music. | Controls via vehicle audio interface. |
+| **seatbelt-system** | `resources/[immersion]/seatbelt-system/` | Seatbelt mechanics that prevent player ejecting through the windshield in major crashes. | **Keybind:** `K` or configurable keybind. |
+| **stress-engine** | `resources/[immersion]/stress-engine/` | Screenshake, panic panting, and aiming sway during intense gunfights or high-speed driving. | Automatic. Relieved by smoking, relaxing, or eating. |
+| **vehicle-physics** | `resources/[immersion]/vehicle-physics/` | Immersive vehicle handling profiles, drift thresholds, and terrain resistance modifiers. | Background vehicle injection. |
+| **wasabi-boombox** | `resources/[immersion]/wasabi-boombox/` | Usable boombox prop playing synchronized YouTube/Soundcloud music. | Double clicking `boombox` item in inventory. |
+
+---
+
+## 13. Jobs (`[jobs]`)
+
+| Resource Name | Path | Description | Activation & How to Trigger |
+|---|---|---|---|
+| **civilian-jobs** | `resources/[jobs]/civilian-jobs/` | Starts entry-level public jobs easily. | **Commands:** `/busstart`, `/garbagestart`, `/mailstart`, `/requesttow`, `/towstart`. |
+| **taxi-system** | `resources/[jobs]/taxi-system/` | Advanced fare meters, tip mechanics, and client rating boards. | **Command/Keybind:** `taxiui`. |
+
+---
+
+## 14. Logistics & Towing (`[logistics]`)
+
+Commercial logistics, heavy hauling, flatbed loading, and city towing.
+
+| Resource Name | Path | Description | Activation & How to Trigger |
+|---|---|---|---|
+| **advanced-tow** | `resources/[logistics]/advanced-tow/` | Physical tow cable winch pulling stranded vehicles onto trucks. | Target interaction near a tow truck. |
+| **barricades** | `resources/[logistics]/barricades/` | Road blockers, detour lights, and orange pylons. | Using deployable barricade items. |
+| **flatbed** | `resources/[logistics]/flatbed/` | Pulling cars up onto flatbeds persistently. | Target menu at rear of tow trucks. |
+| **fleet-management** | `resources/[logistics]/fleet-management/` | Corporate registry tracking commercial logistics truck inventories. | Interactive business terminals. |
+| **impound** | `resources/[logistics]/impound/` | Automated vehicle impounding yards with recovery fines. | Interacting with the Impound lot ped. |
+| **tow-job** | `resources/[logistics]/tow-job/` | Professional tow routes towing illegally parked cars for cash. | Job start at the Towing Office. |
+
+---
+
+## 15. Map Loadable Objects / MLOs (`[mlo]`)
+
+Custom map interior modifications. No scripts are executed here, but they contain assets streamed directly to client files.
+
+* **borders**: `resources/[mlo]/borders/` - Adds checkpoints at map borders.
+* **bunker**: `resources/[mlo]/bunker/` - Underground operational facility.
+* **gang-tunnel**: `resources/[mlo]/gang-tunnel/` - Underground passages for gangs.
+* **gigz-youtool**: `resources/[mlo]/gigz-youtool/` - Redesigned YouTool store.
+* **luxury-autos**: `resources/[mlo]/luxury-autos/` - Luxury car showroom.
+* **mrpd**: `resources/[mlo]/mrpd/` - Replaces Mission Row Police Department with highly detailed interiors.
+* **mt3d-fib**: `resources/[mlo]/mt3d-fib/` - Replaces FIB Building with full elevators.
+* **pillbox-hospital**: `resources/[mlo]/pillbox-hospital/` - Expanded interior hospital layout.
+* **sandy-medical**: `resources/[mlo]/sandy-medical/` - Country medical clinic.
+
+---
+
+## 16. Smartphones & Tech (`[phones]`)
+
+Smartphones and criminal laptop interfaces.
+
+| Resource Name | Path | Description | Activation & How to Trigger |
+|---|---|---|---|
+| **blackmarket** | `resources/[phones]/blackmarket/` | Phone application for buying lockpicks and contraband anonymously. | Open on the smartphone app grid. |
+| **criminal-laptop** | `resources/[phones]/criminal-laptop/` | Portable hacking machine used to execute black-market operations. | **Command/Keybind:** `+laptop` or using the `criminal_laptop` item. |
+| **hacking** | `resources/[phones]/hacking/` | Interactive keypads, simon says, and logic gateways. | Opens automatically during heist phases. |
+| **iphone** | `resources/[phones]/iphone/` | A customizable smartphone styled after the iPhone 17 Pro Max (real Dynamic Island element, ultra-thin bezels), single monolithic resource where each app is a case in `web/script.js`'s app-switcher. Apps: Twitter, Messages, Calls, Camera (requires `[shared]/screenshot-basic`), Wallet/Banking, Notes, TikTok, **Jobs** (lists every server job, shows current employment, apply directly from the app), **Voice Memos** (records nearby voice activity via `pma-voice`'s proximity API since real microphone capture isn't reliably available in FiveM's NUI, styled with a waveform UI, exportable to CID evidence, persisted in the `voice_memos` table). Shop-ownership profit payouts (see Economy section) push a live banner through the Dynamic Island even while the phone app is closed. | **Command/Keybind:** `+phone`. **UI-Enabled.** |
+| **locator** | `resources/[phones]/locator/` | App for tracking cell signal locations of wanted individuals. | Opens via specific phone applications. |
+| **vpn** | `resources/[phones]/vpn/` | Encryption layer for masking player IP addresses on the network. | Equipped as an item before connecting to net nodes. |
+
+---
+
+## 17. Player Systems (`[player]`)
+
+Player management tools, custom menus, outfits, garages, inventories, and radial wheels.
+
+| Resource Name | Path | Description | Activation & How to Trigger |
+|---|---|---|---|
+| **Renewed-Banking** | `resources/[player]/Renewed-Banking/` | Detailed banking layout with transactions and cards. | Interacting with banks or ATMs. |
+| **Renewed-Garages** | `resources/[player]/Renewed-Garages/` | Standard garages where players retrieve or store vehicles. | Approaching garage terminal points. |
+| **anim-menu** | `resources/[player]/anim-menu/` | Fast action and expression animations. | **Commands:** `/anim`, `/cancel`. |
+| **custom-pause** | `resources/[player]/custom-pause/` | Custom Pause Screen showcasing server logo, links, rules, and player statistics. | **UI-Enabled:** Triggers on pressing `ESC`. |
+| **drag-system** | `resources/[player]/drag-system/` | Allows dragging handcuffed suspects or downed bodies. | Target option on player or using corresponding radial option. |
+| **hud** | `resources/[player]/hud/` | Modern UI displaying health, armor, hunger, thirst, stress, speed, street names, and oxygen levels. Built with Vue3 and Quasar. | **Commands/Keybinds:** `menu` (config menu), `/resethud`. **UI-Enabled.** |
+| **illenium-appearance** | `resources/[player]/illenium-appearance/` | Complete clothing, hair, skin, and makeup customization. | Interacting with clothing stores or wardrobe zones. |
+| **glovebox** | `resources/[player]/glovebox/` | Radial glovebox menu for accessing vehicle documents and stored items directly from the driver's seat. | **F1 Radial Menu integration.** |
+| **item-actions** | `resources/[player]/item-actions/` | Use and application checks of generic items like handcuffs, bandages, and repair kits. | Triggered by using items. |
+| **notepad** | `resources/[player]/notepad/` | Lets players read and write notes in game. | **UI-Enabled:** Double clicking notes in inventory. |
+| **outfit-manager** | `resources/[player]/outfit-manager/` | Save custom clothes configurations as persistent outfits. | **UI-Enabled:** Interactive markers in clothing shops. |
+| **ox-context** | `resources/[player]/ox-context/` | Adapts custom styling for context popup menus. | Called via custom exports. |
+| **ox-inventory-cfg** | `resources/[player]/ox-inventory-cfg/` | Active layout configurations of standard item profiles. | Loads on startup. |
+| **ox_inventory** | `resources/[player]/ox_inventory/` | Advanced grid-based inventory featuring items weight, durability, and custom weapons attachment structures. | **Keybind:** `TAB` (Configurable)<br>**Commands:** `/steal` (robbing), `/clearActiveIdentifier`. **UI-Enabled.** |
+| **property-system** *(disabled)* | `resources/_disabled-overlaps/property-system/` | Duplicated ps-housing's functionality; moved to `_disabled-overlaps` during overlap resolution. | Not active. |
+| **ps-housing** | `resources/[player]/ps-housing/` | **The active player housing system** (kept over advanced-housing and property-system — most complete implementation at 747 lines, and the only one with a real front-end resource referencing it). Instance/shell housing with furniture placement and stash storage. | Physical entry points. |
+| **ps-realtor** | `resources/[player]/ps-realtor/` | Real estate agent management board enabling purchases of ps-housing properties. | Accessed by realtors at offices. |
+| **radialmenu** | `resources/[player]/radialmenu/` | Main interaction wheel with sub-menus for vehicles (engine, doors, hood), clothing toggles, and job actions. | **Keybind/Command:** `radialmenu` (normally holding `F1`). **UI-Enabled.** |
+| **radio** | `resources/[player]/radio/` | Standard handheld radio with dynamic channel entry. | **UI-Enabled:** Using the `radio` item in inventory. |
+| **repair-kit** | `resources/[player]/repair-kit/` | Repairs vehicle engines using standard mechanical parts. | Double-clicking `repairkit` inside inventories near car hoods. |
+| **tuning-garage** | `resources/[player]/tuning-garage/` | Customize performance engines, cosmetic wraps, neons, and rims. | Driving inside custom tuning garages. |
+| **vehicle-interactions** | `resources/[player]/vehicle-interactions/` | Simple commands for managing vehicle compartments. | **Commands:** `/door`, `/frunk`, `/trunk`, `/windows`, `/seat` with keybind handling. |
+| **vehicle-keys** | `resources/[player]/vehicle-keys/` | Locks and unlocks vehicles. Features a rotating dial lockpick mini-game. | **Command/Keybind:** `/vehiclelock`. **UI-Enabled.** |
+| **vehicle-lock** | `resources/[player]/vehicle-lock/` | Master engine locking algorithms preventing car hotwiring. | **Command/Keybind:** `+vehicleLock` (locks closest vehicle). |
+
+---
+
+## 18. Police Department (`[police]`)
+
+The central policing and community protection systems.
+
+| Resource Name | Path | Description | Activation & How to Trigger |
+|---|---|---|---|
+| **bodycam** | `resources/[police]/bodycam/` | Police bodycam overlay displaying officer rank, name, and live battery drainage. Logs activities to Discord. | **Command/Keybind:** `+bodycam` on-duty. |
+| **bolo-system** | `resources/[police]/bolo-system/` | File and view Be On Look Out entries for vehicles and suspects. | Interacting with MRPD computers. |
+| **breathalyzer** | `resources/[police]/breathalyzer/` | Measures blood alcohol content of suspects. | Using a `breathalyzer` on nearby players. |
+| **crosshair-toggle** | `resources/[police]/crosshair-toggle/` | Fast command toggle enabling custom shooting crosshairs. | **Command/Keybind:** `+crosshair`. |
+| **cuff-system** | `resources/[police]/cuff-system/` | Fast cuffs, animations, and sound effects for detaining suspects. | Context radial menus on targets. |
+| **davis-station** | `resources/[police]/davis-station/` | Custom map assets optimizing Davis Police Department. | Map asset. |
+| **dna** | `resources/[police]/dna/` | Analyze blood stains or saliva left behind at crime scenes. | Forensic kit collection. |
+| **duty-blips** | `resources/[police]/duty-blips/` | Updates colored maps blips of active police (blue) and CID (purple) every five seconds. | Automatic when going on-duty. |
+| **field-sobriety** | `resources/[police]/field-sobriety/` | Triggers custom sobriety balance tests for suspects. | **Command/Keybind:** `/sobriety` or radial menu. |
+| **fines** | `resources/[police]/fines/` | Directly charge citizens bills or traffic tickets. | Opened from police radial options or MDT. |
+| **grapple** | `resources/[police]/grapple/` | Tactical grappling hook allowing SWAT officers to climb up roofs. | **Command/Keybind:** `+grapple` or using `grapple_hook` item. |
+| **jail-cutscene** | `resources/[police]/jail-cutscene/` | Interactive booking cutscene running during prison processing. | Triggered automatically when sentencing suspect players at MRPD. |
+| **k9-unit** | `resources/[police]/k9-unit/` | Spawns a trained police dog capable of tracking scents and sniffing contraband. | Radial menu options. |
+| **lspd-laptop** | `resources/[police]/lspd-laptop/` | Portable laptop for cruisers enabling remote database lookups. | **Command/Keybind:** `+lspdLaptop` or using cruiser computers. |
+| **mdt** | `resources/[police]/mdt/` | Complete Mobile Data Terminal tracking warrants, records, and reports. | **Command/Keybind:** `+mdt` on-duty. |
+| **mrpd-mlo** | `resources/[police]/mrpd-mlo/` | Coordinates and lightings for Mission Row MLO. | Map asset. |
+| **officer-lockers** | `resources/[police]/officer-lockers/` | Stashes for storing officer gear and weaponry safely. | Interacting with lockers inside MRPD. |
+| **p-list** | `resources/[police]/p-list/` | Complete online police roster showing ranks and active channels. | **Command/Keybind:** `+plist`. **UI-Enabled.** |
+| **panic-button** | `resources/[police]/panic-button/` | Sends emergency backup requests with sound effects and GPS blips. | **Command/Keybind:** `+panic` (normally bound to `P`). |
+| **person-search** | `resources/[police]/person-search/` | Interactively search and review items carried by detained players. | **UI-Enabled:** Target option on cuffed players. |
+| **police-garage** | `resources/[police]/police-garage/` | Authorized police cruiser, SUV, and interceptor spawner. | Interaction points at MRPD garage gates. |
+| **police-uniforms** | `resources/[police]/police-uniforms/` | Quick-duty outfits, tactical gear, vests, and badges. | **Command/Keybind:** `+applyUniform` or interacting with MRPD lockers. |
+| **police-suite** | `resources/[police]/police-suite/` | Bundled suite of officer tools including the dashcam feature. Supports both qbx_core and legacy qb-core/es_extended framework detection for portability, with qbx_core taking priority when detected (which it always is on this server). | **Command:** `/dashcam [plate/officer_id]` attaches a chase-cam to the specified vehicle or officer. |
+| **prison** | `resources/[police]/prison/` | Processing booking terminals. | Physical booking desk interactions. |
+| **radar-gun** | `resources/[police]/radar-gun/` | Laser speed radar gun measuring speeds of passing vehicles. | **UI-Enabled:** Equipped as a speed radar weapon. |
+| **road-deployables** | `resources/[police]/road-deployables/` | Quick placement menu for roadblocks, detours, and pylons. | Selectable via police inventory items. |
+| **shields** | `resources/[police]/shields/` | Equips a physical riot shield blockading incoming projectile fire. | **Command/Keybind:** `+shield`. |
+| **snakecam** | `resources/[police]/snakecam/` | Usable snakecam item for looking under doors and around corners without exposing the officer. | Using the `snakecam` item from inventory. |
+| **spike-strips** | `resources/[police]/spike-strips/` | Pop tires of fleeing vehicles by throwing spike strip blocks. | **Command/Keybind:** `+spikestrip` or radial menu. |
+| **spotlight** | `resources/[police]/spotlight/` | High-beam steerable helicopter or cruiser searchlights. | **Command/Keybind:** `+spotlight` in police vehicles. |
+| **tackle** | `resources/[police]/tackle/` | Tackle fleeing suspects to the ground. | **Command/Keybind:** `+tackle` while running. |
+| **taser** | `resources/[police]/taser/` | Conductive taser cartridges with custom screenshake and recovery times. | Equipped and fired as standard stun weapon. |
+| **traffic-stop** | `resources/[police]/traffic-stop/` | Standard pull-over indicator lights and siren guides. | **Command/Keybind:** `/trafficstop`. |
+
+---
+
+## 19. Polish & Quality of Life (`[polish]`)
+
+Quality of life, optimizations, security, custom loading screens, and standalone elements.
+
+| Resource Name | Path | Description | Activation & How to Trigger |
+|---|---|---|---|
+| **admin-menu** *(disabled)* | `resources/_disabled-overlaps/admin-menu/` | Legacy admin menu — confirmed genuinely redundant with god-dashboard (identical admin/superadmin/god permission groups and identical core commands: noclip, godmode, freeze, revive, teleport, spawn, ban, kick). | Not active. |
+| **advanced-mechanics** | `resources/[polish]/advanced-mechanics/` | **The active mechanic job system** (kept over `mechanics` during overlap resolution). Repairing individual components (alternators, radiators, gaskets), paired with mechanic-laptop for business management. | Interaction with vehicle engines. |
+| **anticheat** | `resources/[polish]/anticheat/` | Detects health/armor changes, rapid teleports, blacklisted weapons (RPG, Railgun, Minigun), and speed hacks. Uses a 3-strike auto-ban structure. | Constant automatic server-side scans. |
+| **cinematic-camera** | `resources/[polish]/cinematic-camera/` | Cinematic camera with overlays for pictures and videos. | **Command/Keybind:** `/cinematic`. |
+| **client-optimizer** | `resources/[polish]/client-optimizer/` | Dynamic LOD and asset streaming management. | Runs automatically in the background. |
+| **clothing-store** | `resources/[polish]/clothing-store/` | Interactive markers at clothing stores. | Stepping into clothing store markers. |
+| **death-screen** | `resources/[polish]/death-screen/` | Interactive respawn timers, cardiac monitors, and EMS alert buttons. | Triggered automatically on player death. |
+| **doorlock** | `resources/[polish]/doorlock/` | Lockable doors (police departments, businesses, private warehouses) requiring keycards, passcodes, or lockpicks. | Keybind or targeted interaction on locked doors. |
+| **forensics** | `resources/[polish]/forensics/` | Collecting fingerprints, bullet casings, and blood drops at crime scenes. Includes full analysis terminals at CID HQ. | **UI-Enabled:** Physical blue terminal markers at CID HQ (`vec3(-1454.36, -519.81, 29.88)`). |
+| **fuel-ui** | `resources/[polish]/fuel-ui/` | Dynamic dashboard fuel display. | Active when driving inside vehicles. |
+| **gun-recoil** | `resources/[polish]/gun-recoil/` | Custom camera shake recoil patterns for firearms to balance gunplay. | Automatically applies when firing guns. |
+| **headbag** | `resources/[polish]/headbag/` | Hood bag item that can be placed on hostages, blinding their screens during kidnappings. | Double-clicking `headbag` item while behind a bound player. |
+| **id-card** | `resources/[polish]/id-card/` | Show physical driving licenses, weapon licenses, and ID cards to nearby players. | Using ID card items from the inventory. |
+| **immersion-polish** | `resources/[polish]/immersion-polish/` | Carrying and slinging other players. | **Command/Keybind:** `/releasecarry`. |
+| **loading-screen** *(disabled)* | `resources/_disabled-overlaps/loading-screen/` | Basic static loading screen, superseded by loading-screen-new. | Not active. |
+| **loading-screen-new** | `resources/[polish]/loading-screen-new/` | **The active loading screen.** Upgraded featuring background audio carousel, high-detail videos, and keybind help cards. | Runs on connection. **UI-Enabled.** |
+| **mechanic-laptop** | `resources/[polish]/mechanic-laptop/` | Manage repair rosters and parts orders. | **Command/Keybind:** `+mechanicLaptop` or using the `mechanic_laptop` item. |
+| **mechanics** *(disabled)* | `resources/_disabled-overlaps/mechanics/` | Older mechanic repair/tuning job script, superseded by advanced-mechanics during overlap resolution. | Not active. |
+| **no-wanted** | `resources/[polish]/no-wanted/` | Disables built-in GTA wanted level police so player-controlled cops manage arrests. | Automatically running. |
+| **passcode-doors** | `resources/[polish]/passcode-doors/` | Allows setting up doors requiring numeric passcode entries. | Targeted interaction on door handle. |
+| **radio** *(disabled)* | `resources/_disabled-overlaps/radio-polish/` | Standard voice communication channel slider — duplicated `[player]/radio` and was disabled in overlap resolution (renamed radio-polish to avoid a folder-name collision with the already-disabled radio-system). | Not active. |
+| **security-cam** | `resources/[polish]/security-cam/` | Allows security guards or police to monitor camera feeds inside major buildings. | Interacting with terminal screens. |
+| **server-guide** | `resources/[polish]/server-guide/` | Dynamic menu showcasing server rules, custom keybind layouts, and active staff contacts. | **Command:** `/rules`. **UI-Enabled.** |
+| **shops** | `resources/[polish]/shops/` | NPC grocery and hardware stores. Extended with a **player-ownership system**: shops can be purchased (deducted from the buyer's bank via the same flow ps-realtor uses for property purchases), and owners receive a configurable profit share on every sale, deposited to their bank and pushed as a live Dynamic Island notification on the owner's iPhone even if the app isn't open. Tracked in the `shops` table. | Interacting with shop peds; ownership purchase via `ox_target`. |
+| **speed-camera** | `resources/[polish]/speed-camera/` | Speed cameras ticketing speeding vehicles automatically and charging banking cards. | Automatic when passing active cameras too fast. |
+| **tattoo-shop** | `resources/[polish]/tattoo-shop/` | Buy tattoos at specialized ink shops. | Target-based interaction inside tattoo shops. |
+| **trash-cans** | `resources/[polish]/trash-cans/` | Allows searching trash cans to find scrap metal and food. | Target option on public garbage cans. |
+| **vending-machine** | `resources/[polish]/vending-machine/` | Purchase quick snacks or soda cans. | Interacting with physical vending machines. |
+
+---
+
+## 20. Prison System (`[prison]`)
+
+| Resource Name | Path | Description | Activation & How to Trigger |
+|---|---|---|---|
+| **prison-system** | `resources/[prison]/prison-system/` | Processing jail times, prisoner jobs (sweeping, cleaning sewers) to reduce jail sentences, contraband smuggling, and breakouts. | Automatically triggers when a player is jailed. |
+
+---
+
+## 21. Shared Resources (`[shared]`)
+
+Core layouts shared globally across multiple scripts. No activations here; they run persistently in the background.
+
+* **building-interiors**: `resources/[shared]/building-interiors/` - Stores interior locations.
+* **database**: `resources/[shared]/database/` - Stores `master_schema.sql` (80+ tables).
+* **fib-building**: `resources/[shared]/fib-building/` - Replaces FIB building floors and roof elevator terminals.
+* **helipads**: `resources/[shared]/helipads/` - Coordinates for standard helipads.
+* **libs**: `resources/[shared]/libs/` - Shared globals, tables, math helpers, and libraries.
+* **locales**: `resources/[shared]/locales/` - Core translation dictionaries (Arabic and English).
+* **nui-theme**: `resources/[shared]/nui-theme/` - CSS rules enabling the glassmorphism visual style for UI interfaces.
+* **secret-bunkers**: `resources/[shared]/secret-bunkers/` - Coordinates and markers of hidden bunkers across the map.
+
+---
+
+## 22. Vehicle Packs (`[vehicles]`)
+
+Vehicle asset modifications streaming meta information, handlings, and yft files. No commands, keybinds, or items are directly declared here.
+
+* **bevo**: `resources/[vehicles]/bevo/` - Adds Mercedes G-Wagon Bevo with 32+ custom tuning parts (bumpers, grilles, fenders).
+* **dicy**: `resources/[vehicles]/dicy/` - Luxury Dicy 21 S580M sedan.
+* **pitd-cars**: `resources/[vehicles]/pitd-cars/` - Tol Car Pack A containing over 50 unbranded sports and supercar models (tol22m5, tol240sx, tolbt62r, and more).
+* **police-bikes**: `resources/[vehicles]/police-bikes/` - Adds 5 heavy law-enforcement police motorcycles (BMW 1200RT, Kawasaki Ninja).
+
+---
+
+## 23. Unused/Legacy Overlaps (`_disabled-overlaps`)
+
+These folders contain legacy or redundant resources that have been disabled to prevent overlaps with newer systems, preserved intact for reference. Do not start these resources.
+
+* **admin-menu**: Replaced by `god-dashboard` (identical permission groups and core commands).
+* **advanced-housing**: Replaced by `ps-housing` + `ps-realtor` (more complete, and the only one with a real front-end referencing it).
+* **banking-plus**: Replaced by `Renewed-Banking` (other resources — civilian-jobs, mechanic-laptop, food-truck, cid-laptop — already depend on it).
+* **cdn-hud**: Replaced by the newer Vue-based `hud`.
+* **garage-system**: Replaced by `Renewed-Garages`.
+* **god-menu**: Replaced by `god-dashboard`, which absorbed every unique feature it had.
+* **linden-outfitbag** / **linden-outfits**: Replaced by `outfit-manager`.
+* **loading-screen**: Replaced by `loading-screen-new`.
+* **mechanics**: Replaced by `advanced-mechanics`.
+* **property-system**: Replaced by `ps-housing` (same reason as advanced-housing).
+* **qbox-spawn**: Replaced by `spawn-selector`.
+* **radio-polish** / **radio-system**: Both replaced by the `[player]/radio`.
+* **taxi** / **taxi-civilian**: Replaced by `taxi-system` (which also has iPhone Jobs app integration).
+
+---
+
+## 24. Extra Assets & Sources for Porting
+
+### Folder: `new mlos and vehicles/`
+Contains 14 additional asset packs ready to install:
+* `borders` (checkpoint MLO)
+* `bunker` (MLO)
+* `dicy21s580m` (luxury vehicle)
+* `DLDebadgedPoliceBikes` (police bikes)
+* `energy_luxuryautos` (showroom MLO)
+* `fiv3devs_pillbox` (hospital MLO)
+* `LuxBunker` (luxury bunker MLO)
+* `mt3d_fib` (FIB building)
+* `nteammrpdupdate` (MRPD map updates)
+* `pitd_unbranded_tol_car_pack_A` (vehicle pack)
+* `under ground bunker` (gang tunnel MLO)
+* `YouTools_Stores_MLO` (YouTool hardware store MLO)
+* `unclejsustsandymedicalv2` (Sandy Shores medical MLO)
+
+### Folder: `new scrpits/` (Original QBCore Source Code)
+Used as references for porting to QBox:
+* `qb-hud-main`
+* `qb-loading-main`
+* `qb-radialmenu-main`
+* `qb-spawn-main`
+
+---
+
+## 25. Database Schema Quick Guide
+
+The `master_schema.sql` creates approximately 190 tables persistently storing every gameplay layer:
+* **Player Data**: `players`, `characters`, `fingerprints`, `dna_records`.
+* **Banking**: `bank_accounts`, `loans`, `credit_scores`, `transactions`.
+* **CID & Police**: `cid_cases`, `cid_warrants`, `cid_bolos`, `bans`, `admin_logs`, `weapon_serials`.
+* **Property & Garages**: `player_properties`, `house_furniture`, `player_vehicles`, `impounded_vehicles`.
+* **Admin & Immersion (added this session)**: `server_owners`, `bans`, `ambient_events`, `shops` (player ownership + profit share), `support_tickets`, `voice_memos`.
+* **Criminal**: `gang_renown`, `blackmarket_listings`, `smuggling_events`.
+
+---
+
+## 26. Technical Reference & Internal Workflows
+
+### 1. God Dashboard Authorization Pattern (`isAdmin()`)
+Every privileged callback and event in `god-dashboard/server/main.lua` (and `ticket-system/server.lua`, which reuses the identical pattern) implements a two-tier check — either is sufficient:
+```lua
+-- server/main.lua
+local function isOwner(identifier)
+    -- Checks the persistent server_owners DB table
+    return MySQL.scalar.await('SELECT id FROM server_owners WHERE identifier = ? LIMIT 1', { identifier }) ~= nil
+end
+
+local function isAdmin(src)
+    local player = QBox.Functions.GetPlayer(src)
+    if not player then return false end
+    if isOwner(player.PlayerData.license) or isOwner(player.PlayerData.citizenid) then
+        return true
+    end
+    for _, g in ipairs({ 'admin', 'superadmin', 'god' }) do
+        if player.PlayerData.group == g then return true end
+    end
+    return false
+end
+```
+Every state-changing handler that passes this check also calls `logAdminAction(src, action, target)`, which inserts a row into `admin_logs` — visible from god-dashboard's own log viewer.
+
+### 2. Auto God Ownership Allocation
+On `playerConnecting`, the server checks if any active owner exists in the `server_owners` database table. If zero records are found, the joining player is assigned as the supreme God Owner (`group_name = 'god'`) instantly, securing the server. The same handler also checks the `bans` table and rejects the connection with the ban reason and expiry if the player's license is banned.
+
+### 3. Anticheat Auto-Ban Escalar
+The anticheat monitors telemetry variables per client frame:
+* Health changes > 5 HP/tick
+* Armour changes > 5 AP/tick
+* Teleport movements > 300 meters/tick
+* Firing blacklisted weapons (RPG, Minigun)
+Detections log strike tallies. Reaching **3 strikes** kicks the target and issues a permanent ban logged to `bans` and Discord.
+
+---
+
 ## Known Resolved Issues & Audit Pass Summary
 
 A comprehensive full audit-and-fix pass was completed across all 260+ resources:
@@ -523,3 +582,4 @@ A comprehensive full audit-and-fix pass was completed across all 260+ resources:
 9. **Voice Memos Persistence Fixed**: The Voice Memos app was storing all recordings in an in-memory Lua table with no database backing — every memo was permanently lost on any resource restart. Added a `voice_memos` table and rewired save/get/export-to-evidence to use it.
 10. **Dead Code Removed**: Deleted an orphaned, never-called duplicate Jobs/Voice Memos server implementation in `resources/[phones]/iphone/server/main.lua` left over from an earlier merge point, and a duplicate copy of `ps-housing`/`ps-realtor` mistakenly left behind in `resources/_disabled-overlaps/` after the housing decision was reversed.
 11. **Documentation Accuracy Pass**: Corrected several outdated/contradictory resource descriptions in this README (advanced-housing and mechanics were still described as the active systems after being disabled; god-menu was still described as the main admin panel after being consolidated into god-dashboard; the disabled-overlaps count was stale at 6 when it is actually 16).
+12. **README Restructured**: Replaced the previous unstructured prose-paragraph format with the organized table-of-contents + per-category table format used above, cross-checked against the actual current state of every resource (not copied verbatim from any single prior branch's draft).

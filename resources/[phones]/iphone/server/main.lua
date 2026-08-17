@@ -121,13 +121,24 @@ RegisterNetEvent('jobsApp:server:applyJob', function(jobName)
 end)
 
 -- Voice Memos & Evidence Integration
-local savedVoiceMemos = {}
-
 QBox.Functions.CreateCallback('voiceMemos:server:getMemos', function(source, cb)
     local src = source
     local p = QBox.Functions.GetPlayer(src)
     local cid = p and p.PlayerData.citizenid or 'unknown'
-    cb(savedVoiceMemos[cid] or {})
+    local rows = MySQL.query.await('SELECT id, title, duration, voices_log, officer_name, UNIX_TIMESTAMP(created_at) AS created_at FROM voice_memos WHERE citizenid = ? ORDER BY created_at DESC', { cid }) or {}
+    local memos = {}
+    for _, r in ipairs(rows) do
+        table.insert(memos, {
+            id = r.id,
+            title = r.title,
+            duration = r.duration,
+            voicesLog = r.voices_log,
+            timestamp = os.date('%Y-%m-%d %H:%M:%S', r.created_at),
+            citizenid = cid,
+            officerName = r.officer_name,
+        })
+    end
+    cb(memos)
 end)
 
 RegisterNetEvent('voiceMemos:server:saveMemo', function(title, duration, voicesLog)
@@ -135,19 +146,11 @@ RegisterNetEvent('voiceMemos:server:saveMemo', function(title, duration, voicesL
     local p = QBox.Functions.GetPlayer(src)
     if not p then return end
     local cid = p.PlayerData.citizenid
-    savedVoiceMemos[cid] = savedVoiceMemos[cid] or {}
+    local officerName = p.PlayerData.charinfo.firstname .. ' ' .. p.PlayerData.charinfo.lastname
 
-    local memo = {
-        id = #savedVoiceMemos[cid] + 1,
-        title = title or ('Memo #' .. (#savedVoiceMemos[cid] + 1)),
-        duration = duration or 5,
-        voicesLog = voicesLog or 'No nearby voices detected',
-        timestamp = os.date('%Y-%m-%d %H:%M:%S'),
-        citizenid = cid,
-        officerName = p.PlayerData.charinfo.firstname .. ' ' .. p.PlayerData.charinfo.lastname
-    }
-
-    table.insert(savedVoiceMemos[cid], memo)
+    MySQL.insert('INSERT INTO voice_memos (citizenid, title, duration, voices_log, officer_name) VALUES (?, ?, ?, ?, ?)', {
+        cid, title or 'Voice Memo', duration or 5, voicesLog or 'No nearby voices detected', officerName,
+    })
     TriggerClientEvent('ox_lib:notify', src, { type = 'success', description = 'Voice memo saved.' })
 end)
 
@@ -156,17 +159,13 @@ RegisterNetEvent('voiceMemos:server:exportToEvidence', function(memoId)
     local p = QBox.Functions.GetPlayer(src)
     if not p then return end
     local cid = p.PlayerData.citizenid
-    local userMemos = savedVoiceMemos[cid] or {}
-    local memo = nil
-    for _, m in ipairs(userMemos) do
-        if m.id == memoId then memo = m; break end
-    end
+    local memo = MySQL.single.await('SELECT * FROM voice_memos WHERE id = ? AND citizenid = ?', { memoId, cid })
 
     if not memo then
         return TriggerClientEvent('ox_lib:notify', src, { type = 'error', description = 'Voice memo not found.' })
     end
 
-    local detail = string.format('Voice Recording [%s]: %s (Duration: %ds)', memo.title, memo.voicesLog, memo.duration)
+    local detail = string.format('Voice Recording [%s]: %s (Duration: %ds)', memo.title, memo.voices_log, memo.duration)
     MySQL.insert('INSERT INTO evidence_analysis (citizenid, type, result, timestamp) VALUES (?, ?, ?, ?)', {
         cid, 'Voice Memo Audio Recording', detail, os.time()
     })
@@ -875,44 +874,3 @@ end)
 
 exports('getCallChannel', function(src) return callChannels[src] end)
 exports('isInCall', function(src) return activeCalls[src] ~= nil end)
-
-
---- Jobs App ---
-QBox.Functions.CreateCallback('iphone:server:getJobsList', function(source, cb)
-    local jobs = {
-        { name = 'unemployed', label = 'Unemployed', description = 'Civilian looking for work' },
-        { name = 'police', label = 'Police Department', description = 'Law enforcement officer' },
-        { name = 'ambulance', label = 'Emergency Medical Services', description = 'EMS & Medical staff' },
-        { name = 'mechanic', label = 'Los Santos Customs', description = 'Vehicle repair & tuning' },
-        { name = 'taxi', label = 'Downtown Cab Co', description = 'Passenger transportation' },
-        { name = 'garbage', label = 'Waste Management', description = 'City garbage collection' },
-        { name = 'bus', label = 'Los Santos Transit', description = 'Bus driver' }
-    }
-    cb(jobs)
-end)
-
-RegisterNetEvent('iphone:server:applyForJob', function(jobName)
-    local src = source
-    local player = QBox.Functions.GetPlayer(src)
-    if player and jobName then
-        player.Functions.SetJob(jobName, 0)
-        TriggerClientEvent('ox_lib:notify', src, { type = 'success', description = 'Applied and hired for ' .. jobName })
-    end
-end)
-
-
---- Voice Memos App & Evidence Integration ---
-RegisterNetEvent('iphone:server:saveVoiceMemo', function(title, duration, voicesCount)
-    local src = source
-    local player = QBox.Functions.GetPlayer(src)
-    if not player then return end
-
-    MySQL.insert('INSERT INTO voice_memos (citizenid, title, duration, voices_count) VALUES (?, ?, ?, ?)', {
-        player.PlayerData.citizenid, title or 'Voice Memo', duration or 0, voicesCount or 0
-    })
-    TriggerClientEvent('ox_lib:notify', src, { type = 'success', description = 'Saved Voice Memo' })
-end)
-
-exports('GetVoiceMemosForEvidence', function(citizenid)
-    return MySQL.query.await('SELECT * FROM voice_memos WHERE citizenid = ?', { citizenid })
-end)

@@ -1756,3 +1756,15 @@ CREATE TABLE IF NOT EXISTS support_tickets (
   INDEX idx_tickets_status (status),
   INDEX idx_tickets_sender (sender_citizenid)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- === VOICE MEMOS ([phones]/iphone) ===
+CREATE TABLE IF NOT EXISTS voice_memos (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  citizenid VARCHAR(50) NOT NULL,
+  title VARCHAR(100) NOT NULL,
+  duration INT DEFAULT 5,
+  voices_log VARCHAR(255) DEFAULT NULL,
+  officer_name VARCHAR(100) DEFAULT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_voice_memos_citizenid (citizenid)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

@@ -3,8 +3,13 @@ local adminCache = {}
 local dbOwners = {}
 
 local function getSteamIdentifier(src)
+    -- Despite the name (kept for compatibility with existing call sites below),
+    -- this returns the player's license identifier, not steam:. license: is
+    -- always present regardless of whether steam_webApiKey is configured, and
+    -- matches exactly what god-dashboard's isOwner() checks (player.PlayerData.license),
+    -- so ownership granted here is recognized consistently across both admin panels.
     for _, id in ipairs(GetPlayerIdentifiers(src)) do
-        if string.find(id, 'steam:') then return id end
+        if string.find(id, 'license:') then return id end
     end
     return nil
 end

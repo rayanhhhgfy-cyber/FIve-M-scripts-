@@ -1,295 +1,507 @@
-# Five M Server — Complete Setup Guide
+# دليل التشغيل الكامل — خطوة بخطوة (بالعربي، بدون تعقيد)
 
-## 📦 What Was Added This Session
+هذا الدليل مكتوب لشخص ما بيعرف شي عن الكمبيوتر أو السيرفرات. كل خطوة مشروحة كاملة، وما في أي شي مفروض إنك تعرفه من قبل. اقرأ بالترتيب وما تقفز خطوة.
 
-### 1. Bodycam Auto-On Duty
-When you go on duty as police/CID, your bodycam **turns on automatically** and starts recording. When you go off duty, it stops.
-- Bodycam key: **L** (toggle manually too)
-- Now works for **CID** as well
-- Config: `resources/[police]/bodycam/config.lua`
+## أول شي: شو بدك بالضبط
 
-### 2. P-List (Personnel List) — `/plist` or **F6**
-Shows every police/CID officer currently on duty, their name, job, rank, and what radio channel they're on.
-- Press **F6** or type `/plist`
-- Shows **count** of active officers at the top
-- Updates live every 3 seconds
-- Dark glassmorphism UI on the right side of screen
+عندك خيارين، واختار حسب هدفك:
 
-### 3. On-Duty Map Blips
-When you go on duty, other police/CID can see your **blue blip** on the map with your name. When you go off duty, the blip disappears.
-- Police = blue blip
-- CID = dark blue/purple blip
-- Updates every 5 seconds
+**الخيار 1 — تجربة على جهازك الشخصي (مجاني، بدون إنترنت، للتجربة بس):**
+السيرفر بيشتغل على نفس جهازك، وأنت بس اللي بتقدر تدخله (ما حدا من برا بيقدر يدخل). منيح عشان تتأكد إن كل شي شغال قبل ما تروح للخطوة الحقيقية.
 
-### 4. FIB Building
-Brand new FIB building MLO at the Pillbox area with:
-- **Elevator** with door sounds, fade transitions, and floor selection
-- **Computer terminals** you can use to check building status, date, BOLOs
-- **Access control** — only police/CID can enter, CID gets restricted floors
-- Elevator floors: Lobby, Offices, Armory, Interrogation, Server Room, Roof (rank-gated)
+**الخيار 2 — تشغيل حقيقي على Oracle Cloud (مجاني، وأي حدا بالعالم يقدر يدخل):**
+هاد السيرفر الحقيقي اللي أصحابك أو أي حدا بيقدر يدخله من بيته.
+
+انصحك تجرب الخيار 1 أول، تتأكد كل شي شغال، وبعدين تروح للخيار 2.
 
 ---
 
-## 🚀 Step-by-Step: What You MUST Do to Launch
+## معلومة مهمة قبل ما تختار جهاز على Oracle Cloud
 
-### Step 1 — Get a Server
-You need a FiveM server to run this. Options:
-- Use a hosting company (e.g., ZAP-Hosting, GTANet, OVH) — $5-15/month
-- Use a friend's PC as a server
+Oracle Cloud بيعطيك نوعين من الأجهزة المجانية:
+- نوع اسمه **AMD** — قوي شوي بس ذاكرته صغيرة جداً (1 جيجا بس)، وهاد المشروع كبير (260+ إضافة) فرح يكون بطيء جداً أو ما رح يشتغل أصلاً.
+- نوع اسمه **Ampere / ARM** — قوي جداً ومجاني تماماً (4 معالجات و24 جيجا رام، يعني أقوى بكثير)، بس فيه مشكلة وحدة: برنامج تشغيل GTA سيرفرات (FXServer) مبني أصلاً لنوع تاني من المعالجات (اسمه x86_64)، فما بيشتغل مباشرة على هاد النوع من غير خطوة إضافية بسيطة هنشرحها بالتفصيل بالأسفل (خطوة اسمها "المترجم" أو FEX-Emu).
 
-### Step 2 — Upload Files
-Upload the entire `resources/` folder to your server's resources directory.
+**النصيحة: اختار النوع الثاني (Ampere/ARM)** لأنه فعلياً أقوى بكثير ومجاني، وبس رح تحتاج خطوة إضافية وحدة بسيطة رح نشرحلك ياها بالتفصيل. المشروع عندك كبير (260+ إضافة) ومحتاج ذاكرة كبيرة، فالخيار الأول (AMD 1 جيجا) شبه مستحيل يشتغل معه.
 
-### Step 3 — Configure server.cfg
-The file at `resources/server.cfg` is your main config. Edit these:
+---
+
+## الخيار 1 بالتفصيل: تجربة السيرفر على جهاز الويندوز تبعك (Localhost)
+
+### الخطوة 1 — نزّل برنامج السيرفر (FXServer)
+
+1. افتح المتصفح (كروم أو أي متصفح) وروح للرابط:
+   `https://runtime.fivem.net/artifacts/fivem/build_server_windows/master/`
+2. رح تشوف قائمة تواريخ. اختار **آخر تاريخ بالأسفل** (الأحدث).
+3. حمّل الملف اللي اسمه شي متله `server.zip`.
+4. بعد ما يخلص التحميل، اعمل مجلد جديد بأي مكان بجهازك (مثلاً على سطح المكتب) وسميه `FiveM-Server`.
+5. فك ضغط الملف اللي حملته جوا هاد المجلد (كبسة يمين على الملف > Extract All > اختار مجلد FiveM-Server).
+
+بعد هاي الخطوة، جوا مجلد `FiveM-Server` رح تلاقي ملف اسمه **FXServer.exe** — هاد هو "برنامج تشغيل السيرفر" نفسه.
+
+### الخطوة 2 — حط ملفات المشروع بمكانها الصح
+
+1. جوا مجلد `FiveM-Server`، اعمل مجلد جديد اسمه `server-data`.
+2. حمّل ملفات المشروع تبعك من GitHub (من صفحة المشروع، زر اسمه Code، بعدين Download ZIP).
+3. فك ضغط الملف اللي نزّلته.
+4. من جوا المجلد اللي طلع، انسخ مجلد اسمه `resources` (فيه كل السكربتات) والصقه جوا مجلد `server-data` اللي عملته بالخطوة 1.
+
+يعني الشكل النهائي المفروض يكون هيك:
+```
+FiveM-Server/
+   FXServer.exe
+   server-data/
+      resources/
+         server.cfg  (هذا جوا resources)
+         [admin]/
+         [police]/
+         ... الخ
+```
+
+### الخطوة 3 — اعمل ملف تشغيل بسيط (اختصار)
+
+1. جوا مجلد `FiveM-Server`، اعمل ملف نصي جديد (كبسة يمين > New > Text Document).
+2. سمّيه `run.bat` (لازم تشيل `.txt` من الآخر وتحطها `.bat` — لو ما بتشوف امتداد الملفات، افتح "File Explorer" واختار من فوق تبويب "View" وفعّل "File name extensions").
+3. افتح الملف بالـ Notepad واكتب فيه بالضبط هاد السطر:
+```
+FXServer.exe +exec server-data\resources\server.cfg
+```
+4. احفظ الملف واقفله.
+
+### الخطوة 4 — شغّل السيرفر
+
+1. اعمل دبل كليك على `run.bat`.
+2. رح تفتحلك نافذة سودة (اسمها "الطرفية" أو Console) فيها كتابة كتير بتمشي بسرعة — هذا طبيعي، هذا السيرفر عم "يشتغل" ويحمّل كل الإضافات.
+3. استنى لين توقف الكتابة عن الحركة السريعة وتشوف بآخرها شي متل `Server is now ready`. أول مرة ممكن تاخذ دقيقة لدقيقتين.
+4. **لا تقفل هاي النافذة السودة** طول ما بدك السيرفر يضل شغال — لو قفلتها بينطفي السيرفر.
+
+### الخطوة 5 — ادخل عالسيرفر من داخل اللعبة
+
+1. افتح لعبة FiveM العادية عندك (مو GTA V العادية، لازم يكون عندك تطبيق FiveM مثبت من الموقع الرسمي fivem.net لو ما عندك).
+2. لما تفتح، اضغط على زر **F8** بالكيبورد — رح تطلعلك نافذة كتابة أوامر بأسفل الشاشة.
+3. اكتب بالضبط:
+```
+connect localhost
+```
+4. اضغط Enter.
+5. السيرفر المفروض يوصلك ويحملك جواه.
+
+لو دخلت وشفت شخصيتك بالمدينة — مبروك، السيرفر شغال صح على جهازك!
+
+---
+
+## الخيار 2 بالتفصيل: التشغيل الحقيقي على Oracle Cloud
+
+### الخطوة 1 — اعمل حساب على Oracle Cloud
+
+1. روح لموقع `https://www.oracle.com/cloud/free/` واضغط "Start for free".
+2. سجّل بإيميلك واملأ بياناتك (اسم، بلد، الخ).
+3. رح يطلبوا منك رقم بطاقة بنكية (فيزا أو ماستركارد) — هذا **مجرد تأكيد هوية**، ما رح يخصموا منها شي طالما ضلّيت جوا الحدود المجانية اللي رح نشرحها. Oracle معروفين إنهم ما بيسحبوا فلوس لحالهم أبداً.
+4. أكمل التسجيل واستنى لين يجيك إيميل تأكيد.
+
+### الخطوة 2 — اعمل الجهاز (Instance)
+
+1. سجّل دخول لحسابك على `https://cloud.oracle.com`.
+2. من القائمة اللي على اليسار (لازم تضغط على الثلاث خطوط بأعلى الشمال لو ما ظاهرة)، روح لـ **Compute > Instances**.
+3. اضغط الزر الأزرق **Create Instance**.
+4. بمكان اسم الجهاز، اكتب أي اسم بتحبه متل `my-fivem-server`.
+5. تحت قسم "Image and shape"، اضغط **Edit**.
+   - بخانة "Image"، اختار **Ubuntu** (آخر إصدار موجود، متل Ubuntu 22.04 أو أحدث).
+   - بخانة "Shape"، اضغط **Change Shape**. رح تشوف تبويبات فوق (AMD, Intel, Ampere...). اضغط تبويب **Ampere**.
+   - اختار الشكل اللي اسمه **VM.Standard.A1.Flex**.
+   - تحت، فيه خانتين اسمهم "Number of OCPUs" و"Amount of memory". حط **4** بالأولى و**24** بالثانية (هذا أقصى شي مسموح مجاني).
+   - اضغط **Select Shape**.
+6. تحت قسم "Networking"، خلّي كل شي متل ما هو (الإعدادات الافتراضية منيحة).
+7. تحت قسم "Add SSH keys"، اختار **Generate a key pair for me**، وبعدين اضغط **Save Private Key** و**Save Public Key** — هدول ملفين رح تحتاجهم بالخطوة الجاية عشان تدخل عالجهاز، خليهم بمكان تتذكره (مثلاً سطح المكتب).
+8. اضغط الزر الأزرق **Create** بالأسفل.
+9. استنى دقيقة لدقيقتين لين تشوف حالة الجهاز تصير **Running** (دائرة خضرا).
+
+**ملاحظة:** أحياناً Oracle بيقولك "ما فيه أجهزة Ampere متوفرة حالياً بهاد المنطقة" — هاد شي عادي ومؤقت (الطلب عليها كتير). جرب تاني بعد شوي، أو غيّر "Availability Domain" من نفس صفحة الإنشاء وجرب تاني.
+
+### الخطوة 3 — افتح الأبواب (Ports) عشان الناس تقدر تدخل
+
+السيرفر لازم "باب" مفتوح عشان اللاعبين يقدروا يوصلوله من الإنترنت. هيك تفتحه:
+
+1. من نفس صفحة الجهاز اللي عملته، لاقي قسم اسمه **Primary VNIC** وتحته رابط اسمه **Subnet** — اضغط عليه.
+2. رح توصل صفحة اسمها Subnet Details. تحت لاقي **Security Lists** واضغط على الاسم اللي فيها (عادةً اسمه Default Security List).
+3. اضغط الزر **Add Ingress Rules** (يعني "إضافة قاعدة سماح دخول").
+4. املأ هيك:
+   - Source CIDR: `0.0.0.0/0`
+   - IP Protocol: **TCP**
+   - Destination Port Range: `30120`
+5. اضغط **Add Ingress Rules** تحفظ.
+6. كرر نفس الخطوة زبطها بس هاي المرة اختار IP Protocol: **UDP** بدل TCP، ونفس البورت `30120`.
+7. كرر مرة ثالثة لبورت `40120` (بروتوكول TCP) — هذا بيلزم لصفحة إدارة السيرفر (txAdmin) لو حبيت تستخدمها لاحقاً.
+
+الآن الجهاز جاهز يستقبل لاعبين من برا.
+
+### الخطوة 4 — ادخل على الجهاز من بعيد (Connect)
+
+عشان تتحكم بالجهاز اللي عملته على Oracle، لازم "تدخله" من جهازك عن طريق برنامج بيوصلك بيه ويعطيك نافذة كتابة أوامر — هذا يسمى **SSH**. رح نستخدم برنامج مجاني اسمه PuTTY.
+
+1. حمّل برنامج PuTTY من `https://www.putty.org` (اضغط على رابط التحميل وحمّل النسخة العادية 64-bit).
+2. ثبّته زي أي برنامج عادي (Next, Next, Install).
+3. المفتاح اللي حفظته بالخطوة السابقة (Private Key) لازم نحوله لصيغة PuTTY يفهمها:
+   - افتح برنامج اسمه **PuTTYgen** (بيتثبت مع PuTTY تلقائياً، دوره من قائمة Start).
+   - اضغط **Load** واختار الملف اللي حفظته (ممكن تحتاج تغيّر الفلتر بالأسفل ليمين لـ "All Files" عشان يظهرلك).
+   - اضغط **Save private key** واحفظه بمكان تتذكره باسم متل `oracle-key.ppk`.
+4. افتح برنامج **PuTTY** نفسه.
+5. رجع لصفحة الجهاز على Oracle Cloud وانسخ العنوان اللي جنب "Public IP Address" (رقم شكله متل 123.45.67.89).
+6. بـ PuTTY، بخانة "Host Name"، الصق الرقم وقدامه اكتب `ubuntu@` — يعني يصير الشكل: `ubuntu@123.45.67.89`
+7. من القائمة اليسار بـ PuTTY، روح لـ **Connection > SSH > Auth > Credentials** والصق مسار ملف `oracle-key.ppk` اللي عملته.
+8. ارجع فوق لـ **Session** واضغط **Open**.
+9. أول مرة رح تطلعلك رسالة تحذير أمان — اضغط **Accept**.
+10. رح تفتحلك نافذة سودة فيها كتابة — هذا معناه إنك دخلت للجهاز بنجاح. من هلأ وطول الدليل، أي جملة نطلب منك "تكتبها" لازم تكتبها بهاي النافذة السودة بالضبط وتضغط Enter بعدها.
+
+### الخطوة 5 — جهّز الجهاز (تثبيت البرامج الأساسية)
+
+انسخ والصق كل سطر بالترتيب بالنافذة السودة، واضغط Enter، واستنى يخلص قبل ما تنقل للي بعده:
 
 ```
-# Change your server name
-sv_hostname "YOUR SERVER NAME HERE"
+sudo apt update && sudo apt upgrade -y
+```
+(هذا بيحدّث الجهاز — ممكن ياخذ كم دقيقة)
 
-# Your Steam API key (get from https://steamcommunity.com/dev/apikey)
-set steam_webApiKey "YOUR_KEY_HERE"
+```
+sudo apt install -y screen mariadb-server mariadb-client unzip curl
+```
+(هذا بيثبت: برنامج "screen" اللي بيخلي السيرفر يضل شغال حتى لو سكرت PuTTY، وبرنامج قاعدة البيانات MariaDB، وأدوات فك الضغط والتحميل)
 
-# Optional: server icon (place logo.png in resources folder)
-load_server_icon logo.png
+```
+sudo systemctl start mariadb
+sudo systemctl enable mariadb
+```
+(هذا بيشغّل قاعدة البيانات ويخليها تشتغل تلقائياً كل مرة الجهاز يفتح)
+
+### الخطوة 6 — ثبّت "المترجم" (لأن الجهاز نوعه Ampere/ARM)
+
+زي ما شرحنا بالأول، برنامج السيرفر مبني لنوع معالج تاني، فمحتاجين "مترجم" بينه وبين الجهاز. انسخ هاي الأسطر وحطها وحدة وحدة:
+
+```
+sudo apt install -y software-properties-common
+sudo add-apt-repository ppa:fex-emu/fex -y
+sudo apt update
+sudo apt install -y fex-emu-armv8.0 fex-emu-binfmt32 fex-emu-binfmt64
 ```
 
-### Step 4 — Database Setup
-1. Open `resources/[shared]/database/master_schema.sql`
-2. Copy all the SQL
-3. Run it on your **MySQL database** (your hosting company gives you database access)
-4. This creates all tables the server needs
+بعدين شغّل هاد الأمر (بيحمّل ملفات إضافية للمترجم، حوالي 1 جيجا، ممكن ياخذ شوي وقت):
+```
+FEXRootFSFetcher
+```
+لما يسألك أسئلة، اكتب **1** واضغط Enter على كل سؤال (يعني اختار الخيار الافتراضي في كل مرة).
 
-### Step 5 — Configure God Admin (VERY IMPORTANT)
-Open `resources/[admin]/admin-commander/config.lua`
+### الخطوة 7 — نزّل برنامج السيرفر (FXServer) لجهاز Oracle
 
-Find `Config.ownerIdentifiers` and add your **Steam Hex** ID:
-```lua
-Config.ownerIdentifiers = {
-    'steam:110000123456789',  -- <-- PUT YOUR STEAM HEX HERE
-}
+بنفس النافذة السودة، اكتب:
+```
+mkdir ~/FXServer && cd ~/FXServer
+curl -sL https://runtime.fivem.net/artifacts/fivem/build_proot_linux/master/fx.tar.xz -o fx.tar.xz
+tar xf fx.tar.xz
 ```
 
-To find your Steam Hex:
-1. Start the server and join
-2. Type `/steam` in chat
-3. It shows your hex (looks like `steam:110000xxxxxxxxx`)
-4. Add it to the config, restart server
+### الخطوة 8 — نزّل ملفات المشروع من GitHub
 
-The **first person** who joins after you set this will become permanent admin (saved in database). After that, only that person can use `/addowner` to add others.
+بدل ما نرفع الملفات يدوياً (طريقة بطيئة ومعقدة)، رح نخلي الجهاز ينزّلهم مباشرة من صفحة المشروع على GitHub:
+```
+cd ~/FXServer
+git clone https://github.com/rayanhhhgfy-cyber/FIve-M-scripts-.git server-data
+```
+هذا بينزّل كل مجلد `resources` وملف `server.cfg` مباشرة بمكانهم الصح.
 
-### Step 6 — Set ox_inventory Items
-The server needs custom items defined. Run these SQL queries on your database:
+**ملاحظة لأي تحديث مستقبلي:** لو عدّلت شي على GitHub بعدين وبدك تجيبه للسيرفر، بس اكتب:
+```
+cd ~/FXServer/server-data && git pull
+```
+
+### الخطوة 9 — جهّز قاعدة البيانات
+
+قاعدة البيانات هي المكان اللي بيتخزن فيه كل شي دائم (فلوس اللاعبين، بيوتهم، سياراتهم...). هيك تعملها:
+
+```
+sudo mysql -u root
+```
+هذا بيدخلك لقاعدة البيانات. اكتب هالأربع أسطر وحدة وحدة (غيّر كلمة `كلمة_سر_قوية` لأي كلمة سر تختارها، بس تذكرها):
+```
+CREATE DATABASE fivem_db;
+CREATE USER 'fivem_user'@'localhost' IDENTIFIED BY 'كلمة_سر_قوية';
+GRANT ALL PRIVILEGES ON fivem_db.* TO 'fivem_user'@'localhost';
+FLUSH PRIVILEGES;
+```
+بعدين اكتب `exit` وEnter تطلع.
+
+الآن حمّل هيكل الجداول (كل الجداول اللي المشروع محتاجها):
+```
+sudo mysql -u root fivem_db < ~/FXServer/server-data/resources/\[shared\]/database/master_schema.sql
+```
+
+### الخطوة 10 — احصل على مفتاح الترخيص (License Key) — إلزامي
+
+السيرفر ما بيشتغل بدون هاد المفتاح، وهو مجاني ومباشر تحصله (أسهل بكثير من مفتاح Steam):
+
+1. روح لموقع `https://keymaster.fivem.net` وسجّل دخول بحساب Cfx.re / FiveM تبعك (لو ما عندك حساب، اعمل واحد من نفس الصفحة، مجاني).
+2. اضغط **Register New Server**.
+3. اكتب أي اسم للسيرفر واضغط Create.
+4. رح يطلعلك مفتاح طويل شكله متل حروف وأرقام مخلوطة — انسخه، رح تحتاجه بالخطوة الجاية.
+
+**بخصوص Steam API Key:** ذكرت إنك ما قدرت تحصل عليه — لا مشكلة، مو إلزامي. السيرفر بيشتغل تمام بدونه، بس اللاعبين اللي بيدخلوا عن طريق حساب Steam ما رح ينضبط لهم بعض ميزات التحقق من الهوية عن طريق Steam تحديداً (باقي طرق الدخول العادية بتشتغل عادي زي المعتاد). خلّي هاد السطر بملف server.cfg متل ما هو فاضي.
+
+### الخطوة 11 — عدّل ملف server.cfg
+
+```
+nano ~/FXServer/server-data/resources/server.cfg
+```
+هذا بيفتحلك الملف بمحرر بسيط داخل النافذة السودة. دور (باستخدام أسهم الكيبورد) على السطر اللي فيه:
+```
+# set sv_licenseKey "YOUR_CFX_SERVER_LICENSE_KEY"
+```
+احذف علامة `#` من أوله والمسافة اللي بعدها، وحط مكان `YOUR_CFX_SERVER_LICENSE_KEY` المفتاح اللي نسخته بالخطوة السابقة (خلي علامات التنصيص "" متل ما هي). يصير الشكل:
+```
+set sv_licenseKey "abc123...المفتاح_تبعك"
+```
+كمان دور على سطر `sv_hostname` وغيّر الاسم لاسم سيرفرك اللي بدك ياه يظهر للاعبين.
+
+لما تخلص التعديل: اضغط `Ctrl + O` (يحفظ)، اضغط Enter، بعدين `Ctrl + X` (يطلع من المحرر).
+
+### الخطوة 12 — اربط السيرفر بقاعدة البيانات
+
+بنفس الملف اللي فتحته بالخطوة اللي قبل (لو قفلته، افتحه تاني بنفس أمر `nano`)، دور على السطر اللي بأول الملف تقريباً وشكله هيك:
+```
+set mysql_connection_string "mysql://fivem_user:CHANGE_THIS_PASSWORD@localhost/fivem_db?charset=utf8mb4"
+```
+غيّر بس كلمة `CHANGE_THIS_PASSWORD` لنفس كلمة السر اللي اخترتها بالخطوة 9 (خلي باقي السطر متل ما هو بالضبط — اسم قاعدة البيانات `fivem_db` واسم المستخدم `fivem_user` مطابقين لنفس الأسماء اللي عملناها). احفظ بنفس طريقة `Ctrl+O` بعدين `Ctrl+X`.
+
+### الخطوة 13 — شغّل السيرفر (وخليه يضل شغال حتى لو سكرت PuTTY)
+
+عشان السيرفر يضل شغال حتى لو قفلت برنامج PuTTY أو طفيت جهازك الشخصي، رح نستخدم برنامج `screen` (ثبتناه بالخطوة 5) — هذا بيخلي البرنامج يشتغل "بالخلفية" جوا جهاز Oracle نفسه.
+
+```
+screen -S fivem
+```
+هذا بيفتحلك "شاشة" جديدة اسمها fivem. جواها اكتب:
+```
+cd ~/FXServer
+./run.sh +exec server-data/resources/server.cfg
+```
+استنى شوي — رح تبلش تطلع كتابة كتيرة (هذا طبيعي، عم يحمّل كل الإضافات الـ260+). استنى لين توقف الحركة السريعة وتشوف بآخرها شي شبيه بـ `Server is now ready`.
+
+**لو ظهرلك خطأ فيه كلمة `exec format error` أو `cannot execute binary file`:** هذا معناه لازم تستخدم "المترجم" يدوياً. اضغط `Ctrl+C` لتوقف المحاولة، وجرب هاد الأمر بدل السابق:
+```
+FEXInterpreter ./run.sh +exec server-data/resources/server.cfg
+```
+
+**عشان تطلع من شاشة screen بدون ما توقف السيرفر:** اضغط `Ctrl+A` ثم اضغط `D` (منفصلين، مو مع بعض). السيرفر رح يضل شغال بالخلفية.
+
+**عشان ترجع تشوف شاشة السيرفر بعدين** (مثلاً بعد ما تسكر PuTTY وترجع تفتحه): اكتب
+```
+screen -r fivem
+```
+
+### الخطوة 14 — خلّي اللاعبين يدخلوا من بيوتهم
+
+1. ارجع لصفحة الجهاز على Oracle Cloud وانسخ **Public IP Address** تبعه (نفس الرقم اللي استخدمته بـ PuTTY).
+2. أي حدا بده يدخل السيرفر، لازم يفتح لعبة FiveM، يضغط **F8**، ويكتب:
+```
+connect 123.45.67.89
+```
+(استبدل الرقم برقم جهازك الحقيقي)
+
+ممكن كمان تعطيهم الرقم يحفظوه كـ"مفضلة" جوا قائمة السيرفرات بلعبة FiveM نفسها عشان ما يضطروا يكتبوه كل مرة (فيه زر "Add as Favorite" جوا قائمة السيرفرات بعد ما يدخلوا مرة).
+
+**تنويه:** رقم الـ Public IP ممكن يتغير لو طفيت وشغلت الجهاز من جديد من Oracle Cloud، إلا إذا ثبّته (فيه خيار اسمه "Reserved Public IP" من نفس صفحة الشبكة تقدر تفعّله عشان يضل نفس الرقم دايماً — منصوح فيه).
+
+---
+
+## كيف تصير الأدمن الأعلى (God Admin)
+
+### الطريقة الأسهل: كن أول واحد يدخل السيرفر
+
+السيرفر مصمم بحيث **أول شخص يدخله بعد أول تشغيل، بيصير تلقائياً "الأدمن الأعلى" بشكل دائم** (محفوظ بقاعدة البيانات، ما بينمسح لو طفيت السيرفر). يعني:
+
+1. شغّل السيرفر (خطوة 13 اللي فوق).
+2. افتح لعبة FiveM من جهازك وادخل عليه أنت أول واحد (قبل ما تعطي حدا الرابط).
+3. بمجرد ما تدخل وتشوف شخصيتك بالمدينة، رح تطلعلك رسالة بأسفل يمين الشاشة تقولك إنك صرت "Server Owner". خلص، صرت الأدمن الأعلى بشكل دائم.
+
+**مهم:** هاي الطريقة بتشتغل مرة وحدة بس (أول شخص). لو حدا تاني دخل قبلك بالغلط، أو بدك تضيف حدا تاني أدمن بعدين، استخدم إحدى الطريقتين التاليتين.
+
+### الطريقة اليدوية (لو فاتتك تكون أول واحد، أو بدك تضيف حدا تاني)
+
+1. خلي الشخص يدخل السيرفر عادي مرة وحدة (كأي لاعب عادي).
+2. روح لنافذة السيرفر السودة (screen) وشوف آخر الأسطر — رح تلاقي سطر فيه معرّف الشخص يبدأ بـ `license:` متبوع بحروف وأرقام (هاد المعرّف الدائم تبعه، ما بيتغير).
+3. افتح قاعدة البيانات:
+```
+sudo mysql -u root fivem_db
+```
+4. اكتب (استبدل `license:xxxxx` بالمعرّف الحقيقي اللي شفته):
 ```sql
--- Insert bodycam item (if not exists)
-INSERT IGNORE INTO items (name, label, weight, type, category) VALUES
-('bodycam', 'Body Camera', 500, 'item', 'police'),
-('police_radio', 'Police Radio', 200, 'item', 'police');
+INSERT INTO server_owners (identifier, group_name) VALUES ('license:xxxxxxxxxxxxxxxxxxxxx', 'god');
 ```
+5. اكتب `exit` تطلع.
+6. خلّي الشخص يقطع الاتصال ويرجع يدخل السيرفر من جديد — رح يصير أدمن أعلى تلقائياً.
 
-### Step 7 — Start Server
-1. Start your FiveM server
-2. It should load all resources automatically from server.cfg
-3. Join the server and test
+### طريقة بديلة من داخل اللعبة (لأدمن موجود يضيف حدا تاني)
+
+لو أنت بالفعل أدمن أعلى وبدك تضيف حدا تاني، وهو موجود بالسيرفر حالياً، اكتب بشات اللعبة (اضغط T أو Enter لفتح الشات):
+```
+/addowner [رقمه بالسيرفر]
+```
+(رقم اللاعب بالسيرفر بتلاقيه بقائمة اللاعبين، أو بلوحة god-dashboard تبعت F6)
 
 ---
 
-## 🎮 All Commands You'll Use
+## قائمة كل الأوامر بالسيرفر
 
-### Player Commands
-| Command | What it does |
-|---------|-------------|
-| `/plist` or **F6** | Open Personnel List (who's on duty + radio freq) |
-| **L** | Toggle bodycam on/off |
-| **F5** | Open Outfit Manager |
-| **U** | Open surveillance console (CID) |
-| **H** | Open/close undercover vehicle trunk (CID UC car) |
-| **J/K** | Identity swap hotkeys (CID UC car) |
-| `/e [emote]` | Do an emote (dance, sit, etc.) |
-| `/radio [freq]` | Join radio channel (e.g., `/radio 1`) |
-| `/respawn` | Respawn at hospital |
-| `/911 [message]` | Call 911 (e.g., `/911 I need help at Pillbox`) |
-| `/cancel` | Cancel current action |
+كل الأوامر تُكتب بشات اللعبة (اضغط **T** أو **Enter** لفتح الشات، اكتب الأمر، اضغط Enter). الأوامر اللي مكتوب جنبها "أدمن فقط" ما بتشتغل إلا لو أنت أدمن أعلى أو معك رتبة إدارية.
 
-### Police/CID Commands
-| Command | What it does |
-|---------|-------------|
-| **E** (on duty panel) | Clock in/out at police station |
-| `/panic` or **P** | Send panic alert |
-| `/cuff` | Handcuff nearest player |
-| `/uncuff` | Remove handcuffs |
-| `/escort` | Drag/escort cuffed player |
-| `/check` | Check ID of nearest player |
-| `/search` | Search nearest player |
-| `/plate` | Run plate of nearest vehicle |
-| `/impound` | Impound vehicle (charges fee) |
-| `/ticket [amount]` | Issue a ticket |
-| `/fine [amount]` | Issue a fine |
-| `/call [number]` | Use patrol phone |
-| `/mdt` | Open Mobile Data Terminal |
-| `/bolo` | Create/view BOLO alerts |
-| `/clear [id]` | Clear a 911 call |
-| `/cuff [id]` | Cuff a specific player |
+### لوحة التحكم الرئيسية (أدمن فقط)
+| الأمر | الوظيفة |
+|---|---|
+| `/god` (أو زر **F6**) | يفتح لوحة تحكم الأدمن الرئيسية (كل شي: فلوس، أغراض، مركبات، طرد، حظر، طقس، وقت...) |
+| `/admin` | يفتح قائمة أدمن إضافية (admin-commander) |
+| `/addowner [رقم]` | يضيف لاعب كأدمن أعلى دائم |
+| `/removeowner [المعرّف]` | يشيل أدمن أعلى |
+| `/listowners` | يعرض قائمة كل الأدمنية الأعليين |
+| `/adminlogs` | يعرض سجل كل أفعال الأدمن |
+| `/adminlogstats` | إحصائيات سجل الأدمن |
+| `/kick [رقم]` | يطرد لاعب |
+| `/freeze [رقم]` | يجمّد/يفك تجميد لاعب |
+| `/noclip` | تفعيل وضعية التحليق واختراق الجدران |
+| `/spectate` / `/unspectate` | مراقبة لاعب / إيقاف المراقبة |
+| `/vanish` | إخفاء نفسك عن باقي اللاعبين |
+| `/bring [رقم]` | تجيب لاعب لعندك |
+| `/goto [رقم]` | تروح للاعب |
+| `/coords` | يعرض إحداثياتك الحالية |
+| `/car [موديل]` | يطلعلك مركبة |
+| `/givecar [رقم] [موديل]` | تعطي مركبة للاعب |
+| `/givemoney [رقم] [مبلغ]` | تعطي فلوس للاعب |
+| `/setjob [رقم] [الوظيفة]` | تغيّر وظيفة لاعب |
+| `/setgroup [رقم] [الرتبة]` | تغيّر رتبة لاعب الإدارية |
+| `/transfervehicle [لوحة] [رقم]` | تنقل ملكية مركبة للاعب تاني |
+| `/place` | أداة وضع أشياء بالخريطة |
+| `/bunker` | أداة بناء المخابئ |
+| `/tickets` | يفتح لوحة تذاكر الدعم (تذاكر مساعدة اللاعبين) |
+| `/openticket` | يفتح نافذة تقديم تذكرة دعم (لأي لاعب) |
 
-### CID-Specific Commands
-| Command | What it does |
-|---------|-------------|
-| `/trace [phone]` | Trace a phone number |
-| `/wiretap [phone]` | Wiretap a phone (court order) |
-| `/deploybug` | Deploy surveillance bug |
-| `/gps [id]` | Deploy GPS tracker on vehicle |
-| `/sweep` | Sweep vehicle for trackers |
-| `/entry` | Begin covert entry (lockpick + alarm bypass) |
-| `/op [name]` | Start/join operations in ops center |
+### الدردشة والتفاعل
+| الأمر | الوظيفة |
+|---|---|
+| `/me [نص]` | فعل أو وصف (يظهر بفقاعة فوق راسك) |
+| `/do [نص]` | وصف مشهد/بيئة |
+| `/ooc [نص]` | كلام خارج الشخصية |
+| `/b [نص]` | كلام همس قريب |
+| `/try [نص]` | محاولة فعل بنسبة نجاح |
+| `/sit` | تجلس |
+| `/laydown` | تستلقي |
+| `/wave` | تلوّح |
+| `/e [اسم الحركة]` | قائمة حركات وتعابير (إيموتس) |
+| `/cancel` | يوقف أي حركة شغالة |
+| `/anim` | قائمة حركات إضافية |
 
-### Admin / God Commands
-| Command | What it does |
-|---------|-------------|
-| `/addowner [id]` | Add someone as permanent owner/admin |
-| `/removeowner [id]` | Remove owner status |
-| `/listowners` | List all permanent owners |
-| `/bunker` | Open Bunker Builder wizard |
-| `/place` | Open Place Anywhere mode |
-| `/goto [id]` | Teleport to player |
-| `/bring [id]` | Bring player to you |
-| `/revive [id]` | Revive yourself or someone |
-| `/heal [id]` | Fully heal yourself or someone |
-| `/car [model]` | Spawn any vehicle (e.g., `/car adder`) |
-| `/dv` | Delete nearest vehicle |
-| `/fix [id]` | Fix nearest vehicle or target |
-| `/noclip` | Toggle noclip mode |
-| `/god` | Toggle god mode |
-| `/setjob [id] [job] [grade]` | Set someone's job |
-| `/setmoney [id] [type] [amount]` | Set money (cash/bank) |
-| `/setgroup [id] [group]` | Set admin group |
-| `/announce [msg]` | Server-wide announcement |
-| `/weather [type]` | Change weather (EXTRASUNNY, RAIN, etc.) |
-| `/time [hour]` | Set time of day |
-| `/ban [id] [reason]` | Ban a player |
-| `/unban [id]` | Unban a player |
-| `/kick [id] [reason]` | Kick a player |
+### الشرطة
+| الأمر | الوظيفة |
+|---|---|
+| `/dashcam [لوحة/رقم]` | تفعيل كاميرا المطاردة |
+| `/drone` | استخدام الطائرة المسيرة |
+| `/plist` | عرض قائمة الضباط النشطين حالياً |
+| `/snakecam` | استخدام كاميرا الفحص تحت الأبواب |
+| `/trafficstop` | بدء إجراء توقيف مروري |
+| `/sobriety` | فحص السكر/التعاطي لسائق |
+| `/cuff` / `/uncuff` | تقييد / فك تقييد لاعب |
+| `/bolo` | إصدار بلاغ بحث عن مركبة/شخص |
+| `/bololist` | عرض كل البلاغات |
+| `/boloresolve` | إغلاق بلاغ |
+| `/clearlocker` | تفريغ خزانة الضابط |
+| `/forensic` | استخدام عدة الأدلة الجنائية |
+| `/leavenotrace` | (مصدر التخفي الجنائي) |
 
-### FIB Building Controls
-| Key/Action | What it does |
-|------------|-------------|
-| **E** (at FIB door) | Enter/exit FIB building |
-| **E** (at elevator) | Open floor selector → click floor → door closes → fade → arrive |
-| **E** (at computer) | Open terminal → type `help` for commands |
+### المحكمة والقضاء
+| الأمر | الوظيفة |
+|---|---|
+| `/cases` | عرض القضايا |
+| `/filecase` | تسجيل قضية جديدة |
+| `/starttrial` | بدء محاكمة |
+| `/juryvote` | تصويت هيئة المحلفين |
+| `/sentence` | إصدار حكم |
+| `/inmates` | عرض قائمة السجناء |
 
-FIB elevator commands inside terminal: `help`, `clear`, `date`, `status`, `bolos`, `exit`
+### الطوارئ والاستدعاء
+| الأمر | الوظيفة |
+|---|---|
+| `/911` | الاتصال بالطوارئ |
+| `/dispatch` | فتح شاشة الاستدعاء |
+| `/assign` | تعيين وحدة لبلاغ |
+| `/onscene` | الإعلان عن الوصول لمكان البلاغ |
+| `/resolvecall` | إغلاق بلاغ |
+| `/alertamber` / `/alertweather` / `/evacuate` / `/femadeploy` | تنبيهات طارئة عامة (أدمن) |
 
----
+### الوظائف
+| الأمر | الوظيفة |
+|---|---|
+| `/busstart` | بدء وردية سائق حافلة |
+| `/garbagestart` | بدء وردية جامع نفايات |
+| `/mailstart` | بدء وردية توصيل بريد |
+| `/towstart` / `/requesttow` | بدء وردية سطحة / طلب سطحة |
+| `/taxiui` | فتح واجهة سائق التاكسي |
+| `/methlab` | إدارة مختبر التصنيع (وظيفة إجرامية) |
 
-## ⚙️ How to Configure Things
+### المركبات والأشياء الشخصية
+| الأمر | الوظيفة |
+|---|---|
+| `/door` `/frunk` `/trunk` `/windows` `/seat` | فتح باب / صندوق أمامي / صندوق خلفي / نوافذ / مقعد المركبة |
+| `/vehiclelock` | قفل/فتح المركبة |
+| `/glove` `/glovebox` | فتح صندوق القفازات |
+| `/menu` | فتح قائمة الواجهة الرئيسية (HUD) |
+| `/resethud` | إعادة ضبط الواجهة |
+| `/radialmenu` | فتح القائمة الدائرية السريعة |
+| `/bank` `/cash` | عرض رصيد البنك / الكاش |
+| `/steal` | محاولة سرقة من لاعب |
+| `/phone` | فتح الهاتف |
+| `/settings` | إعدادات اللعبة |
+| `/report` `/reports` | تقديم بلاغ للإدارة / عرض البلاغات (أدمن) |
 
-### Bodycam Settings
-File: `resources/[police]/bodycam/config.lua`
-```lua
-Config.Bodycam = {
-    ToggleKey = 'L',           -- Key to toggle bodycam
-    AutoRecordOnDuty = true,   -- Auto-start when going on duty
-    RequireDuty = true,        -- Must be on duty to use
-    BatteryMax = 100,          -- Battery capacity
-    BatteryDrainRate = 1,      -- How fast battery drains
-    AllowedJobs = { 'police', 'sheriff', 'statepolice', 'cid' },
-}
-```
+### الأبواب
+| الأمر | الوظيفة |
+|---|---|
+| `/doorlock` | قفل/فتح باب |
+| `/addpasscodedoor` `/removepasscodedoor` | إضافة/حذف باب برمز (أدمن) |
+| `/setdooraccess` `/revokedooraccess` | منح/سحب صلاحية دخول باب (أدمن) |
 
-### P-List Settings
-File: `resources/[police]/p-list/config.lua`
-```lua
-Config.PList = {
-    command = 'plist',      -- Command name
-    keybind = 'F6',          -- Key to open
-    refreshInterval = 3000,  -- Update every 3 seconds
-    allowedJobs = { 'police', 'sheriff', 'statepolice', 'cid' },
-}
-```
+### مفاتيح اختصار مهمة (بدون كتابة أوامر)
+| المفتاح | الوظيفة |
+|---|---|
+| **F6** | فتح لوحة الأدمن الرئيسية |
+| **F1** | فتح الهاتف |
+| **F2** | تبديل علامة التصويب |
+| **F5** | فتح دفتر التحقيقات / MDT (حسب الوظيفة) |
+| **F9** | رفع/تنزيل نوافذ المركبة |
+| **F10** | فتح قائمة الأبواب |
+| **F11** | فتح الصندوق الخلفي |
+| **F12** | فتح الصندوق الأمامي |
+| **L** | قفل/فتح المركبة (أو كاميرا الجسد للشرطة، حسب السياق) |
+| **U** | تفعيل الزي الرسمي / وردية التاكسي (حسب الوظيفة) |
+| **Z** | تبديل مدى الراديو |
+| **G** | استخدام خطاف التسلق |
 
-### Duty Blips Settings
-File: `resources/[police]/duty-blips/config.lua`
-```lua
-Config.DutyBlips = {
-    updateInterval = 5000,   -- Update every 5 seconds
-    -- Colors: 3=blue, 5=green, 17=orange, 57=purple
-    blips = {
-        police = { sprite = 1, color = 3, scale = 0.7 },
-        cid = { sprite = 1, color = 57, scale = 0.7 },
-    },
-}
-```
-
-### FIB Building Settings
-File: `resources/[shared]/fib-building/config.lua`
-
-**IMPORTANT: After launching the server, you may need to adjust coordinates!**
-The FIB MLO places its geometry at specific world coords. If the entrance door isn't where you expect:
-1. Go to the FIB building in-game
-2. Use `/coords` in chat to see your position
-3. Update the `entrance.coords` in this file
-4. Restart the resource
-
-```lua
-Config.FIB = {
-    entrance = { coords = vector3(135.0, -749.0, 45.0) },
-    interior = { coords = vector3(110.0, -740.0, 42.0) },
-    elevator = {
-        floors = {
-            { name = 'lobby', label = 'Lobby', coords = vector3(...), minRank = 0 },
-            { name = 'offices', label = 'Offices', ..., minRank = 0 },
-            { name = 'armory', label = 'Armory / Evidence', ..., minRank = 2 },
-            { name = 'interrogation', label = 'Interrogation', ..., minRank = 1 },
-            { name = 'server', label = 'Server Room', ..., minRank = 3 },
-            { name = 'roof', label = 'Roof / Helipad', ..., minRank = 3 },
-        }
-    },
-    allowedJobs = { 'police', 'cid' },
-    restrictedJobs = { 'cid' },
-}
-```
-
-### FIB Elevator Floor Configuration
-After testing in-game, you'll know the exact coordinates for each floor. Use `/coords` standing where the elevator should drop you, then update `config.lua`:
-
-```lua
--- Example after finding correct coords:
-floors = {
-    { name = 'lobby', label = 'Lobby', coords = vector3(110.0, -740.0, 42.0), heading = 180.0, minRank = 0 },
-    ...
-}
-```
+**ملاحظة:** بعض هاي الأوامر مرتبطة بوظيفة معينة (شرطة، إسعاف، ميكانيكي...) وما رح تشتغل إلا وأنت بهاي الوظيفة.
 
 ---
 
-## 🔍 Troubleshooting
+## حل أشهر المشاكل
 
-| Problem | Solution |
-|---------|----------|
-| Server won't start | Check `server.cfg` for typos. Make sure all `ensure` paths exist. |
-| People can't join | Check your `sv_endpoint_ping` setting. Open port 30120 in firewall. |
-| Items missing | Check `items.lua` in ox_inventory. Did you run the SQL inserts? |
-| FIB building invisible | The MLO coords may be wrong. Use `/coords` near where the FIB should be, update config. |
-| Elevator doesn't work | Teleport coords need adjustment. Use `/coords` at each floor location. |
-| Bodycam not auto-starting | Make sure you have the `bodycam` item in your inventory and you're going on duty properly. |
-| P-List shows no one | Make sure players are actually toggling on duty at a police station. |
-| No blips on map | Make sure `Config.DutyBlips.updateInterval` is set. Officers must be on duty. |
+**السيرفر يطلع خطأ ويقفل فوراً بعد التشغيل:**
+تأكد إنك حطيت `sv_licenseKey` صح بملف server.cfg (خطوة 10-11)، وتأكد إن `mysql_connection_string` مضبوط صح (خطوة 12) وإن قاعدة البيانات شغالة (`sudo systemctl status mariadb`).
 
----
+**اللاعبين ما قادرين يدخلوا من برا:**
+تأكد إنك فتحت البورتات الثلاثة (خطوة 3 بقسم Oracle Cloud) وإنك عم تعطيهم الـ Public IP الصحيح.
 
-## 👑 Admin Quick Reference
+**رسالة `exec format error` أو `cannot execute binary file` عند التشغيل:**
+هذا يعني المترجم (FEX-Emu) مو شغال صح. جرب أمر `FEXInterpreter ./run.sh ...` بدل `./run.sh` العادي (شرحناها بخطوة 13).
 
-After setting your Steam Hex in `admin-commander/config.lua`:
-1. Join server
-2. You are automatically saved as permanent owner
-3. Use `/addowner` to give other admins permanent access
-4. Use `/listowners` to see all owners
-5. Use `/place` to spawn objects anywhere (WASD to move, Q/E to rotate, Enter to place)
-6. Use `/bunker` to create custom bunkers for players
-7. Use `/car` to spawn any vehicle
-8. Use `/setjob` to give people jobs
+**السيرفر بطيء جداً:**
+تأكد إنك فعلاً اخترت شكل الجهاز **Ampere / A1.Flex** بـ 4 معالجات و24 جيجا رام، مو النوع الـ AMD الصغير.
 
-All admin commands listed in the table above under "Admin / God Commands".
+**نسيت رقم الـ Public IP أو تغيّر:**
+ارجع لصفحة الجهاز بـ Oracle Cloud، وفعّل خيار "Reserved Public IP" عشان ما يتغيّر تاني.
 
 ---
 
-That's it! Your server has all the CID/police systems, FIB building, bodycams, personnel list, map blips, and more. Test everything in-game and adjust the FIB coordinates as needed. Good luck!
+*آخر تحديث لهذا الدليل: أُعيدت كتابته بالكامل ليطابق حالة السيرفر الفعلية الحالية على فرع master، بعد إصلاح مشكلة اعتماد نظام "أول لاعب = أدمن أعلى" على معرّف Steam (اللي ما بيشتغل بدون مفتاح Steam API) — الآن يعتمد على معرّف الترخيص (license) المتوفر دايماً بغض النظر عن مفتاح Steam.*

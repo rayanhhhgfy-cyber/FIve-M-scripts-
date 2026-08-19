@@ -60,6 +60,22 @@ FiveM-Server/
          ... الخ
 ```
 
+### الخطوة 2.5 — نزّل الأجزاء الأساسية اللي مو موجودة بالمشروع (مهم جداً — بدونها السيرفر ما بيشتغل خالص)
+
+المشروع اللي عندك مبني فوق "إطار عمل" اسمه QBox، وهاد الإطار نفسه — زي محرك السيارة — مو جزء من ملفات المشروع على GitHub، لازم تنزّله لحاله. بدون هاي الخطوة، رح يطلعلك عشرات الأخطاء "Couldn't find resource" ولا شي رح يشتغل (هذا بالضبط اللي صار معك).
+
+حمّل كل واحد من هاي الروابط (كل واحد فيه زر أخضر "Code" ثم "Download ZIP" نفس طريقة الخطوة 2):
+
+1. `https://github.com/citizenfx/cfx-server-data` — فك الضغط، وجوا المجلد اللي بيطلع دور على مجلد اسمه `resources`. جواه رح تلاقي مجلدين اسمهم `[managers]` و `[system]` — انسخهم الاثنين والصقهم داخل `FiveM-Server\server-data\resources` (جنب مجلدات `[admin]` و`[police]` الموجودة أصلاً).
+2. `https://github.com/overextended/oxmysql` — فك الضغط، بيطلعلك مجلد اسمه شي متل `oxmysql-main` أو `oxmysql-master` (بيختلف حسب المشروع). سمّيه `oxmysql` بالضبط (احذف أي كلمة زايدة بعد الاسم متل `-main` أو `-master`)، والصقه داخل `FiveM-Server\server-data\resources`.
+3. كرر نفس الشي بالضبط (حمّل، فك ضغط، شيل أي كلمة زايدة من اسم المجلد وخليه بس اسم الأداة، الصقه بنفس المكان) لكل واحد من هدول:
+   - `https://github.com/overextended/ox_lib` → المجلد لازم يصير اسمه `ox_lib`
+   - `https://github.com/overextended/ox_target` → المجلد لازم يصير اسمه `ox_target`
+   - `https://github.com/Qbox-project/qbx_core` → المجلد لازم يصير اسمه `qbx_core`
+   - `https://github.com/AvarianKnight/pma-voice` → المجلد لازم يصير اسمه `pma-voice`
+
+**تحقق قبل ما تكمل:** افتح `FiveM-Server\server-data\resources` وتأكد إنك شايف كل هاي المجلدات مباشرة جوّاها (مو جوا مجلد فرعي تاني): `[managers]`, `[system]`, `oxmysql`, `ox_lib`, `ox_target`, `qbx_core`, `pma-voice` — بالإضافة للمجلدات الأصلية متل `[admin]` و`[police]`.
+
 ### الخطوة 3 — ثبّت قاعدة بيانات على جهازك
 
 السيرفر محتاج قاعدة بيانات عشان يخزّن فلوس اللاعبين وبيوتهم وسياراتهم — حتى للتجربة على جهازك.
@@ -243,6 +259,38 @@ tar xf fx.tar.xz
 cd ~/FXServer
 git clone https://github.com/rayanhhhgfy-cyber/FIve-M-scripts-.git server-data
 ```
+
+### الخطوة 8.5 — نزّل الأجزاء الأساسية اللي مو موجودة بالمشروع (مهم جداً — بدونها السيرفر ما بيشتغل خالص)
+
+المشروع اللي عندك مبني فوق "إطار عمل" اسمه QBox، وهاد الإطار نفسه — زي محرك السيارة — مو جزء من ملفات المشروع، لازم تنزّله لحاله من مصادره الرسمية. بدون هاي الخطوة، رح يطلعلك عشرات الأخطاء "Couldn't find resource" ولا شي رح يشتغل.
+
+انسخ والصق هاد كله (كل سطر لحاله، استنى يخلص قبل التالي):
+```
+cd ~/FXServer/server-data/resources
+git clone https://github.com/citizenfx/cfx-server-data.git cfx-base-tmp
+mv cfx-base-tmp/resources/\[managers\] .
+mv cfx-base-tmp/resources/\[system\] .
+mkdir -p "[gameplay]"
+mv cfx-base-tmp/resources/hardcap "[gameplay]/" 2>/dev/null
+mv cfx-base-tmp/resources/rconlog "[gameplay]/" 2>/dev/null
+mv cfx-base-tmp/resources/chat "[gameplay]/" 2>/dev/null
+rm -rf cfx-base-tmp
+
+mkdir -p "[external]" && cd "[external]"
+git clone https://github.com/overextended/oxmysql.git
+git clone https://github.com/overextended/ox_lib.git
+git clone https://github.com/overextended/ox_target.git
+git clone https://github.com/Qbox-project/qbx_core.git
+git clone https://github.com/AvarianKnight/pma-voice.git
+```
+
+**هذا بيحمّل:**
+- الأجزاء الأساسية اللي أي سيرفر FiveM محتاجها (اسمها sessionmanager, mapmanager, spawnmanager, chat, hardcap, rconlog, basic-gamemode) من المصدر الرسمي لشركة Cfx.re نفسها.
+- الإطار الأساسي للمشروع (qbx_core) وأدواته (ox_lib, oxmysql, ox_target) من مصادرهم الرسمية.
+- نظام الصوت (pma-voice) اللي كل التخاطب الصوتي بالسيرفر مبني عليه.
+
+**ملاحظة:** server.cfg تبع المشروع أصلاً معدّل ليتوقع هاي الأسماء بالضبط بهاد الترتيب، فما تحتاج تلمسه — بس تأكد إن الخطوة اللي فوق خلصت بدون أخطاء حمراء.
+
 هذا بينزّل كل مجلد `resources` وملف `server.cfg` مباشرة بمكانهم الصح.
 
 **ملاحظة لأي تحديث مستقبلي:** لو عدّلت شي على GitHub بعدين وبدك تجيبه للسيرفر، بس اكتب:
@@ -525,6 +573,12 @@ INSERT INTO server_owners (identifier, group_name) VALUES ('license:xxxxxxxxxxxx
 ---
 
 ## حل أشهر المشاكل
+
+**رسائل كتير "Couldn't find resource X" أو "Could not find dependency ox_lib" لما تشغّل السيرفر:**
+هذا معناه فاتتك خطوة تحميل الأجزاء الأساسية (qbx_core, ox_lib, oxmysql, ox_target, pma-voice, والأجزاء الأساسية من Cfx.re) — راجع الخطوة 2.5 (تجربة محلية) أو 8.5 (Oracle Cloud) وتأكد كل مجلد بمكانه الصح باسمه الصح بالضبط (بدون أي كلمة زايدة بآخر اسم المجلد).
+
+**رسالة `onesync: OneSync needs to be enabled`:**
+تأكد إن سطر `set onesync on` موجود بملف server.cfg (موجود افتراضياً بالنسخة الحديثة من المشروع — لو مش موجود، حدّث ملفاتك من GitHub).
 
 **السيرفر يطلع خطأ ويقفل فوراً بعد التشغيل:**
 تأكد إنك حطيت `sv_licenseKey` صح بملف server.cfg (خطوة 10-11)، وتأكد إن `mysql_connection_string` مضبوط صح (خطوة 12) وإن قاعدة البيانات شغالة (`sudo systemctl status mariadb`).

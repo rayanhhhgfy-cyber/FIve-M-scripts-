@@ -27,8 +27,8 @@ local function SampleThreadUsage()
     for i = 0, numResources - 1 do
         local resName = GetResourceByFindIndex(i)
         if resName and GetResourceState(resName) == 'started' then
-            local cpuTime = GetResourceCpuTime(resName)
-            if cpuTime and cpuTime > 0 then
+            local ok, cpuTime = pcall(GetResourceCpuTime, resName)
+            if ok and cpuTime and cpuTime > 0 then
                 if not threadProfileData[resName] then
                     threadProfileData[resName] = { samples = 0, totalCpu = 0, maxCpu = 0 }
                 end
@@ -40,6 +40,12 @@ local function SampleThreadUsage()
                 if Config.ThreadProfiling.logSlowThreads and cpuTime > Config.ThreadProfiling.slowThreshold then
                     print(string.format('^3[optimizer] SLOW THREAD: %s = %.2fms^7', resName, cpuTime))
                 end
+            elseif not ok then
+                -- GetResourceCpuTime isn't available on this FXServer build/version -
+                -- disable further sampling attempts this session instead of erroring every cycle
+                Config.ThreadProfiling.enabled = false
+                print('^3[optimizer] CPU time profiling unavailable on this server build, disabling thread profiling^7')
+                return
             end
         end
     end

@@ -23,21 +23,23 @@ end
 
 local function SampleThreadUsage()
     if not Config.ThreadProfiling.enabled then return end
-    local resources = GetResources()
-    for i = 1, #resources do
-        local resName = resources[i]
-        local cpuTime = GetResourceCpuTime(resName)
-        if cpuTime and cpuTime > 0 then
-            if not threadProfileData[resName] then
-                threadProfileData[resName] = { samples = 0, totalCpu = 0, maxCpu = 0 }
-            end
-            threadProfileData[resName].samples = threadProfileData[resName].samples + 1
-            threadProfileData[resName].totalCpu = threadProfileData[resName].totalCpu + cpuTime
-            if cpuTime > threadProfileData[resName].maxCpu then
-                threadProfileData[resName].maxCpu = cpuTime
-            end
-            if Config.ThreadProfiling.logSlowThreads and cpuTime > Config.ThreadProfiling.slowThreshold then
-                print(string.format('^3[optimizer] SLOW THREAD: %s = %.2fms^7', resName, cpuTime))
+    local numResources = GetNumResources()
+    for i = 0, numResources - 1 do
+        local resName = GetResourceByFindIndex(i)
+        if resName and GetResourceState(resName) == 'started' then
+            local cpuTime = GetResourceCpuTime(resName)
+            if cpuTime and cpuTime > 0 then
+                if not threadProfileData[resName] then
+                    threadProfileData[resName] = { samples = 0, totalCpu = 0, maxCpu = 0 }
+                end
+                threadProfileData[resName].samples = threadProfileData[resName].samples + 1
+                threadProfileData[resName].totalCpu = threadProfileData[resName].totalCpu + cpuTime
+                if cpuTime > threadProfileData[resName].maxCpu then
+                    threadProfileData[resName].maxCpu = cpuTime
+                end
+                if Config.ThreadProfiling.logSlowThreads and cpuTime > Config.ThreadProfiling.slowThreshold then
+                    print(string.format('^3[optimizer] SLOW THREAD: %s = %.2fms^7', resName, cpuTime))
+                end
             end
         end
     end

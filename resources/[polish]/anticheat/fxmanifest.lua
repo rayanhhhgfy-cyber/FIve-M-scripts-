@@ -6,6 +6,7 @@ description 'Server-side anticheat detection'
 author 'QBox Framework'
 version '1.0.0'
 shared_scripts { '@ox_lib/init.lua', '@qbx_core/shared/locale.lua', 'config.lua' }
-server_scripts { 'server/main.lua' }
+server_scripts {
+    '@oxmysql/lib/MySQL.lua', 'server/main.lua' }
 client_script 'client/main.lua'
 dependencies { 'ox_lib', 'qbx_core', 'discord-logs' }

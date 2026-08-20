@@ -22,9 +22,9 @@ fx_version 'adamant'
 games { 'rdr3', 'gta5' }
 rdr3_warning 'I acknowledge that this is a prerelease build of RedM, and I am aware my resources *will* become incompatible once RedM ships.'
 
-dependencies {
-  'yarn',
-  'webpack'
-}
-
-webpack_config 'webpack.config.js'
+-- Note: originally declared 'yarn' and 'webpack' as dependencies here (build
+-- tooling markers from the upstream cfx-server-data source, not real FiveM
+-- resources). FXServer's resource scanner was treating them as literal
+-- missing resource dependencies and refusing to start this resource at all.
+-- The dist/ folder below is now pre-built and committed directly, so no
+-- build step or dependency on those is needed at runtime.

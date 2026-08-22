@@ -888,23 +888,39 @@ CREATE TABLE IF NOT EXISTS phone_groups (
   INDEX idx_pg_owner (owner_cid)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- === VEHICLE DEALERSHIP ([economy]/vehicle-dealership) ===
+-- === PLAYER VEHICLES (core table - used by qbx_vehicles, god-dashboard,
+--     Renewed-Garages, davis-station, mrpd-mlo, and others) ===
+-- Column set matches Qbox-project/qbx_vehicles (the authoritative vehicle
+-- ownership resource) plus financing/model_data columns some economy
+-- resources also use.
 CREATE TABLE IF NOT EXISTS player_vehicles (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  citizenid VARCHAR(20) NOT NULL,
-  plate VARCHAR(20) NOT NULL UNIQUE,
-  model VARCHAR(50) NOT NULL,
+  license VARCHAR(50) DEFAULT NULL,
+  citizenid VARCHAR(50) DEFAULT NULL,
+  vehicle VARCHAR(50) DEFAULT NULL,
+  hash VARCHAR(50) DEFAULT NULL,
+  mods LONGTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
   model_data JSON DEFAULT NULL,
+  plate VARCHAR(15) NOT NULL,
+  fakeplate VARCHAR(50) DEFAULT NULL,
   garage VARCHAR(50) DEFAULT 'A',
   fuel INT DEFAULT 100,
+  engine FLOAT DEFAULT 1000,
+  body FLOAT DEFAULT 1000,
+  state INT DEFAULT 1,
+  depotprice INT NOT NULL DEFAULT 0,
+  drivingdistance INT DEFAULT NULL,
+  status TEXT DEFAULT NULL,
+  coords TEXT DEFAULT NULL,
+  stolen TINYINT(1) DEFAULT 0,
   financed TINYINT(1) DEFAULT 0,
   finance_payments INT DEFAULT 0,
   finance_total INT DEFAULT 0,
   finance_weekly INT DEFAULT 0,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  INDEX idx_pv_citizenid (citizenid),
-  INDEX idx_pv_plate (plate)
+  UNIQUE KEY plate (plate),
+  INDEX idx_pv_citizenid (citizenid)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- === IMPOUND SYSTEM ([player]/garage-system) ===

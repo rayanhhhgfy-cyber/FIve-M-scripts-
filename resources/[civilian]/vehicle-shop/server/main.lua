@@ -5,7 +5,7 @@ local QBox = exports['qbx_core']:GetCoreObject()
 
 Citizen.CreateThread(function()
     MySQL.ready(function()
-        MySQL.query('CREATE TABLE IF NOT EXISTS player_vehicles (id INT AUTO_INCREMENT PRIMARY KEY, citizenid VARCHAR(50), vehicle VARCHAR(50), plate VARCHAR(12), color INT, showroom VARCHAR(50), financed BOOLEAN DEFAULT FALSE, down_payment INT DEFAULT 0, monthly_payment INT DEFAULT 0, payments_remaining INT DEFAULT 0, purchase_date INT DEFAULT 0)', {})
+        MySQL.query('CREATE TABLE IF NOT EXISTS vehicle_shop_purchases (id INT AUTO_INCREMENT PRIMARY KEY, citizenid VARCHAR(50), vehicle VARCHAR(50), plate VARCHAR(12), color INT, showroom VARCHAR(50), financed BOOLEAN DEFAULT FALSE, down_payment INT DEFAULT 0, monthly_payment INT DEFAULT 0, payments_remaining INT DEFAULT 0, purchase_date INT DEFAULT 0)', {})
     end)
 end)
 
@@ -84,7 +84,7 @@ RegisterNetEvent('vehicle_shop:purchase', function(model, label, price, colorInd
     local plate = GeneratePlate()
     local citizenid = p.PlayerData.citizenid
 
-    MySQL.insert('INSERT INTO player_vehicles (citizenid, vehicle, plate, color, showroom, financed, down_payment, monthly_payment, payments_remaining, purchase_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+    MySQL.insert('INSERT INTO vehicle_shop_purchases (citizenid, vehicle, plate, color, showroom, financed, down_payment, monthly_payment, payments_remaining, purchase_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
         { citizenid, model, plate, colorIndex or 0, showroomName, financed, downPayment, monthlyPayment, paymentsRemaining, os.time() },
         function()
             TriggerClientEvent('vehicle_shop:purchaseSuccess', src, model, label)
@@ -117,12 +117,12 @@ local function CreateFinanceThread(src, citizenid, model, monthlyPayment)
 
             if p.PlayerData.money.cash >= monthlyPayment then
                 p.Functions.RemoveMoney('cash', monthlyPayment)
-                MySQL.update('UPDATE player_vehicles SET payments_remaining = payments_remaining - 1 WHERE citizenid = ? AND vehicle = ?', { citizenid, model })
+                MySQL.update('UPDATE vehicle_shop_purchases SET payments_remaining = payments_remaining - 1 WHERE citizenid = ? AND vehicle = ?', { citizenid, model })
                 Wrappers.Notify(src, Locale('vehicle_shop.finance_paid', monthlyPayment) or string.format('Finance payment of $%d taken', monthlyPayment), 'info')
 
-                MySQL.single('SELECT payments_remaining FROM player_vehicles WHERE citizenid = ? AND vehicle = ?', { citizenid, model }, function(result)
+                MySQL.single('SELECT payments_remaining FROM vehicle_shop_purchases WHERE citizenid = ? AND vehicle = ?', { citizenid, model }, function(result)
                     if result and result.payments_remaining <= 0 then
-                        MySQL.update('UPDATE player_vehicles SET financed = FALSE WHERE citizenid = ? AND vehicle = ?', { citizenid, model })
+                        MySQL.update('UPDATE vehicle_shop_purchases SET financed = FALSE WHERE citizenid = ? AND vehicle = ?', { citizenid, model })
                         Wrappers.Notify(src, Locale('vehicle_shop.finance_paid_off') or 'Vehicle is fully paid off!', 'success')
                         Citizen.StopThread(testDriveTimers[threadKey])
                         testDriveTimers[threadKey] = nil
@@ -141,7 +141,7 @@ local function GeneratePlate()
     for i = 1, 8 do
         plate = plate .. chars:sub(math.random(1, #chars), math.random(1, #chars))
     end
-    local exists = MySQL.single.await('SELECT plate FROM player_vehicles WHERE plate = ?', { plate })
+    local exists = MySQL.single.await('SELECT plate FROM vehicle_shop_purchases WHERE plate = ?', { plate })
     if exists then return GeneratePlate() end
     return plate
 end
